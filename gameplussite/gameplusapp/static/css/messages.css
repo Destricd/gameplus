@@ -1,0 +1,115 @@
+section {
+	display: block;
+}
+.functions {
+	padding: 10px 20px 5px 20px;
+}
+.msgblock, .sortblock, .searchblock, .messages, .about {
+	display: inline-block;
+}
+.msgblock, .sortblock {
+	margin-right: 10px;
+}
+.msgblock  > form, .sortblock  > form, .searchblock > form, .send > .sendform {
+	display: block;
+}
+.msgsel, .sortsel {
+	padding: 8px;
+	border: 2px solid #7BA7AB;
+	border-radius: 5px;
+	width: 150px;
+}
+.msgform > p, .sortform > p, .searchform > p, .sendform > p {
+	position: relative;
+}
+.msgform > p, .sortform > p, .searchform > p {
+	margin: 10px 0;
+}
+.sendform > p {
+    margin: 0;
+    height: 100%;
+}
+.searchform > p > input {
+    width: 100%;
+    padding: 9px 9px 9px 10px;
+    border: 2px solid #7BA7AB;
+    border-radius: 5px;
+    outline: none;
+}
+.searchform > p > button {
+	position: absolute; 
+    top: 0;
+    right: 0px;
+    padding: 9px;
+    border: none;
+    background: #7BA7AB;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+}
+.searchform > p > button:before {
+	content: "\f35a";
+    font-family: 'Font Awesome 5 Free';
+    font-size: 17px;
+    color: #F9F0DA;
+}
+.sendform > p > textarea {
+    height: 100%;
+    width: 90%;
+    resize: none;
+    padding: 6px 9px 6px 10px;
+    border-radius: 0 0 0 5px;
+}
+.sendform > p > button {
+	position: absolute;
+    top: 0;
+    right: 0px;
+    height: 100%;
+    width: 10%;
+    border: none;
+    background: #7BA7AB;
+    border-radius: 0 0 5px 0;
+    cursor: pointer;
+}
+.sendform > p > button:before {
+	content: "\f35a";
+    font-family: 'Font Awesome 5 Free';
+    font-size: 24px;
+    color: #F9F0DA;
+}
+.lists {
+	padding: 5px 20px 40px 20px;
+}
+.messages, .about {
+	width: 48%; /* Ширина блока */
+}
+.messages, .msglist {
+    background-color: #A6CAF0; /* Цвет фона */
+    background-attachment: local;
+	overflow: auto; /* Добавляем полосы прокрутки */
+}
+.messages {
+    height: 720px; /* Высота блока */
+}
+.about {
+    height: 720px; /* Высота блока */
+	float: right;
+}
+.messages > p {
+	height: 1920px; /* Высота блока */
+	width: 100%;
+	background-position: center top 5%; /* Позиция изображения относительно блока */
+	background-repeat: no-repeat; /* Повторение фона */
+}
+p.example {
+	background-image: url("../images/main/main-block-bg.png"); /* Путь к фоновому изображению */
+}
+.msglist {
+    height: 94%;
+    padding: 10px 20px;
+}
+.send {
+    height: 6%; /* Высота блока */
+}
+.sendform {
+    height: 100%;
+}

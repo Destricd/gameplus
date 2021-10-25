@@ -1,0 +1,122 @@
+section {
+	display: block;
+}
+.functions {
+	padding: 10px 20px 5px 20px;
+}
+.sortblock, .searchblock, .reviews, .feedback {
+	display: inline-block;
+}
+.sortblock {
+	margin-right: 10px;
+}
+.sortblock  > form, .searchblock > form {
+	display: block;
+}
+.sortsel {
+	padding: 8px;
+	border: 2px solid #7BA7AB;
+	border-radius: 5px;
+	width: 150px;
+}
+.sortform > p, .searchform > p {
+	position: relative;
+	margin: 10px 0;
+}
+.searchform > p > input {
+	width: 100%;
+    padding: 9px 9px 9px 10px;
+    border: 2px solid #7BA7AB;
+    border-radius: 5px;
+    outline: none;
+}
+.searchform > p > button {
+	position: absolute; 
+    top: 0;
+    right: 0px;
+    padding: 9px;
+    border: none;
+    background: #7BA7AB;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+}
+.searchform > p > button:before {
+	content: "\f35a";
+    font-family: 'Font Awesome 5 Free';
+    font-size: 17px;
+    color: #F9F0DA;
+}
+.lists {
+	padding: 5px 20px 40px 20px;
+}
+.reviews, .feedback {
+	width: 48%; /* Ширина блока */
+	height: 720px; /* Высота блока */
+}
+.reviews {
+    background-color: #A6CAF0; /* Цвет фона */
+	background-attachment: local;
+	overflow: auto; /* Добавляем полосы прокрутки */
+}
+.feedback {
+	float: right;
+}
+.reviews > p {
+	height: 1920px; /* Высота блока */
+	width: 100%;
+	background-position: center top 5%; /* Позиция изображения относительно блока */
+	background-repeat: no-repeat; /* Повторение фона */
+}
+p.example {
+	background-image: url("../images/main/main-block-bg.png"); /* Путь к фоновому изображению */
+}
+.rightimg  {
+	width: 30%;
+	height: 40%;
+    float: right; /* Выравнивание по правому краю  */ 
+    margin: 7px 0 7px 7px; /* Отступы вокруг картинки */
+}
+.inputrev {
+    height: 94%;
+}
+.inputrev > form {
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+    height: 100%;
+}
+.writetitle {
+    font-size: 24px;
+    text-align: center;
+}
+.inputrev > form > input, .inputrev > form > textarea{
+    width: 100%;
+    margin: 5px 0 20px 0;
+    padding: 5px 15px;
+}
+textarea[name="message"] {
+    resize: none;
+    flex-grow: 3;
+}
+.writerev {
+    height: 6%;
+}
+.writerev > form > p {
+    position: relative;
+    margin: 0;
+}
+.writerev > form > p > button {
+    position: absolute; 
+    top: 0;
+    right: 0px;
+    padding: 12px 9px;
+    border: none;
+    background: #7BA7AB;
+    cursor: pointer;
+}
+.writerev > form > p > button:before {
+    content: "Отправить";
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 17px;
+    color: #F9F0DA;
+}

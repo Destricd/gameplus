@@ -1,0 +1,15 @@
+.games > p {
+	height: 1920px; /* Высота блока */
+	width: 100%;
+	background-position: center top 5%; /* Позиция изображения относительно блока */
+	background-repeat: no-repeat; /* Повторение фона */
+}
+p.example {
+	background-image: url("../images/main/main-block-bg.png"); /* Путь к фоновому изображению */
+}
+.rightimg  {
+	width: 30%;
+	height: 40%;
+    float: right; /* Выравнивание по правому краю  */ 
+    margin: 7px 0 7px 7px; /* Отступы вокруг картинки */
+}
