@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views import View
+from .function import *
 
 
 class MainPage(View):
@@ -10,7 +11,10 @@ class MainPage(View):
 
 class GamesPage(View):
     def get(self, request):
-        context = {}
+        g_games = get_games()
+        context = {
+            'g_games': g_games,
+        }
         return render(request, 'games.html', context=context)
 
 
