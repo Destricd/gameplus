@@ -60,7 +60,11 @@
 		<section class="allgames">
 			<div class="lists">
 				<div class="games">
-					<p class="example"></p>
+
+					{% for game in g_games %}
+					{% include 'game_one.html' %}
+					{% endfor %}
+
 				</div>
 				<div class="about">
 					<div class="name">
