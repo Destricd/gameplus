@@ -66,8 +66,43 @@ section {
 	background-position: center top 5%; /* Позиция изображения относительно блока */
 	background-repeat: no-repeat; /* Повторение фона */
 }
-p.example {
-	background-image: url("../images/main/main-block-bg.png"); /* Путь к фоновому изображению */
+.gameone {
+    margin: 10px 0;
+    border: 1px solid black;
+    border-radius: 20px;
+}
+.gametag {
+    border-bottom: 1px solid black;
+}
+.gametag > div, .gameother > div {
+    display: inline-block;
+}
+.gamename {
+    width: 49%;
+    border-right: 1px solid black;
+    padding: 10px 10px 10px 20px;
+    font-weight: bold;
+}
+.gametype {
+    float: right;
+    padding: 10px 40px 10px 10px;
+}
+.gamename > p, .gametype > p, .gamerate > p, .gamedate > p, .gameprice > p, .more > p {
+    margin: 0;
+}
+.gamerate {
+    width: 9.4%;
+    border-right: 1px solid black;
+    padding: 8px 10px;
+}
+.gamedate {
+    width: 39%;
+    border-right: 1px solid black;
+    padding: 8px 10px;
+}
+.gameprice {
+    width: 25%;
+    border-right: 1px solid black;
 }
 .rightimg  {
 	width: 30%;

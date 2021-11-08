@@ -1,15 +1,26 @@
 {% block content %}
 
-<div>
-    <div>
-        <div>
+<div class="gameone">
+    <div class="gametag">
+        <div class="gamename">
             <p>{{ game.name }}</p>
         </div>
-        <div>
+        <div class="gametype">
             <p>{{ game.type }}</p>
         </div>
-        <div>
+    </div>
+    <div class="gameother">
+        <div class="gamerate">
+            <p>{{ game.rate }}</p>
+        </div>
+        <div class="gamedate">
+            <p>{{ game.release_date }}</p>
+        </div>
+        <div class="gameprice">
             <p>{{ game.price }}</p>
+        </div>
+        <div class="more">
+            <p>Подробнее</p>
         </div>
     </div>
 </div>
