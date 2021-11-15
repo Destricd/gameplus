@@ -100,9 +100,20 @@ section {
     border-right: 1px solid black;
     padding: 8px 10px;
 }
+.gamerate > p, .gamedate > p {
+    text-align: center;
+}
 .gameprice {
     width: 25%;
     border-right: 1px solid black;
+    padding: 8px 20px 8px 10px;
+}
+.more {
+    float: right;
+    padding: 8px 8px 8px 4px;
+}
+.gameprice > p {
+    text-align: right;
 }
 .rightimg  {
 	width: 30%;
