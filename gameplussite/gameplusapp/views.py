@@ -60,12 +60,6 @@ class MessagesPage(View):
         return render(request, 'messages.html', context=context)
 
 
-class NofiticationsPage(View):
-    def get(self, request):
-        context = {}
-        return render(request, 'nofitications.html', context=context)
-
-
 class PrivatesPage(View):
     def get(self, request):
         context = {}
