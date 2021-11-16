@@ -8,12 +8,14 @@ class MainPage(View):
         context = {}
         return render(request, 'main.html', context=context)
 
-
+    
 class GamesPage(View):
-    def get(self, request):
+    def get(self, request, id):
         g_games = get_games()
+        game_info = get_gameinfo(id)
         context = {
             'g_games': g_games,
+            'game_info': game_info
         }
         return render(request, 'games.html', context=context)
 

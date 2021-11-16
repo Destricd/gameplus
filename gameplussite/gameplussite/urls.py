@@ -20,7 +20,7 @@ from django.contrib import admin
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', MainPage.as_view()),
-    path('games.html', GamesPage.as_view()),
+    path('games.html/<int:id>', GamesPage.as_view()),
     path('account.html', AccountPage.as_view()),
     path('allgames.html', AllGamesPage.as_view()),
     path('alltasks.html', AllTasksPage.as_view()),

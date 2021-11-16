@@ -14,15 +14,13 @@
             <p>{{ game.rate }}</p>
         </div>
         <div class="gamedate">
-            <p>{{ game.release_date }}</p>
+            <p>{{ game.release_date|date:"d.m.Y" }}</p>
         </div>
         <div class="gameprice">
             <p>{{ game.price }} руб.</p>
         </div>
         <div class="more">
-            <form method="get">
-                <a id="{{ game.id }}">Подробнее>></a>
-            </form>
+            <a href="{{ game.id }}">Подробнее>></a>
         </div>
     </div>
 </div>

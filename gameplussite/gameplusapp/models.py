@@ -12,6 +12,7 @@ class Game(models.Model):
     number_of_rules = models.BooleanField(default=False)
     price = models.DecimalField(max_digits=12, decimal_places=2)
     development_budget = models.DecimalField(max_digits=12, decimal_places=2)
+    picture = models.ImageField(upload_to="static/images/games", blank=True)
 
 
 class GameDevelopmentStage(models.Model):
