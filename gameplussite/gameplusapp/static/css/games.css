@@ -4,22 +4,22 @@ section {
 .functions {
 	padding: 10px 20px 5px 20px;
 }
-.gameblock, .sortblock, .searchblock, .games, .about {
+.sortblock, .searchblock, .games, .about {
 	display: inline-block;
 }
-.gameblock, .sortblock {
+.sortblock {
 	margin-right: 10px;
 }
-.gameblock  > form, .sortblock  > form, .searchblock > form {
+.sortblock  > form, .searchblock > form {
 	display: block;
 }
-.gamesel, .sortsel {
+.sortsel {
 	padding: 8px;
 	border: 2px solid #7BA7AB;
 	border-radius: 5px;
 	width: 150px;
 }
-.gameform > p, .sortform > p, .searchform > p {
+.sortform > p, .searchform > p {
 	position: relative;
 	margin: 10px 0;
 }

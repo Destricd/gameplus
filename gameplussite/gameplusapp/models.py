@@ -14,6 +14,9 @@ class Game(models.Model):
     development_budget = models.DecimalField(max_digits=12, decimal_places=2)
     picture = models.ImageField(upload_to="static/images/games", blank=True)
 
+    class Meta:
+        gamesort = ["name"]
+
 
 class GameDevelopmentStage(models.Model):
     game_id = models.ForeignKey(Game, on_delete=models.CASCADE)
