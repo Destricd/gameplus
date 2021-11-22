@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.views import View
+from django.http import HttpResponseRedirect
 from .function import *
 from .forms import GamesFilterForm
+from .forms import ContractsForm
 
 
 class MainPage(View):
@@ -51,9 +53,30 @@ class GameOnePage(View):
 
 
 class CreateContract(View):
-    def get(self, request):
-        context = {}
+    def get(self, request, id):
+        form = ContractsForm()
+
+        context = {
+            'form': form
+        }
         return render(request, 'newcontract.html', context=context)
+
+    def post(self, request, id):
+        error = 'Неправильное заполнение'
+        form = ContractsForm()
+
+        context = {
+            'form': form,
+            'error': error
+        }
+        if request.method == 'POST':
+            form = ContractsForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect('/games.html')
+            else:
+                return render(request, 'newcontract.html', context=context)
+
 
 
 class AccountPage(View):

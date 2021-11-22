@@ -4,23 +4,23 @@
     <head>
         <meta charset="UTF-8">
         <title>Студия Гейм-Плюс | Формировнаие заказа</title>
-        <link rel="stylesheet" href="../static/css/pattern.css" />
-        <link rel="stylesheet" href="../static/css/newcontract.css" />
+        <link rel="stylesheet" href="/static/css/pattern.css" />
+        <link rel="stylesheet" href="/static/css/newcontract.css" />
     </head>
 
     <body>
         <header>
 		  <nav>
-		      <a href="/" class="logo"><img src="../static/images/logo.png" alt="логотип"></a>
+		      <a href="/" class="logo"><img src="/static/images/logo.png" alt="логотип"></a>
 			  <ul class="topmenu">
-				<li><a href="games.html">Игры</a></li>
-				<li><a href="reviews.html">Отзывы</a></li>
-				<li><a class="submenu-link"><img src="../static/images/avatar.png" alt="аватарка"></a>
+				<li><a href="/games.html">Игры</a></li>
+				<li><a href="/reviews.html">Отзывы</a></li>
+				<li><a class="submenu-link"><img src="/static/images/avatar.png" alt="аватарка"></a>
 				  <ul class="submenu">
-					<li><a href="account.html">Аккаунт</a></li>
-					<li><a href="messages.html">Сообщения</a></li>
-					<li><a href="control.html">Управление</a></li>
-					<li><a href="login.html">Войти\Регистрация</a></li>
+					<li><a href="/account.html">Аккаунт</a></li>
+					<li><a href="/messages.html">Сообщения</a></li>
+					<li><a href="/control.html">Управление</a></li>
+					<li><a href="/login.html">Войти\Регистрация</a></li>
 				  </ul>
 				</li>
 			  </ul>
@@ -28,14 +28,27 @@
 		</header>
         <section>
             <div class="contract">
-                <h1>Форма для составления контракта</h1>
-                <form method="post">
-					<input type="date">
-					<input type="date">
-					<input type="number">
-					<input type="number">
-					<button type="submit"></button>
-                </form>
+				<form method="post" class="decor">
+					{% csrf_token %}
+					<div class="form-left-decoration"></div>
+					<div class="form-right-decoration"></div>
+					<div class="circle"></div>
+					<div class="form-inner">
+					<h3>Составление контракта</h3>
+					<label for="id_conclusion_date">Дата заключения:</label>
+					{{ form.conclusion_date }}
+					<label for="id_contract_end_date">Дата окончания действия:</label>
+					{{ form.contract_end_date }}
+					<label for="id_employee_id">Выберите сотрудника:</label>
+					{{ form.employee_id }}
+					{{ form.client_id }}
+					{{ form.game_id }}
+					<label for="id_development_full_price">Введите дополнительные расходы:</label>
+					{{ form.development_full_price }}
+					<span>{{ error }}</span>
+					<input type="submit" value="Отправить">
+					</div>
+				</form>
             </div>
         </section>
     </body>
