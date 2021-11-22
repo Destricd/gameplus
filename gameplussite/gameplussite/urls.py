@@ -22,6 +22,7 @@ urlpatterns = [
     path('', MainPage.as_view()),
     path('games.html', GamesPage.as_view()),
     path('games.html/<int:id>', GameOnePage.as_view()),
+    path('games.html/create', CreateContract.as_view()),
     path('account.html', AccountPage.as_view()),
     path('allgames.html', AllGamesPage.as_view()),
     path('alltasks.html', AllTasksPage.as_view()),

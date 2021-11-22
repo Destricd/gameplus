@@ -10,6 +10,10 @@ section {
 .sortblock {
 	margin-right: 10px;
 }
+.sortblock > p, .searchblock > p {
+    position: relative;
+    margin: 10px 0;
+}
 .sortsel {
 	padding: 8px;
 	border: 2px solid #7BA7AB;

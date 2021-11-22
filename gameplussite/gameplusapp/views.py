@@ -33,11 +33,27 @@ class GameOnePage(View):
     def get(self, request, id):
         g_games = get_games()
         game_info = get_gameinfo(id)
+        form = GamesFilterForm(request.GET)
+
+        if form.is_valid():
+            if form.cleaned_data["search"]:
+                g_games = g_games.filter(name__iregex=form.cleaned_data["search"])
+
+            if form.cleaned_data["ordering"]:
+                g_games = g_games.order_by(form.cleaned_data["ordering"])
+
         context = {
             'g_games': g_games,
-            'game_info': game_info
+            'game_info': game_info,
+            'form': form
         }
         return render(request, 'games.html', context=context)
+
+
+class CreateContract(View):
+    def get(self, request):
+        context = {}
+        return render(request, 'newcontract.html', context=context)
 
 
 class AccountPage(View):
