@@ -28,24 +28,17 @@
 		</header>
 		<section class="selections">
 			<div class="functions">
-				<div class="sortblock">
-					<form class="sortform">
-					   <p><strong>Сортировать по:</strong></p>
-					   <p><select class="sortsel" name="sort">
-						   <option value="s1" selected>Алфавиту</option>
-						   <option value="s2">Дате выхода</option>
-						   <option value="s3">Цене с дешёвой</option>
-						   <option value="s4">Цене с дорогой</option>
-					   </select></p>
-					</form>
-				</div>
-				<div class="searchblock">
-					<form class="searchform">
-					   <p><strong>Найти:</strong></p>
-					   <p><input type="text" placeholder="Искать здесь...">
-					   <button type="submit"></button></p>
-					</form>
-				</div>
+				<form class="searchform" method="get">
+					<div class="sortblock">
+						<p><strong>Сортировать по:</strong></p>
+						<p>{{ form.ordering }}</p>
+					</div>
+					<div class="searchblock">
+						<p><strong>Найти:</strong></p>
+						<p>{{ form.search }}
+						<button type="submit"></button></p>
+					</div>
+				</form>
 			</div>
 		</section>
 		<section class="allgames">

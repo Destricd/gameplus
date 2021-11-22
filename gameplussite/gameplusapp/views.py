@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views import View
 from .function import *
+from .forms import GamesFilterForm
 
 
 class MainPage(View):
@@ -12,8 +13,18 @@ class MainPage(View):
 class GamesPage(View):
     def get(self, request):
         g_games = get_games()
+        form = GamesFilterForm(request.GET)
+
+        if form.is_valid():
+            if form.cleaned_data["search"]:
+                g_games = g_games.filter(name__iregex=form.cleaned_data["search"])
+
+            if form.cleaned_data["ordering"]:
+                g_games = g_games.order_by(form.cleaned_data["ordering"])
+
         context = {
-            'g_games': g_games
+            'g_games': g_games,
+            'form': form
         }
         return render(request, 'games.html', context=context)
 

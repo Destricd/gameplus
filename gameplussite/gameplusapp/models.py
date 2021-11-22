@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from .forms import GamesFilterForm
 
 
 class Game(models.Model):
@@ -15,7 +16,7 @@ class Game(models.Model):
     picture = models.ImageField(upload_to="static/images/games", blank=True)
 
     class Meta:
-        gamesort = ["name"]
+        ordering = ["name"]
 
 
 class GameDevelopmentStage(models.Model):

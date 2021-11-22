@@ -10,27 +10,20 @@ section {
 .sortblock {
 	margin-right: 10px;
 }
-.sortblock  > form, .searchblock > form {
-	display: block;
-}
 .sortsel {
 	padding: 8px;
 	border: 2px solid #7BA7AB;
 	border-radius: 5px;
 	width: 150px;
 }
-.sortform > p, .searchform > p {
-	position: relative;
-	margin: 10px 0;
-}
-.searchform > p > input {
+.searchblock > p > input {
 	width: 100%;
     padding: 9px 9px 9px 10px;
     border: 2px solid #7BA7AB;
     border-radius: 5px;
     outline: none;
 }
-.searchform > p > button {
+.searchblock > p > button {
 	position: absolute; 
     top: 0;
     right: 0px;
@@ -40,7 +33,7 @@ section {
     border-radius: 0 5px 5px 0;
     cursor: pointer;
 }
-.searchform > p > button:before {
+.searchblock > p > button:before {
 	content: "\f35a";
     font-family: 'Font Awesome 5 Free';
     font-size: 17px;
