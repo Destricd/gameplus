@@ -55,6 +55,7 @@ class GameOnePage(View):
 class CreateContract(View):
     def get(self, request, id):
         form = ContractsForm()
+        form.fields['employee_id'].queryset = (Employee.objects.filter(access_level__in=['A', 'M']))
 
         context = {
             'form': form
@@ -62,19 +63,20 @@ class CreateContract(View):
         return render(request, 'newcontract.html', context=context)
 
     def post(self, request, id):
-        form = ContractsForm()
+        form = ContractsForm(request.POST)
+        form.fields['employee_id'].queryset = (Employee.objects.filter(access_level__in=['A', 'M']))
 
         context = {
             'form': form
         }
-        form = ContractsForm(request.POST)
         if form.is_valid():
-            form.save()
+            contract = form.save(commit=False)
+            contract.game_id = Game.objects.get(id=id)
+            contract.save()
             return HttpResponseRedirect('/games.html')
         else:
             context["error"] = "Неправильное заполнение"
             return render(request, 'newcontract.html', context=context)
-
 
 
 class AccountPage(View):

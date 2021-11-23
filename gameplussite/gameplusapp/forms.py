@@ -19,7 +19,7 @@ class GamesFilterForm(forms.Form):
 class ContractsForm(forms.ModelForm):
     class Meta:
         model = ContractOfDevelopment
-        fields = ['conclusion_date', 'contract_end_date', 'employee_id', 'client_id', 'game_id', 'development_full_price']
+        fields = ['conclusion_date', 'contract_end_date', 'employee_id', 'client_id', 'development_full_price']
 
         widgets = {
             "development_full_price": forms.NumberInput(attrs={

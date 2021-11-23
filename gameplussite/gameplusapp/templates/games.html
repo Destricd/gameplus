@@ -58,7 +58,7 @@
 					<div class="description">
 						<p><img src="../{{ onegame.picture }}" alt="Обложка" class="rightimg">{{ onegame.rules|linebreaks }}</p>
 						<p>Сайт: {{ onegame.site }}</p>
-						<p>Число пользователей: {{ onegame.number_of_rules }}</p>
+						<p>Тип: {{ onegame.number_of_rules|yesno:"Многопользовательская,Однопользовательская" }}</p>
 						<p>Бюджет разработки: {{ onegame.development_budget }} руб.</p>
 					</div>
 					<div class="buttonblock">

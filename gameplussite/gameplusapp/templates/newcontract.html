@@ -42,10 +42,9 @@
 						<label for="id_employee_id">Выберите сотрудника:</label>
 						{{ form.employee_id }}
 						{{ form.client_id }}
-						{{ form.game_id }}
 						<label for="id_development_full_price">Введите дополнительные расходы:</label>
 						{{ form.development_full_price }}
-						<span>{{ error }}</span>
+						<span style="color: red">{{ error }}</span>
 						<input type="submit" value="Отправить">
 					</div>
 				</form>
