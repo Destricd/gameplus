@@ -62,20 +62,18 @@ class CreateContract(View):
         return render(request, 'newcontract.html', context=context)
 
     def post(self, request, id):
-        error = 'Неправильное заполнение'
         form = ContractsForm()
 
         context = {
-            'form': form,
-            'error': error
+            'form': form
         }
-        if request.method == 'POST':
-            form = ContractsForm(request.POST)
-            if form.is_valid():
-                form.save()
-                return HttpResponseRedirect('/games.html')
-            else:
-                return render(request, 'newcontract.html', context=context)
+        form = ContractsForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/games.html')
+        else:
+            context["error"] = "Неправильное заполнение"
+            return render(request, 'newcontract.html', context=context)
 
 
 
