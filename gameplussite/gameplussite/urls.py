@@ -30,7 +30,6 @@ urlpatterns = [
     path('control.html', ControlPage.as_view()),
     path('login.html', LoginPage.as_view()),
     path('messages.html', MessagesPage.as_view()),
-    path('privates.html', PrivatesPage.as_view()),
     path('reviews.html', ReviewsPage.as_view()),
     path('sequrity.html', SequrityPage.as_view()),
 ]

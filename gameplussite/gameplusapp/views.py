@@ -121,12 +121,6 @@ class MessagesPage(View):
         return render(request, 'messages.html', context=context)
 
 
-class PrivatesPage(View):
-    def get(self, request):
-        context = {}
-        return render(request, 'privates.html', context=context)
-
-
 class ReviewsPage(View):
     def get(self, request):
         context = {}
