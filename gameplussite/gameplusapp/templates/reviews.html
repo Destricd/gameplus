@@ -13,14 +13,14 @@
 		  <nav>
 		      <a href="/" class="logo"><img src="../static/images/logo.png" alt="логотип"></a>
 			  <ul class="topmenu">
-				<li><a href="games.html">Игры</a></li>
-				<li><a href="reviews.html">Отзывы</a></li>
+				<li><a href="/games.html">Игры</a></li>
+				<li><a href="/reviews.html">Отзывы</a></li>
 				<li><a class="submenu-link"><img src="../static/images/avatar.png" alt="аватарка"></a>
 				  <ul class="submenu">
-					<li><a href="account.html">Аккаунт</a></li>
-					<li><a href="messages.html">Сообщения</a></li>
-					<li><a href="control.html">Управление</a></li>
-					<li><a href="login.html">Войти\Регистрация</a></li>
+					<li><a href="/account.html">Аккаунт</a></li>
+					<li><a href="/messages.html">Сообщения</a></li>
+					<li><a href="/control.html">Управление</a></li>
+					<li><a href="/login.html">Войти\Регистрация</a></li>
 				  </ul>
 				</li>
 			  </ul>
@@ -28,46 +28,39 @@
 		</header>
 		<section class="selections">
 			<div class="functions">
-				<div class="sortblock">
-					<form class="sortform">
-					   <p><strong>Сортировать по:</strong></p>
-					   <p><select class="sortsel" name="sort">
-						<option value="s1" selected>Алфавиту</option>
-						<option value="s2">Дате выхода</option>
-						<option value="s3">Заказчику</option>
-						<option value="s4">Клиентам</option>
-					   </select></p>
-					</form>
-				</div>
-				<div class="searchblock">
-					<form class="searchform">
-					   <p><strong>Найти:</strong></p>
-					   <p><input type="text" placeholder="Искать здесь...">
-					   <button type="submit"></button></p>
-					</form>
-				</div>
+				<form class="searchform" method="get">
+					<div class="sortblock">
+						<p><strong>Сортировать по:</strong></p>
+						<p>{{ filtred.ordering }}</p>
+					</div>
+					<div class="searchblock">
+						<p><strong>Найти:</strong></p>
+						<p>{{ filtred.search }}
+						<button type="submit"></button></p>
+					</div>
+				</form>
 			</div>
 		</section>
 		<section class="allreviews">
 			<div class="lists">
 				<div class="reviews">
-					<p class="example"></p>
+
+					{% for review in g_reviews %}
+					{% include 'review_one.html' %}
+					{% endfor %}
+
 				</div>
 				<div class="feedback">
 					<div class="inputrev">
-						<form>
-							<div class="writetitle">Оставить отзыв</div>
-							<div>Ваше ФИО</div>
-							<input type="text" name="fio" required="required">
-							<div>Ваш email</div>
-							<input type="email" name="email" required="required">
-							<div>Сообщение</div>
-							<textarea name="message"></textarea>
-						</form>
-					</div>
-					<div class="writerev">
-						<form>
-							<p><button type="submit"></button></p>
+						<form method="post">
+							{% csrf_token %}
+							<h3 class="writetitle">Оставить отзыв</h3>
+							<label for="id_client_id">Ваше ФИО</label>
+							{{ form.client_id }}
+							<label for="id_review_text">Сообщение</label>
+							{{ form.review_text }}
+							<span style="color: red">{{ error }}</span>
+							<button type="submit"></button>
 						</form>
 					</div>
 				</div>

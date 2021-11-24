@@ -11,3 +11,6 @@ def get_gameinfo(id_game):
     return gameinformations
 
 
+def get_reviews():
+    reviews = Review.objects.all()
+    return reviews

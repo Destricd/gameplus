@@ -45,8 +45,11 @@ class TechnicalTask(models.Model):
 
 class Review(models.Model):
     client_id = models.ForeignKey(Employee, on_delete=models.CASCADE)
-    client_email = models.CharField(max_length=30)
     review_text = models.CharField(max_length=200)
+    public_date = models.DateField(default=timezone.now())
+
+    class Meta:
+        ordering = ["-public_date"]
 
 
 class ContractOfDevelopment(models.Model):

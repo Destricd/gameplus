@@ -1,9 +1,13 @@
+import datetime
+
 from django.shortcuts import render
 from django.views import View
 from django.http import HttpResponseRedirect
 from .function import *
 from .forms import GamesFilterForm
 from .forms import ContractsForm
+from .forms import ReviewsForm
+from .forms import ReviewsFilterForm
 
 
 class MainPage(View):
@@ -123,8 +127,96 @@ class MessagesPage(View):
 
 class ReviewsPage(View):
     def get(self, request):
-        context = {}
+        g_reviews = get_reviews()
+        form = ReviewsForm()
+        filtred = ReviewsFilterForm(request.GET)
+
+        if filtred.is_valid():
+            if filtred.cleaned_data["search"]:
+                g_reviews = g_reviews.filter(review_text__iregex=filtred.cleaned_data["search"])
+
+            if filtred.cleaned_data["ordering"]:
+                g_reviews = g_reviews.order_by(filtred.cleaned_data["ordering"])
+
+        context = {
+            'g_reviews': g_reviews,
+            'filtred': filtred,
+            'form': form
+        }
         return render(request, 'reviews.html', context=context)
+
+    def post(self, request):
+        g_reviews = get_reviews()
+        form = ReviewsForm(request.POST)
+        filtred = ReviewsFilterForm(request.GET)
+
+        if filtred.is_valid():
+            if filtred.cleaned_data["search"]:
+                g_reviews = g_reviews.filter(review_text__iregex=filtred.cleaned_data["search"])
+
+            if filtred.cleaned_data["ordering"]:
+                g_reviews = g_reviews.order_by(filtred.cleaned_data["ordering"])
+
+        context = {
+            'g_reviews': g_reviews,
+            'filtred': filtred,
+            'form': form
+        }
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.public_date = datetime.datetime.now()
+            review.save()
+            return HttpResponseRedirect('reviews.html')
+        else:
+            context["error"] = "Неправильное заполнение"
+            return render(request, 'reviews.html', context=context)
+
+
+class ReviewOnePage(View):
+    def get(self, request, id):
+        g_reviews = get_reviews()
+        form = ReviewsForm(initial={'review_text': g_reviews.get(id=id).review_text})
+        filtred = ReviewsFilterForm(request.GET)
+
+        if filtred.is_valid():
+            if filtred.cleaned_data["search"]:
+                g_reviews = g_reviews.filter(review_text__iregex=filtred.cleaned_data["search"])
+
+            if filtred.cleaned_data["ordering"]:
+                g_reviews = g_reviews.order_by(filtred.cleaned_data["ordering"])
+
+        context = {
+            'g_reviews': g_reviews,
+            'filtred': filtred,
+            'form': form
+        }
+        return render(request, 'reviews.html', context=context)
+
+    def post(self, request, id):
+        g_reviews = get_reviews()
+        form = ReviewsForm(request.POST)
+        filtred = ReviewsFilterForm(request.GET)
+
+        if filtred.is_valid():
+            if filtred.cleaned_data["search"]:
+                g_reviews = g_reviews.filter(review_text__iregex=filtred.cleaned_data["search"])
+
+            if filtred.cleaned_data["ordering"]:
+                g_reviews = g_reviews.order_by(filtred.cleaned_data["ordering"])
+
+        context = {
+            'g_reviews': g_reviews,
+            'filtred': filtred,
+            'form': form
+        }
+        if form.is_valid():
+            review = Review.objects.get(id=id)
+            review.review_text = form.cleaned_data["review_text"]
+            review.save()
+            return HttpResponseRedirect('/reviews.html')
+        else:
+            context["error"] = "Неправильное заполнение"
+            return render(request, 'reviews.html', context=context)
 
 
 class SequrityPage(View):

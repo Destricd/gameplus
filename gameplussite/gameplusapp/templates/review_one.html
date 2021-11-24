@@ -1,0 +1,24 @@
+{% block content %}
+
+<div class="revone">
+    <div class="revtag">
+        <div class="revname">
+            <p>{{ review.client_id }}</p>
+        </div>
+        <div class="revdate">
+            <p>{{ review.public_date|date:"d.m.Y" }}</p>
+        </div>
+    </div>
+    <div class="revother">
+        <div class="revrate">
+            <p>{{ review.review_text }}</p>
+        </div>
+    </div>
+    <div class="revchange">
+        <div class="more">
+            <a href="/reviews.html/{{ review.id }}">Редактировать>></a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

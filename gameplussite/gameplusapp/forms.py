@@ -1,5 +1,6 @@
 from django import forms
 from .models import ContractOfDevelopment
+from .models import Review
 
 
 class GamesFilterForm(forms.Form):
@@ -24,5 +25,29 @@ class ContractsForm(forms.ModelForm):
         widgets = {
             "development_full_price": forms.NumberInput(attrs={
                 'placeholder': 'Дополнительные расходы, руб.'
+            })
+        }
+
+
+class ReviewsFilterForm(forms.Form):
+    ordering = forms.ChoiceField(required=False, widget=forms.Select(attrs={
+        'class': 'sortsel'
+    }), choices=[
+        ["-public_date", "Дате последней публикации"],
+        ["public_date", "Дате первой публикации"]
+    ])
+    search = forms.CharField(label="Найти:", required=False, widget=forms.TextInput(attrs={
+        'placeholder': 'Искать здесь...'
+    }))
+
+
+class ReviewsForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['client_id', 'review_text']
+
+        widgets = {
+            "review_text": forms.Textarea(attrs={
+                'placeholder': 'Пишите свои пожелания и замечания для улучшения нашего сервиса, делитесь впечатлениями'
             })
         }

@@ -31,5 +31,6 @@ urlpatterns = [
     path('login.html', LoginPage.as_view()),
     path('messages.html', MessagesPage.as_view()),
     path('reviews.html', ReviewsPage.as_view()),
+    path('reviews.html/<int:id>', ReviewOnePage.as_view()),
     path('sequrity.html', SequrityPage.as_view()),
 ]
