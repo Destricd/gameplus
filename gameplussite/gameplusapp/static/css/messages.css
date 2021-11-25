@@ -4,40 +4,34 @@ section {
 .functions {
 	padding: 10px 20px 5px 20px;
 }
-.msgblock, .sortblock, .searchblock, .messages, .about {
+.sortblock, .searchblock, .messages, .about {
 	display: inline-block;
 }
-.msgblock, .sortblock {
+.sortblock {
 	margin-right: 10px;
 }
-.msgblock  > form, .sortblock  > form, .searchblock > form, .send > .sendform {
+.send > .sendform {
 	display: block;
 }
-.msgsel, .sortsel {
+.sortblock  > form, .searchblock > form, .searchblock > p {
+    position: relative;
+    margin: 10px 0;
+}
+.sortsel {
 	padding: 8px;
 	border: 2px solid #7BA7AB;
 	border-radius: 5px;
 	width: 150px;
 }
-.msgform > p, .sortform > p, .searchform > p, .sendform > p {
-	position: relative;
-}
-.msgform > p, .sortform > p, .searchform > p {
-	margin: 10px 0;
-}
-.sendform > p {
-    margin: 0;
-    height: 100%;
-}
-.searchform > p > input {
-    width: 100%;
+.searchblock > p > input {
+	width: 100%;
     padding: 9px 9px 9px 10px;
     border: 2px solid #7BA7AB;
     border-radius: 5px;
     outline: none;
 }
-.searchform > p > button {
-	position: absolute; 
+.searchblock > p > button {
+	position: absolute;
     top: 0;
     right: 0px;
     padding: 9px;
@@ -46,7 +40,7 @@ section {
     border-radius: 0 5px 5px 0;
     cursor: pointer;
 }
-.searchform > p > button:before {
+.searchblock > p > button:before {
 	content: "\f35a";
     font-family: 'Font Awesome 5 Free';
     font-size: 17px;
