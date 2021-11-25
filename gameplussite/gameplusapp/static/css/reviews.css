@@ -10,7 +10,7 @@ section {
 .sortblock {
 	margin-right: 10px;
 }
-.sortblock  > form, .searchblock > form, .searchblock > p {
+.sortblock  > p, .searchblock > p {
     position: relative;
     margin: 10px 0;
 }

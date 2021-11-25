@@ -1,6 +1,7 @@
 from django import forms
 from .models import ContractOfDevelopment
 from .models import Review
+from .models import Employee
 
 
 class GamesFilterForm(forms.Form):
@@ -50,4 +51,51 @@ class ReviewsForm(forms.ModelForm):
             "review_text": forms.Textarea(attrs={
                 'placeholder': 'Пишите свои пожелания и замечания для улучшения нашего сервиса, делитесь впечатлениями'
             })
+        }
+
+
+class AccountsFilterForm(forms.Form):
+    watching = forms.ChoiceField(required=False, widget=forms.Select(attrs={
+        'class': 'sortsel'
+    }), choices=[
+        ["", "Всех"],
+        ["a", "Админов"],
+        ["m", "Сотрудников"],
+        ["c", "Клиентов"]
+    ])
+    ordering = forms.ChoiceField(required=False, widget=forms.Select(attrs={
+        'class': 'sortsel'
+    }), choices=[
+        ["-reg_date", "Дате последней регистрации"],
+        ["reg_date", "Дате первой регистрации"],
+        ["full_name", "ФИО"],
+        ["login", "Логинам"]
+    ])
+    search = forms.CharField(label="Найти:", required=False, widget=forms.TextInput(attrs={
+        'placeholder': 'Искать здесь...'
+    }))
+
+
+class AccountsForm(forms.ModelForm):
+    class Meta:
+        model = Employee
+        fields = ['full_name', 'phone', 'access_level', 'email', 'login', 'password', 'avatar']
+
+        widgets = {
+            "full_name": forms.TextInput(attrs={
+                'placeholder': 'Фамилия Имя Отчество'
+            }),
+            "phone": forms.NumberInput(attrs={
+                'placeholder': '***********'
+            }),
+            "email": forms.EmailInput(attrs={
+                'placeholder': 'box@example.com'
+            }),
+            "login": forms.TextInput(attrs={
+                'placeholder': 'Логин'
+            }),
+            "password": forms.PasswordInput(attrs={
+                'placeholder': 'Пароль'
+            })
+
         }

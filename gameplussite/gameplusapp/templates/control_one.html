@@ -1,0 +1,28 @@
+{% block content %}
+
+<div class="userone">
+    <div class="usertag">
+        <div class="username">
+            <p>{{ account.full_name }}</p>
+        </div>
+        <div class="userlogin">
+            <p>{{ account.login }}</p>
+        </div>
+    </div>
+    <div class="userother">
+        <div class="userrate">
+            <p>{{ account.access_level }}</p>
+        </div>
+        <div class="userdate">
+            <p>{{ account.reg_date|date:"d.m.Y H:i" }}</p>
+        </div>
+        <div class="useremail">
+            <p>{{ account.email|truncatechars:4 }}</p>
+        </div>
+        <div class="more">
+            <a href="/control.html/{{ account.id }}">Редактировать>></a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

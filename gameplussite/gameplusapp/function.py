@@ -14,3 +14,8 @@ def get_gameinfo(id_game):
 def get_reviews():
     reviews = Review.objects.all()
     return reviews
+
+
+def get_accounts():
+    accounts = Employee.objects.all()
+    return accounts

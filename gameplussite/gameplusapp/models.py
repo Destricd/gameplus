@@ -26,13 +26,22 @@ class GameDevelopmentStage(models.Model):
 
 
 class Employee(models.Model):
+    MY_CHOICES = (
+        ('a', 'Админ'),
+        ('m', 'Мастер'),
+        ('c', 'Клиент')
+    )
     full_name = models.CharField(max_length=50)
     phone = models.CharField(max_length=11)
-    access_level = models.CharField(max_length=1)
+    access_level = models.CharField(max_length=1, choices=MY_CHOICES)
     email = models.CharField(max_length=30)
-    login = models.CharField(max_length=30)
+    login = models.CharField(max_length=30, unique=True)
     password = models.CharField(max_length=30)
+    reg_date = models.DateTimeField(default=timezone.now())
     avatar = models.ImageField(upload_to="static/images/users", null=True, blank=True)
+
+    class Meta:
+        ordering = ["-reg_date"]
 
     def __str__(self):
         return self.full_name
@@ -46,7 +55,7 @@ class TechnicalTask(models.Model):
 class Review(models.Model):
     client_id = models.ForeignKey(Employee, on_delete=models.CASCADE)
     review_text = models.CharField(max_length=200)
-    public_date = models.DateField(default=timezone.now())
+    public_date = models.DateTimeField(default=timezone.now())
 
     class Meta:
         ordering = ["-public_date"]
@@ -61,8 +70,17 @@ class ContractOfDevelopment(models.Model):
     development_full_price = models.DecimalField(max_digits=12, decimal_places=2)
 
 
+class Chat(models.Model):
+    members = models.ManyToManyField(Employee)
+
+
 class Message(models.Model):
-    sender_id = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='sender_id')
-    receiver_id = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='receiver_id')
+    chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
+    sender_id = models.ForeignKey(Employee, on_delete=models.CASCADE)
     letter = models.TextField(default=' ')
+    pub_date = models.DateTimeField(default=timezone.now())
+    is_readed = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['pub_date']
 

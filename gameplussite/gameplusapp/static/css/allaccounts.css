@@ -1,15 +1,55 @@
-.games > p {
-	height: 1920px; /* Высота блока */
-	width: 100%;
-	background-position: center top 5%; /* Позиция изображения относительно блока */
-	background-repeat: no-repeat; /* Повторение фона */
+.userone {
+    margin: 10px 0;
+    border: 1px solid black;
+    border-radius: 20px;
 }
-p.example {
-	background-image: url("../images/main/main-block-bg.png"); /* Путь к фоновому изображению */
+.usertag {
+    border-bottom: 1px solid black;
+}
+.usertag > div, .userother > div {
+    display: inline-block;
+}
+.username {
+    width: 64.9%;
+    border-right: 1px solid black;
+    padding: 10px 10px 10px 20px;
+    font-weight: bold;
+}
+.userlogin {
+    float: right;
+    padding: 10px 40px 10px 10px;
+}
+.username > p, .userlogin > p, .userrate > p, .userdate > p, .useremail > p, .more > p {
+    margin: 0;
+}
+.userrate {
+    width: 9.4%;
+    border-right: 1px solid black;
+    padding: 8px 10px;
+}
+.userdate {
+    width: 39%;
+    border-right: 1px solid black;
+    padding: 8px 10px;
+}
+.userrate > p, .userdate > p {
+    text-align: center;
+}
+.useremail {
+    width: 15%;
+    border-right: 1px solid black;
+    padding: 8px 20px 8px 10px;
+}
+.more {
+    float: right;
+    padding: 8px 8px 8px 4px;
+}
+.useremail > p {
+    text-align: right;
 }
 .rightimg  {
 	width: 30%;
 	height: 40%;
-    float: right; /* Выравнивание по правому краю  */ 
+    float: right; /* Выравнивание по правому краю  */
     margin: 7px 0 7px 7px; /* Отступы вокруг картинки */
 }

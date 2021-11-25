@@ -8,6 +8,8 @@ from .forms import GamesFilterForm
 from .forms import ContractsForm
 from .forms import ReviewsForm
 from .forms import ReviewsFilterForm
+from .forms import AccountsForm
+from .forms import AccountsFilterForm
 
 
 class MainPage(View):
@@ -109,8 +111,108 @@ class ContractsPage(View):
 
 class ControlPage(View):
     def get(self, request):
-        context = {}
+        g_accounts = get_accounts()
+        form = AccountsForm()
+        filtred = AccountsFilterForm(request.GET)
+
+        if filtred.is_valid():
+            if filtred.cleaned_data["search"]:
+                g_accounts = g_accounts.filter(full_name__iregex=filtred.cleaned_data["search"])
+
+            if filtred.cleaned_data["ordering"]:
+                g_accounts = g_accounts.order_by(filtred.cleaned_data["ordering"])
+
+            if filtred.cleaned_data["watching"]:
+                g_accounts = g_accounts.filter(access_level=filtred.cleaned_data["watching"])
+
+        context = {
+            'g_accounts': g_accounts,
+            'filtred': filtred,
+            'form': form
+        }
         return render(request, 'control.html', context=context)
+
+    def post(self, request):
+        g_accounts = get_accounts()
+        form = AccountsForm(request.POST)
+        filtred = AccountsFilterForm(request.GET)
+
+        if filtred.is_valid():
+            if filtred.cleaned_data["search"]:
+                g_accounts = g_accounts.filter(full_name__iregex=filtred.cleaned_data["search"])
+
+            if filtred.cleaned_data["ordering"]:
+                g_accounts = g_accounts.order_by(filtred.cleaned_data["ordering"])
+
+            if filtred.cleaned_data["watching"]:
+                g_accounts = g_accounts.filter(access_level=filtred.cleaned_data["watching"])
+
+        context = {
+            'g_accounts': g_accounts,
+            'filtred': filtred,
+            'form': form
+        }
+        if form.is_valid():
+            account = form.save(commit=False)
+            account.public_date = datetime.datetime.now()
+            account.save()
+            return HttpResponseRedirect('control.html')
+        else:
+            context["error"] = "Неправильное заполнение"
+            return render(request, 'control.html', context=context)
+
+
+class ControlOnePage(View):
+    def get(self, request, id):
+        g_accounts = get_accounts()
+        form = AccountsForm(initial={'full_name': g_accounts.get(id=id).full_name})
+        filtred = AccountsFilterForm(request.GET)
+
+        if filtred.is_valid():
+            if filtred.cleaned_data["search"]:
+                g_accounts = g_accounts.filter(full_name__iregex=filtred.cleaned_data["search"])
+
+            if filtred.cleaned_data["ordering"]:
+                g_accounts = g_accounts.order_by(filtred.cleaned_data["ordering"])
+
+            if filtred.cleaned_data["watching"]:
+                g_accounts = g_accounts.filter(access_level=filtred.cleaned_data["watching"])
+
+        context = {
+            'g_accounts': g_accounts,
+            'filtred': filtred,
+            'form': form
+        }
+        return render(request, 'control.html', context=context)
+
+    def post(self, request, id):
+        g_accounts = get_accounts()
+        form = AccountsForm(request.POST)
+        filtred = AccountsFilterForm(request.GET)
+
+        if filtred.is_valid():
+            if filtred.cleaned_data["search"]:
+                g_accounts = g_accounts.filter(full_name__iregex=filtred.cleaned_data["search"])
+
+            if filtred.cleaned_data["ordering"]:
+                g_accounts = g_accounts.order_by(filtred.cleaned_data["ordering"])
+
+            if filtred.cleaned_data["watching"]:
+                g_accounts = g_accounts.filter(access_level=filtred.cleaned_data["watching"])
+
+        context = {
+            'g_accounts': g_accounts,
+            'filtred': filtred,
+            'form': form
+        }
+        if form.is_valid():
+            account = Employee.objects.get(id=id)
+            account.full_name = form.cleaned_data["full_name"]
+            account.save()
+            return HttpResponseRedirect('/control.html')
+        else:
+            context["error"] = "Неправильное заполнение"
+            return render(request, 'control.html', context=context)
 
 
 class LoginPage(View):

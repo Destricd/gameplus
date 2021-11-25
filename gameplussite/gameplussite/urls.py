@@ -28,6 +28,7 @@ urlpatterns = [
     path('alltasks.html', AllTasksPage.as_view()),
     path('contracts.html', ContractsPage.as_view()),
     path('control.html', ControlPage.as_view()),
+    path('control.html/<int:id>', ControlOnePage.as_view()),
     path('login.html', LoginPage.as_view()),
     path('messages.html', MessagesPage.as_view()),
     path('reviews.html', ReviewsPage.as_view()),
