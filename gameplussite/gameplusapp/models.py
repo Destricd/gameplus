@@ -61,8 +61,17 @@ class ContractOfDevelopment(models.Model):
     development_full_price = models.DecimalField(max_digits=12, decimal_places=2)
 
 
+class Chat(models.Model):
+    members = models.ManyToManyField(Employee)
+
+
 class Message(models.Model):
-    sender_id = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='sender_id')
-    receiver_id = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='receiver_id')
+    chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
+    sender_id = models.ForeignKey(Employee, on_delete=models.CASCADE)
     letter = models.TextField(default=' ')
+    pub_date = models.DateTimeField(default=timezone.now())
+    is_readed = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['pub_date']
 
