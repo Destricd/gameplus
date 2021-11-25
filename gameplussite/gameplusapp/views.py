@@ -165,7 +165,9 @@ class ControlPage(View):
 class ControlOnePage(View):
     def get(self, request, id):
         g_accounts = get_accounts()
-        form = AccountsForm(initial={'full_name': g_accounts.get(id=id).full_name})
+        form = AccountsForm(initial={'full_name': g_accounts.get(id=id).full_name,
+                                    'login': g_accounts.get(id=id).login,
+                                    'password': g_accounts.get(id=id).password})
         filtred = AccountsFilterForm(request.GET)
 
         if filtred.is_valid():
@@ -208,6 +210,8 @@ class ControlOnePage(View):
         if form.is_valid():
             account = Employee.objects.get(id=id)
             account.full_name = form.cleaned_data["full_name"]
+            account.login = form.cleaned_data["login"]
+            account.password = form.cleaned_data["password"]
             account.save()
             return HttpResponseRedirect('/control.html')
         else:
