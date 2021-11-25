@@ -8,7 +8,7 @@ class Game(models.Model):
     rate = models.CharField(max_length=10)
     rules = models.TextField(default=' ')
     release_date = models.DateField(default=timezone.now())
-    site = models.CharField(max_length=20)
+    site = models.CharField(max_length=63)
     number_of_rules = models.BooleanField(default=False)
     price = models.DecimalField(max_digits=12, decimal_places=2)
     development_budget = models.DecimalField(max_digits=12, decimal_places=2)
@@ -49,6 +49,7 @@ class Employee(models.Model):
 
 class TechnicalTask(models.Model):
     description = models.TextField(default=' ')
+    complete = models.BooleanField(default=False)
     employee_id = models.ForeignKey(Employee, on_delete=models.CASCADE)
 
 

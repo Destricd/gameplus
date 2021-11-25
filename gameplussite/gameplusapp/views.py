@@ -40,7 +40,7 @@ class GamesPage(View):
 class GameOnePage(View):
     def get(self, request, id):
         g_games = get_games()
-        game_info = get_gameinfo(id)
+        game_info = Game.objects.get(id=id)
         form = GamesFilterForm(request.GET)
 
         if form.is_valid():
@@ -154,7 +154,7 @@ class ControlPage(View):
         }
         if form.is_valid():
             account = form.save(commit=False)
-            account.public_date = datetime.datetime.now()
+            account.reg_date = datetime.datetime.now()
             account.save()
             return HttpResponseRedirect('control.html')
         else:

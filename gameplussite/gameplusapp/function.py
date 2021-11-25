@@ -6,11 +6,6 @@ def get_games():
     return games
 
 
-def get_gameinfo(id_game):
-    gameinformations = Game.objects.filter(id=id_game)
-    return gameinformations
-
-
 def get_reviews():
     reviews = Review.objects.all()
     return reviews

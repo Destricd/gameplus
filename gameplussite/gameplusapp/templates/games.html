@@ -51,22 +51,20 @@
 
 				</div>
 				<div class="about">
-					{% for onegame in game_info %}
 					<div class="name">
-						<h3>{{ onegame.name }}</h3>
+						<h3>{{ game_info.name }}</h3>
 					</div>
 					<div class="description">
-						<p><img src="../{{ onegame.picture }}" alt="Обложка" class="rightimg">{{ onegame.rules|linebreaks }}</p>
-						<p>Сайт: {{ onegame.site }}</p>
-						<p>Тип: {{ onegame.number_of_rules|yesno:"Многопользовательская,Однопользовательская" }}</p>
-						<p>Бюджет разработки: {{ onegame.development_budget }} руб.</p>
+						<p><img src="../{{ game_info.picture }}" alt="Отсутствует изображение" class="rightimg">{{ game_info.rules|linebreaks }}</p>
+						<p>Сайт: {{ game_info.site }}</p>
+						<p>Тип: {{ game_info.number_of_rules|yesno:"Многопользовательская,Однопользовательская" }}</p>
+						<p>Бюджет разработки: {{ game_info.development_budget }} руб.</p>
 					</div>
 					<div class="buttonblock">
-						<form action="{{ onegame.id }}/create">
+						<form action="{{ game_info.id }}/create">
 							<button type="buy">Заказать</button>
 						</form>
 					</div>
-					{% endfor %}
 				</div>
 			</div>
 		</section>
