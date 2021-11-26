@@ -68,12 +68,12 @@
 				</div>
 				<div class="info">
 					<div class="name">
-						<h3>Общие настройки</h3>
+						<h3>Общие настройки - {{ mod }}</h3>
 					</div>
 					<div class="description">
-						<p><img src="../{{ onegame.picture }}" alt="Обложка" class="rightimg">
+						<p><img src="../{{ avatar }}" alt="Отсутствует фото" class="rightimg">
 							<div class="userblock">
-								<form class="userform" method="post">
+								<form class="userform" method="post" enctype="multipart/form-data">
 									{% csrf_token %}
 								    <p><strong>ФИО:</strong></p>
 								    <p>{{ form.full_name }}</p>

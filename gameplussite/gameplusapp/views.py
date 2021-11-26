@@ -111,6 +111,7 @@ class ContractsPage(View):
 
 class ControlPage(View):
     def get(self, request):
+        mod = "добавление"
         g_accounts = get_accounts()
         form = AccountsForm()
         filtred = AccountsFilterForm(request.GET)
@@ -128,11 +129,13 @@ class ControlPage(View):
         context = {
             'g_accounts': g_accounts,
             'filtred': filtred,
-            'form': form
+            'form': form,
+            'mod': mod
         }
         return render(request, 'control.html', context=context)
 
     def post(self, request):
+        mod = "добавление"
         g_accounts = get_accounts()
         form = AccountsForm(request.POST)
         filtred = AccountsFilterForm(request.GET)
@@ -150,7 +153,8 @@ class ControlPage(View):
         context = {
             'g_accounts': g_accounts,
             'filtred': filtred,
-            'form': form
+            'form': form,
+            'mod': mod
         }
         if form.is_valid():
             account = form.save(commit=False)
@@ -164,10 +168,16 @@ class ControlPage(View):
 
 class ControlOnePage(View):
     def get(self, request, id):
+        mod = "редактирование"
         g_accounts = get_accounts()
+        avatar = g_accounts.get(id=id).avatar
         form = AccountsForm(initial={'full_name': g_accounts.get(id=id).full_name,
-                                    'login': g_accounts.get(id=id).login,
-                                    'password': g_accounts.get(id=id).password})
+                                    'password': g_accounts.get(id=id).password,
+                                    'phone': g_accounts.get(id=id).phone,
+                                    'email': g_accounts.get(id=id).email,
+                                    'access_level': g_accounts.get(id=id).access_level,
+                                    'avatar': g_accounts.get(id=id).avatar})
+        form.fields["login"].required = False
         filtred = AccountsFilterForm(request.GET)
 
         if filtred.is_valid():
@@ -183,13 +193,18 @@ class ControlOnePage(View):
         context = {
             'g_accounts': g_accounts,
             'filtred': filtred,
-            'form': form
+            'form': form,
+            'mod': mod,
+            'avatar': avatar
         }
         return render(request, 'control.html', context=context)
 
     def post(self, request, id):
+        mod = "редактирование"
         g_accounts = get_accounts()
-        form = AccountsForm(request.POST)
+        avatar = g_accounts.get(id=id).avatar
+        form = AccountsForm(request.POST, request.FILES)
+        form.fields["login"].required = False
         filtred = AccountsFilterForm(request.GET)
 
         if filtred.is_valid():
@@ -205,13 +220,20 @@ class ControlOnePage(View):
         context = {
             'g_accounts': g_accounts,
             'filtred': filtred,
-            'form': form
+            'form': form,
+            'mod': mod,
+            'avatar': avatar
         }
         if form.is_valid():
             account = Employee.objects.get(id=id)
             account.full_name = form.cleaned_data["full_name"]
-            account.login = form.cleaned_data["login"]
+            if form.cleaned_data["login"] != '':
+                account.login = form.cleaned_data["login"]
             account.password = form.cleaned_data["password"]
+            account.phone = form.cleaned_data["phone"]
+            account.email = form.cleaned_data["email"]
+            account.access_level = form.cleaned_data["access_level"]
+            account.avatar = form.cleaned_data["avatar"]
             account.save()
             return HttpResponseRedirect('/control.html')
         else:
@@ -233,6 +255,7 @@ class MessagesPage(View):
 
 class ReviewsPage(View):
     def get(self, request):
+        mod = "Оставить"
         g_reviews = get_reviews()
         form = ReviewsForm()
         filtred = ReviewsFilterForm(request.GET)
@@ -247,11 +270,13 @@ class ReviewsPage(View):
         context = {
             'g_reviews': g_reviews,
             'filtred': filtred,
-            'form': form
+            'form': form,
+            'mod': mod
         }
         return render(request, 'reviews.html', context=context)
 
     def post(self, request):
+        mod = "Оставить"
         g_reviews = get_reviews()
         form = ReviewsForm(request.POST)
         filtred = ReviewsFilterForm(request.GET)
@@ -266,7 +291,8 @@ class ReviewsPage(View):
         context = {
             'g_reviews': g_reviews,
             'filtred': filtred,
-            'form': form
+            'form': form,
+            'mod': mod
         }
         if form.is_valid():
             review = form.save(commit=False)
@@ -280,6 +306,7 @@ class ReviewsPage(View):
 
 class ReviewOnePage(View):
     def get(self, request, id):
+        mod = "Редактировать"
         g_reviews = get_reviews()
         form = ReviewsForm(initial={'review_text': g_reviews.get(id=id).review_text})
         filtred = ReviewsFilterForm(request.GET)
@@ -294,11 +321,13 @@ class ReviewOnePage(View):
         context = {
             'g_reviews': g_reviews,
             'filtred': filtred,
-            'form': form
+            'form': form,
+            'mod': mod
         }
         return render(request, 'reviews.html', context=context)
 
     def post(self, request, id):
+        mod = "Редактировать"
         g_reviews = get_reviews()
         form = ReviewsForm(request.POST)
         filtred = ReviewsFilterForm(request.GET)
@@ -313,7 +342,8 @@ class ReviewOnePage(View):
         context = {
             'g_reviews': g_reviews,
             'filtred': filtred,
-            'form': form
+            'form': form,
+            'mod': mod
         }
         if form.is_valid():
             review = Review.objects.get(id=id)

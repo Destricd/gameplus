@@ -54,7 +54,7 @@
 					<div class="inputrev">
 						<form method="post">
 							{% csrf_token %}
-							<h3 class="writetitle">Оставить отзыв</h3>
+							<h3 class="writetitle">{{ mod }} отзыв</h3>
 							<label for="id_client_id">Ваше ФИО</label>
 							{{ form.client_id }}
 							<label for="id_review_text">Сообщение</label>

@@ -96,6 +96,6 @@ class AccountsForm(forms.ModelForm):
             }),
             "password": forms.PasswordInput(attrs={
                 'placeholder': 'Пароль'
-            })
+            }, render_value=True)
 
         }
