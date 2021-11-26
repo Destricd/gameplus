@@ -17,6 +17,9 @@ class Game(models.Model):
     class Meta:
         ordering = ["name"]
 
+    def __str__(self):
+        return self.name
+
 
 class GameDevelopmentStage(models.Model):
     game_id = models.ForeignKey(Game, on_delete=models.CASCADE)
@@ -69,6 +72,9 @@ class ContractOfDevelopment(models.Model):
     client_id = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='client_id')
     employee_id = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='employee_id')
     development_full_price = models.DecimalField(max_digits=12, decimal_places=2)
+
+    class Meta:
+        ordering = ["game_id"]
 
 
 class Chat(models.Model):

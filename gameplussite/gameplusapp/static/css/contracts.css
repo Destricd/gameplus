@@ -1,15 +1,33 @@
-.games > p {
-	height: 1920px; /* Высота блока */
-	width: 100%;
-	background-position: center top 5%; /* Позиция изображения относительно блока */
-	background-repeat: no-repeat; /* Повторение фона */
+.noteone {
+    margin: 10px 0;
+    border: 1px solid black;
+    border-radius: 20px;
 }
-p.example {
-	background-image: url("../images/main/main-block-bg.png"); /* Путь к фоновому изображению */
+.notetag {
+    border-bottom: 1px solid black;
 }
-.rightimg  {
-	width: 30%;
-	height: 40%;
-    float: right; /* Выравнивание по правому краю  */ 
-    margin: 7px 0 7px 7px; /* Отступы вокруг картинки */
+.notetag > div, .noteother > div {
+    display: inline-block;
+}
+.notename {
+    width: 49%;
+    border-right: 1px solid black;
+    padding: 10px 10px 10px 20px;
+    font-weight: bold;
+}
+.noteemp {
+    float: right;
+    padding: 10px 40px 10px 10px;
+}
+.notename > p, .noteemp > p, .noterate > p, .more > p {
+    margin: 0;
+}
+.noterate {
+    width: 49%;
+    border-right: 1px solid black;
+    padding: 8px 10px;
+}
+.more {
+    float: right;
+    padding: 8px 8px 8px 4px;
 }

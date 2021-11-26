@@ -1,0 +1,28 @@
+{% block content %}
+
+<div class="gameone">
+    <div class="gametag">
+        <div class="gamename">
+            <p>{{ game.name }}</p>
+        </div>
+        <div class="gametype">
+            <p>{{ game.type }}</p>
+        </div>
+    </div>
+    <div class="gameother">
+        <div class="gamerate">
+            <p>{{ game.rate }}</p>
+        </div>
+        <div class="gamedate">
+            <p>Дата выхода: {{ game.release_date|date:"d.m.Y" }}</p>
+        </div>
+        <div class="gameprice">
+            <p>Цена: {{ game.price }} руб.</p>
+        </div>
+        <div class="more">
+            <a href="/allgames.html/{{ game.id }}">Редактировать>></a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

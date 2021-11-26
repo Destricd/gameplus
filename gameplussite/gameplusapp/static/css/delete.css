@@ -59,7 +59,7 @@ body {
 .form-inner {
    padding: 50px;
 }
-.form-inner input, .form-inner textarea, .form-inner select {
+.form-inner input {
    display: block;
    width: 100%;
    padding: 0 20px;
@@ -70,29 +70,18 @@ body {
    border-radius: 20px;
    font-family: 'Roboto', sans-serif;
 }
-.form-inner select {
-    height: 40px;
-}
 .form-inner input[type="submit"] {
    margin-top: 30px;
-   background: #A6CAF0;
-   border-bottom: 4px solid #99C4EF;
+   background: #EF7777;
+   border-bottom: 4px solid #ED6A6A;
    color: white;
    font-size: 14px;
-}
-.form-inner textarea {
-   resize: none;
 }
 .form-inner h3 {
    margin-top: 0;
    font-family: 'Roboto', sans-serif;
    font-weight: 500;
    font-size: 24px;
-   color: #707981;
-}
-.form-inner label {
-   margin: 0 15px;
-   font-family: 'Roboto', sans-serif;
-   font-size: 12px;
+   text-align: center;
    color: #707981;
 }

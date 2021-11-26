@@ -3,7 +3,7 @@
 	
 	<head>
 		<meta charset="utf-8" />
-		<title>Студия Гейм-Плюс | Настройки аккаунта | Общее</title>
+		<title>Студия Гейм-Плюс | Управление | Аккаунты</title>
 		<link rel="stylesheet" href="../static/css/pattern.css" />
 		<link rel="stylesheet" href="../static/css/control.css" />
 		<link rel="stylesheet" href="../static/css/allaccounts.css" />
@@ -30,7 +30,7 @@
         <section class="selections">
 			<div class="functions">
 				<form class="searchform" method="get">
-					<div class="sortblock">
+					<div class="viewblock">
 						<p><strong>Показать:</strong></p>
 						<p>{{ filtred.watching }}</p>
 					</div>
@@ -68,7 +68,7 @@
 				</div>
 				<div class="info">
 					<div class="name">
-						<h3>Общие настройки - {{ mod }}</h3>
+						<h3>Аккаунты - {{ mod }}</h3>
 					</div>
 					<div class="description">
 						<p><img src="../{{ avatar }}" alt="Отсутствует фото" class="rightimg">
@@ -92,6 +92,7 @@
 									<p><span style="color: red">{{ error }}</span></p>
 								    <p><button type="submit">Отправить</button></p>
 								</form>
+								<a href="{{ user_id }}/delete">Удалить аккаунт</a>
 							</div>
 						</p>
 					</div>

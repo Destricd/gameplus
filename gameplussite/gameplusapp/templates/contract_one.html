@@ -1,0 +1,22 @@
+{% block content %}
+
+<div class="noteone">
+    <div class="notetag">
+        <div class="notename">
+            <p>{{ contract.game_id|truncatechars:20 }}</p>
+        </div>
+        <div class="noteemp">
+            <p>{{ contract.employee_id|truncatechars:17 }}</p>
+        </div>
+    </div>
+    <div class="noteother">
+        <div class="noterate">
+            <p>Оформил(-а): {{ contract.client_id }}</p>
+        </div>
+        <div class="more">
+            <a href="/contracts.html/{{ contract.id }}">Редактировать>></a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

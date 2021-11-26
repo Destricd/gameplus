@@ -1,10 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html>
 
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <title>Студия Гейм-Плюс | Подтверждение удаления</title>
+        <link rel="stylesheet" href="/static/css/pattern.css" />
+        <link rel="stylesheet" href="/static/css/delete.css" />
+    </head>
+
+    <body>
+        <header>
+		  <nav>
+		      <a href="/" class="logo"><img src="/static/images/logo.png" alt="логотип"></a>
+			  <ul class="topmenu">
+				<li><a href="/games.html">Игры</a></li>
+				<li><a href="/reviews.html">Отзывы</a></li>
+				<li><a class="submenu-link"><img src="/static/images/avatar.png" alt="аватарка"></a>
+				  <ul class="submenu">
+					<li><a href="/account.html">Аккаунт</a></li>
+					<li><a href="/messages.html">Сообщения</a></li>
+					<li><a href="/control.html">Управление</a></li>
+					<li><a href="/login.html">Войти\Регистрация</a></li>
+				  </ul>
+				</li>
+			  </ul>
+		  </nav>
+		</header>
+        <section>
+            <div class="contract">
+				<form method="post" class="decor">
+					{% csrf_token %}
+					<div class="form-left-decoration"></div>
+					<div class="form-right-decoration"></div>
+					<div class="circle"></div>
+					<div class="form-inner">
+						<h3>Удалить запись</h3>
+						<span style="color: red">{{ error }}</span>
+						<input type="submit" value="Удалить">
+					</div>
+				</form>
+            </div>
+        </section>
+    </body>
+
+    <footer>
+		<div class="copyright">
+			<span>&copy; The Game + LLC 2019-2020</span>
+		</div>
+	</footer>
+
 </html>
