@@ -13,6 +13,8 @@ from .forms import AccountsForm
 from .forms import AccountsFilterForm
 from .forms import ContractsInfoForm
 from .forms import ContractsFilterForm
+from .forms import TasksForm
+from .forms import TasksFilterForm
 
 
 class MainPage(View):
@@ -224,8 +226,126 @@ class GameListOnePage(View):
 
 class AllTasksPage(View):
     def get(self, request):
-        context = {}
+        mod = "добавление"
+        g_tasks = get_tasks()
+        form = TasksForm()
+        form.fields['employee_id'].queryset = (Employee.objects.filter(access_level='m'))
+        filtred = TasksFilterForm(request.GET)
+
+        if filtred.is_valid():
+            if filtred.cleaned_data["search"]:
+                g_tasks = g_tasks.filter(employee_id__full_name__iregex=filtred.cleaned_data["search"])
+
+            if filtred.cleaned_data["watching"]:
+                if filtred.cleaned_data["watching"] == "a":
+                    g_tasks = g_tasks.filter(complete=True)
+                elif filtred.cleaned_data["watching"] == "b":
+                    g_tasks = g_tasks.filter(complete=False)
+
+        context = {
+            'g_tasks': g_tasks,
+            'filtred': filtred,
+            'form': form,
+            'mod': mod
+        }
         return render(request, 'alltasks.html', context=context)
+
+    def post(self, request):
+        mod = "добавление"
+        g_tasks = get_tasks()
+        form = TasksForm(request.POST)
+        form.fields['employee_id'].queryset = (Employee.objects.filter(access_level='m'))
+        filtred = TasksFilterForm(request.GET)
+
+        if filtred.is_valid():
+            if filtred.cleaned_data["search"]:
+                g_tasks = g_tasks.filter(employee_id__full_name__iregex=filtred.cleaned_data["search"])
+
+            if filtred.cleaned_data["watching"]:
+                if filtred.cleaned_data["watching"] == "a":
+                    g_tasks = g_tasks.filter(complete=True)
+                elif filtred.cleaned_data["watching"] == "b":
+                    g_tasks = g_tasks.filter(complete=False)
+
+        context = {
+            'g_tasks': g_tasks,
+            'filtred': filtred,
+            'form': form,
+            'mod': mod
+        }
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('alltasks.html')
+        else:
+            context["error"] = "Неправильное заполнение"
+            return render(request, 'alltasks.html', context=context)
+
+
+class TaskOnePage(View):
+    def get(self, request, id):
+        mod = "редактирование"
+        task_id = id
+        g_tasks = get_tasks()
+        form = TasksForm(initial={'employee_id': g_tasks.get(id=id).employee_id,
+                                  'description': g_tasks.get(id=id).description,
+                                  'complete': g_tasks.get(id=id).complete})
+        form.fields['employee_id'].queryset = (Employee.objects.filter(access_level='m'))
+        filtred = TasksFilterForm(request.GET)
+
+        if filtred.is_valid():
+            if filtred.cleaned_data["search"]:
+                g_tasks = g_tasks.filter(employee_id__full_name__iregex=filtred.cleaned_data["search"])
+
+            if filtred.cleaned_data["watching"]:
+                if filtred.cleaned_data["watching"] == "a":
+                    g_tasks = g_tasks.filter(complete=True)
+                elif filtred.cleaned_data["watching"] == "b":
+                    g_tasks = g_tasks.filter(complete=False)
+
+        context = {
+            'g_tasks': g_tasks,
+            'filtred': filtred,
+            'form': form,
+            'mod': mod,
+            'task_id': task_id
+        }
+        return render(request, 'alltasks.html', context=context)
+
+    def post(self, request, id):
+        mod = "редактирование"
+        task_id = id
+        g_tasks = get_tasks()
+        form = TasksForm(request.POST)
+        form.fields['employee_id'].queryset = (Employee.objects.filter(access_level='m'))
+        filtred = TasksFilterForm(request.GET)
+
+        if filtred.is_valid():
+            if filtred.cleaned_data["search"]:
+                g_tasks = g_tasks.filter(employee_id__full_name__iregex=filtred.cleaned_data["search"])
+
+            if filtred.cleaned_data["watching"]:
+                if filtred.cleaned_data["watching"] == "a":
+                    g_tasks = g_tasks.filter(complete=True)
+                elif filtred.cleaned_data["watching"] == "b":
+                    g_tasks = g_tasks.filter(complete=False)
+
+        context = {
+            'g_tasks': g_tasks,
+            'filtred': filtred,
+            'form': form,
+            'mod': mod,
+            'task_id': task_id
+        }
+        if form.is_valid():
+            task = TechnicalTask.objects.get(id=id)
+            task.employee_id = form.cleaned_data["employee_id"]
+            task.description = form.cleaned_data["description"]
+            task.complete = form.cleaned_data["complete"]
+            task.save()
+            return HttpResponseRedirect('/alltasks.html')
+        else:
+            context["error"] = "Неправильное заполнение"
+            return render(request, 'alltasks.html', context=context)
 
 
 class ContractsPage(View):
@@ -247,10 +367,10 @@ class ContractsPage(View):
                 if filtred.cleaned_data["watching"] == "a":
                     g_contracts = g_contracts.filter(conclusion_date__gt=datetime.datetime.now())
                 elif filtred.cleaned_data["watching"] == "b":
-                    g_contracts = g_contracts.filter(conclusion_date__lt=datetime.datetime.now(), contract_end_date__gt=datetime.datetime.now())
+                    g_contracts = g_contracts.filter(conclusion_date__lt=datetime.datetime.now(),
+                                                     contract_end_date__gt=datetime.datetime.now())
                 elif filtred.cleaned_data["watching"] == "c":
                     g_contracts = g_contracts.filter(contract_end_date__lt=datetime.datetime.now())
-
 
         context = {
             'g_contracts': g_contracts,
@@ -269,13 +389,19 @@ class ContractsPage(View):
 
         if filtred.is_valid():
             if filtred.cleaned_data["search"]:
-                g_contracts = g_contracts.filter(full_name__iregex=filtred.cleaned_data["search"])
+                g_contracts = g_contracts.filter(game_id__name__iregex=filtred.cleaned_data["search"])
 
             if filtred.cleaned_data["ordering"]:
                 g_contracts = g_contracts.order_by(filtred.cleaned_data["ordering"])
 
             if filtred.cleaned_data["watching"]:
-                g_contracts = g_contracts.filter(access_level=filtred.cleaned_data["watching"])
+                if filtred.cleaned_data["watching"] == "a":
+                    g_contracts = g_contracts.filter(conclusion_date__gt=datetime.datetime.now())
+                elif filtred.cleaned_data["watching"] == "b":
+                    g_contracts = g_contracts.filter(conclusion_date__lt=datetime.datetime.now(),
+                                                     contract_end_date__gt=datetime.datetime.now())
+                elif filtred.cleaned_data["watching"] == "c":
+                    g_contracts = g_contracts.filter(contract_end_date__lt=datetime.datetime.now())
 
         context = {
             'g_contracts': g_contracts,
@@ -316,10 +442,10 @@ class ContractOnePage(View):
                 if filtred.cleaned_data["watching"] == "a":
                     g_contracts = g_contracts.filter(conclusion_date__gt=datetime.datetime.now())
                 elif filtred.cleaned_data["watching"] == "b":
-                    g_contracts = g_contracts.filter(conclusion_date__lt=datetime.datetime.now(), contract_end_date__gt=datetime.datetime.now())
+                    g_contracts = g_contracts.filter(conclusion_date__lt=datetime.datetime.now(),
+                                                     contract_end_date__gt=datetime.datetime.now())
                 elif filtred.cleaned_data["watching"] == "c":
                     g_contracts = g_contracts.filter(contract_end_date__lt=datetime.datetime.now())
-
 
         context = {
             'g_contracts': g_contracts,
@@ -340,13 +466,19 @@ class ContractOnePage(View):
 
         if filtred.is_valid():
             if filtred.cleaned_data["search"]:
-                g_contracts = g_contracts.filter(full_name__iregex=filtred.cleaned_data["search"])
+                g_contracts = g_contracts.filter(game_id__name__iregex=filtred.cleaned_data["search"])
 
             if filtred.cleaned_data["ordering"]:
                 g_contracts = g_contracts.order_by(filtred.cleaned_data["ordering"])
 
             if filtred.cleaned_data["watching"]:
-                g_contracts = g_contracts.filter(access_level=filtred.cleaned_data["watching"])
+                if filtred.cleaned_data["watching"] == "a":
+                    g_contracts = g_contracts.filter(conclusion_date__gt=datetime.datetime.now())
+                elif filtred.cleaned_data["watching"] == "b":
+                    g_contracts = g_contracts.filter(conclusion_date__lt=datetime.datetime.now(),
+                                                     contract_end_date__gt=datetime.datetime.now())
+                elif filtred.cleaned_data["watching"] == "c":
+                    g_contracts = g_contracts.filter(contract_end_date__lt=datetime.datetime.now())
 
         context = {
             'g_contracts': g_contracts,
@@ -661,3 +793,15 @@ class GameDeletePage(View):
         context = {}
         g_del_game.delete()
         return HttpResponseRedirect('/allgames.html')
+
+
+class TaskDeletePage(View):
+    def get(self, request, id):
+        context = {}
+        return render(request, 'confirm_delete.html', context=context)
+
+    def post(self, request, id):
+        g_del_task = get_del_task(id)
+        context = {}
+        g_del_task.delete()
+        return HttpResponseRedirect('/alltasks.html')

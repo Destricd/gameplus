@@ -6,8 +6,18 @@
 .usertag {
     border-bottom: 1px solid black;
 }
-.usertag > div, .userother > div {
-    display: inline-block;
+.usertag, .userother {
+    display: table;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+}
+.usertag > div,
+.usertag > noindex > div,
+.userother > div,
+.userother > noindex > div {
+    display: table-cell;
+    vertical-align: middle;
 }
 .username {
     width: 64.9%;

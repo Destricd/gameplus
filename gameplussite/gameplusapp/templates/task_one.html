@@ -1,0 +1,24 @@
+{% block content %}
+
+<div class="taskone">
+    <div class="tasktag">
+        <div class="taskname">
+            <p>{{ task.employee_id }}</p>
+        </div>
+        <div class="taskdate">
+            <p>{{ task.complete|yesno:"Выполнена,Не выполнена" }}</p>
+        </div>
+    </div>
+    <div class="taskother">
+        <div class="taskrate">
+            <p>{{ task.description }}</p>
+        </div>
+    </div>
+    <div class="taskchange">
+        <div class="more">
+            <a href="/alltasks.html/{{ task.id }}">Редактировать>></a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

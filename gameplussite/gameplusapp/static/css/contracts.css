@@ -6,8 +6,18 @@
 .notetag {
     border-bottom: 1px solid black;
 }
-.notetag > div, .noteother > div {
-    display: inline-block;
+.notetag, .noteother {
+    display: table;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+}
+.notetag > div,
+.notetag > noindex > div,
+.noteother > div,
+.noteother > noindex > div {
+    display: table-cell;
+    vertical-align: middle;
 }
 .notename {
     width: 49%;

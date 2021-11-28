@@ -71,8 +71,18 @@ section {
 .gametag {
     border-bottom: 1px solid black;
 }
-.gametag > div, .gameother > div {
-    display: inline-block;
+.gametag, .gameother {
+    display: table;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+}
+.gametag > div,
+.gametag > noindex > div,
+.gameother > div,
+.gameother > noindex > div {
+    display: table-cell;
+    vertical-align: middle;
 }
 .gamename {
     width: 49%;

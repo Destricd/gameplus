@@ -6,8 +6,18 @@
 .gametag {
     border-bottom: 1px solid black;
 }
-.gametag > div, .gameother > div {
-    display: inline-block;
+.gametag, .gameother {
+    display: table;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+}
+.gametag > div,
+.gametag > noindex > div,
+.gameother > div,
+.gameother > noindex > div {
+    display: table-cell;
+    vertical-align: middle;
 }
 .gamename {
     width: 49%;
@@ -23,12 +33,12 @@
     margin: 0;
 }
 .gamerate {
-    width: 9.4%;
+    width: 15%;
     border-right: 1px solid black;
     padding: 8px 10px;
 }
 .gamedate {
-    width: 39%;
+    width: 30%;
     border-right: 1px solid black;
     padding: 8px 10px;
 }
@@ -36,7 +46,7 @@
     text-align: center;
 }
 .gameprice {
-    width: 25%;
+    width: 20%;
     border-right: 1px solid black;
     padding: 8px 20px 8px 10px;
 }
@@ -52,4 +62,7 @@
 	height: 40%;
     float: right; /* Выравнивание по правому краю  */
     margin: 7px 0 7px 7px; /* Отступы вокруг картинки */
+}
+textarea {
+    resize: none;
 }

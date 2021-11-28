@@ -21,6 +21,11 @@ def get_contracts():
     return contracts
 
 
+def get_tasks():
+    tasks = TechnicalTask.objects.all()
+    return tasks
+
+
 def get_del_account(pk):
     account = Employee.objects.get(id=pk)
     return account
@@ -34,3 +39,8 @@ def get_del_contract(pk):
 def get_del_game(pk):
     game = Game.objects.get(id=pk)
     return game
+
+
+def get_del_task(pk):
+    task = TechnicalTask.objects.get(id=pk)
+    return task

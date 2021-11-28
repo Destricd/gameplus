@@ -1,15 +1,55 @@
-.games > p {
-	height: 1920px; /* Высота блока */
-	width: 100%;
-	background-position: center top 5%; /* Позиция изображения относительно блока */
-	background-repeat: no-repeat; /* Повторение фона */
+.taskone {
+    margin: 10px 0;
+    border: 1px solid black;
+    border-radius: 20px;
 }
-p.example {
-	background-image: url("../images/main/main-block-bg.png"); /* Путь к фоновому изображению */
+.tasktag, .taskother {
+    border-bottom: 1px solid black;
+}
+.tasktag, .taskother, .taskchange {
+    display: table;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+}
+.tasktag > div,
+.tasktag > noindex > div,
+.taskother > div,
+.taskother > noindex > div,
+.taskchange > div,
+.taskchange > noindex > div {
+    display: table-cell;
+    vertical-align: middle;
+}
+.taskname {
+    width: 49%;
+    border-right: 1px solid black;
+    padding: 10px 10px 10px 20px;
+    font-weight: bold;
+}
+.taskdate {
+    float: right;
+    padding: 10px 40px 10px 10px;
+}
+.taskname > p, .taskdate > p, .taskrate > p {
+    margin: 0;
+}
+.taskrate {
+    padding: 8px 10px;
+}
+.more {
+    width: 100%;
+    padding: 8px 8px 8px 4px;
+}
+.more > a {
+    float: right;
 }
 .rightimg  {
 	width: 30%;
 	height: 40%;
     float: right; /* Выравнивание по правому краю  */ 
     margin: 7px 0 7px 7px; /* Отступы вокруг картинки */
+}
+textarea {
+    resize: none;
 }

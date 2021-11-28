@@ -116,8 +116,20 @@ section {
 .revtag, .revother {
     border-bottom: 1px solid black;
 }
-.revtag > div, .revother > div, .revchange > div {
-    display: inline-block;
+.revtag, .revother, .revchange {
+    display: table;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+}
+.revtag > div,
+.revtag > noindex > div,
+.revother > div,
+.revother > noindex > div,
+.revchange > div,
+.revchange > noindex > div {
+    display: table-cell;
+    vertical-align: middle;
 }
 .revname {
     width: 49%;

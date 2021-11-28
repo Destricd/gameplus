@@ -28,6 +28,8 @@ urlpatterns = [
     path('allgames.html/<int:id>', GameListOnePage.as_view()),
     path('allgames.html/<int:id>/delete', GameDeletePage.as_view()),
     path('alltasks.html', AllTasksPage.as_view()),
+    path('alltasks.html/<int:id>', TaskOnePage.as_view()),
+    path('alltasks.html/<int:id>/delete', TaskDeletePage.as_view()),
     path('contracts.html', ContractsPage.as_view()),
     path('contracts.html/<int:id>', ContractOnePage.as_view()),
     path('contracts.html/<int:id>/delete', ContractDeletePage.as_view()),

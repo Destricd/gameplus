@@ -55,6 +55,9 @@ class TechnicalTask(models.Model):
     complete = models.BooleanField(default=False)
     employee_id = models.ForeignKey(Employee, on_delete=models.CASCADE)
 
+    class Meta:
+        ordering = ["employee_id"]
+
 
 class Review(models.Model):
     client_id = models.ForeignKey(Employee, on_delete=models.CASCADE)

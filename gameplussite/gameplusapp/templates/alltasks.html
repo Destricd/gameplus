@@ -14,14 +14,14 @@
 		  <nav>
 		      <a href="/" class="logo"><img src="../static/images/logo.png" alt="логотип"></a>
 			  <ul class="topmenu">
-				<li><a href="games.html">Игры</a></li>
-				<li><a href="reviews.html">Отзывы</a></li>
+				<li><a href="/games.html">Игры</a></li>
+				<li><a href="/reviews.html">Отзывы</a></li>
 				<li><a class="submenu-link"><img src="../static/images/avatar.png" alt="аватарка"></a>
 				  <ul class="submenu">
-					<li><a href="account.html">Аккаунт</a></li>
-					<li><a href="messages.html">Сообщения</a></li>
-					<li><a href="control.html">Управление</a></li>
-					<li><a href="login.html">Войти\Регистрация</a></li>
+					<li><a href="/account.html">Аккаунт</a></li>
+					<li><a href="/messages.html">Сообщения</a></li>
+					<li><a href="/control.html">Управление</a></li>
+					<li><a href="/login.html">Войти\Регистрация</a></li>
 				  </ul>
 				</li>
 			  </ul>
@@ -29,33 +29,17 @@
 		</header>
         <section class="selections">
 			<div class="functions">
-				<div class="gameblock">
-					<form class="gameform">
-					   <p><strong>Показать:</strong></p>
-					   <p><select class="gamesel" name="game">
-						<option value="g1" selected>Все</option>
-						<option value="g2">Заблокированные</option>
-					   </select></p>
-					</form>
-				</div>
-				<div class="sortblock">
-					<form class="sortform">
-					   <p><strong>Сортировать по:</strong></p>
-					   <p><select class="sortsel" name="sort">
-						<option value="s1" selected>Алфавиту</option>
-						<option value="s2">Дате регистрации</option>
-						<option value="s3">Количеству заказов</option>
-						<option value="s4">Уровню доступа</option>
-					   </select></p>
-					</form>
-				</div>
-				<div class="searchblock">
-					<form class="searchform">
-					   <p><strong>Найти:</strong></p>
-					   <p><input type="text" placeholder="Искать здесь...">
-					   <button type="submit"></button></p>
-					</form>
-				</div>
+				<form class="searchform" method="get">
+					<div class="viewblock">
+						<p><strong>Показать:</strong></p>
+						<p>{{ filtred.watching }}</p>
+					</div>
+					<div class="searchblock">
+						<p><strong>Найти:</strong></p>
+						<p>{{ filtred.search }}
+						<button type="submit"></button></p>
+					</div>
+				</form>
 			</div>
 		</section>
 		<section class="allgames">
@@ -64,58 +48,39 @@
 					<div class="widget">
 						<h3>Управление</h3>
 						<ul>
-						  <li><a href="control.html">Аккаунты</a></li>
-						  <li><a href="contracts.html">Договора</a></li>
-						  <li><a href="allgames.html">Игры</a></li>
-						  <li><a href="alltasks.html">Технические задачи</a></li>
+						  <li><a href="/control.html">Аккаунты</a></li>
+						  <li><a href="/contracts.html">Договора</a></li>
+						  <li><a href="/allgames.html">Игры</a></li>
+						  <li><a href="/alltasks.html">Технические задачи</a></li>
 						</ul>
 					</div>
 				</div>
                 <div class="games">
-					<p class="example"></p>
+
+					{% for task in g_tasks %}
+					{% include 'task_one.html' %}
+					{% endfor %}
+
 				</div>
 				<div class="info">
 					<div class="name">
-						<h3>Общие настройки</h3>
+						<h3>Технические задачи - {{ mod }}</h3>
 					</div>
 					<div class="description">
-						<p><img src="../static/images/games/example.png" alt="Обложка" class="rightimg">
-							<div class="fullname">
-								<form class="nameform">
-								   <p><strong>ФИО:</strong></p>
-								   <p><input type="text" placeholder="Фамилия"></p>
-								   <p><input type="text" placeholder="Имя"></p>
-								   <p><input type="text" placeholder="Отчество"></p>
-								   <p><button type="submit">Изменить</button></p>
+						<p>
+							<div class="taskblock">
+								<form class="taskform" method="post" enctype="multipart/form-data">
+									{% csrf_token %}
+								    <p><strong>Работник:</strong></p>
+								    <p>{{ form.employee_id }}</p>
+									<p><strong>Описание задачи:</strong></p>
+								    <p>{{ form.description }}</p>
+									<p><strong>Выполнена:</strong></p>
+								    <p>{{ form.complete }}</p>
+									<p><span style="color: red">{{ error }}</span></p>
+								    <p><button type="submit">Отправить</button></p>
 								</form>
-							</div>
-							<div class="login">
-								<form class="loginform">
-								   <p><strong>Логин:</strong></p>
-								   <p><input type="text" placeholder="Логин"></p>
-								   <p><button type="submit">Изменить</button></p>
-								</form>
-							</div>
-							<div class="address">
-								<form class="addressform">
-								   <p><strong>Адрес:</strong></p>
-								   <p><input type="text" placeholder="Страна"></p>
-								   <p><input type="text" placeholder="Регион"></p>
-								   <p><input type="text" placeholder="Город"></p>
-								   <p><input type="text" placeholder="Район"></p>
-								   <p><input type="text" placeholder="Улица"></p>
-								   <p><input type="text" placeholder="Дом"></p>
-								   <p><input type="text" placeholder="Корпус"></p>
-								   <p><input type="text" placeholder="Квартира"></p>
-								   <p><button type="submit">Изменить</button></p>
-								</form>
-							</div>
-							<div class="phone">
-								<form class="phoneform">
-								   <p><strong>Фотография профиля:</strong></p>
-								   <p><input type="text" placeholder="Страна"></p>
-								   <p><button type="submit">Обновить фото</button></p>
-								</form>
+								<a href="{{ task_id }}/delete">Удалить задачу</a>
 							</div>
 						</p>
 					</div>

@@ -3,6 +3,7 @@ from .models import Game
 from .models import ContractOfDevelopment
 from .models import Employee
 from .models import Review
+from .models import TechnicalTask
 
 
 class GamesFilterForm(forms.Form):
@@ -162,6 +163,32 @@ class ContractsInfoForm(forms.ModelForm):
         widgets = {
             "development_full_price": forms.NumberInput(attrs={
                 'placeholder': 'Дополнительные расходы, руб.'
+            })
+
+        }
+
+
+class TasksFilterForm(forms.Form):
+    watching = forms.ChoiceField(required=False, widget=forms.Select(attrs={
+        'class': 'sortsel'
+    }), choices=[
+        ["", "Все"],
+        ["a", "Выполненные"],
+        ["b", "Невыполненные"]
+    ])
+    search = forms.CharField(label="Найти:", required=False, widget=forms.TextInput(attrs={
+        'placeholder': 'Искать здесь...'
+    }))
+
+
+class TasksForm(forms.ModelForm):
+    class Meta:
+        model = TechnicalTask
+        fields = ['employee_id', 'description', 'complete']
+
+        widgets = {
+            "description": forms.Textarea(attrs={
+                'placeholder': 'Описание'
             })
 
         }
