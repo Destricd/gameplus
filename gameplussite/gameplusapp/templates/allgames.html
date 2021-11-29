@@ -21,7 +21,7 @@
 					<li><a href="/account.html">Аккаунт</a></li>
 					<li><a href="/messages.html">Сообщения</a></li>
 					<li><a href="/control.html">Управление</a></li>
-					<li><a href="/login.html">Войти\Регистрация</a></li>
+					<li><a href="/confirm_exit.html">Выйти</a></li>
 				  </ul>
 				</li>
 			  </ul>
@@ -95,7 +95,9 @@
 									<p><span style="color: red">{{ error }}</span></p>
 								    <p><button type="submit">Отправить</button></p>
 								</form>
+								{% if mod == "редактирование" %}
 								<a href="{{ game_id }}/delete">Удалить игру</a>
+								{% endif %}
 							</div>
 						</p>
 					</div>

@@ -3,18 +3,34 @@ import datetime
 from django.shortcuts import render
 from django.views import View
 from django.http import HttpResponseRedirect
+from django.db.models import Q
 from .function import *
 from .forms import *
 
 
 class MainPage(View):
     def get(self, request):
-        context = {}
+        if "id_user" in request.session:
+            link = "confirm_exit.html"
+            log = "Выйти"
+        else:
+            link = "login.html"
+            log = "Войти\Регистрация"
+        context = {
+            'link': link,
+            'log': log
+        }
         return render(request, 'main.html', context=context)
 
 
 class GamesPage(View):
     def get(self, request):
+        if "id_user" in request.session:
+            link = "confirm_exit.html"
+            log = "Выйти"
+        else:
+            link = "login.html"
+            log = "Войти\Регистрация"
         g_games = get_games()
         form = GamesFilterForm(request.GET)
 
@@ -27,13 +43,21 @@ class GamesPage(View):
 
         context = {
             'g_games': g_games,
-            'form': form
+            'form': form,
+            'link': link,
+            'log': log
         }
         return render(request, 'games.html', context=context)
 
 
 class GameOnePage(View):
     def get(self, request, id):
+        if "id_user" in request.session:
+            link = "confirm_exit.html"
+            log = "Выйти"
+        else:
+            link = "login.html"
+            log = "Войти\Регистрация"
         g_games = get_games()
         game_info = Game.objects.get(id=id)
         form = GamesFilterForm(request.GET)
@@ -48,13 +72,18 @@ class GameOnePage(View):
         context = {
             'g_games': g_games,
             'game_info': game_info,
-            'form': form
+            'form': form,
+            'link': link,
+            'log': log,
+            'enable': 'enable'
         }
         return render(request, 'games.html', context=context)
 
 
 class CreateContract(View):
     def get(self, request, id):
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('/login.html')
         form = ContractsForm()
         form.fields['employee_id'].queryset = (Employee.objects.filter(access_level__in=['a', 'm']))
 
@@ -64,6 +93,8 @@ class CreateContract(View):
         return render(request, 'newcontract.html', context=context)
 
     def post(self, request, id):
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('/login.html')
         form = ContractsForm(request.POST)
         form.fields['employee_id'].queryset = (Employee.objects.filter(access_level__in=['a', 'm']))
 
@@ -73,6 +104,7 @@ class CreateContract(View):
         if form.is_valid():
             contract = form.save(commit=False)
             contract.game_id = Game.objects.get(id=id)
+            contract.client_id = Employee.objects.get(id=request.session["id_user"])
             contract.save()
             return HttpResponseRedirect('/games.html')
         else:
@@ -82,34 +114,21 @@ class CreateContract(View):
 
 class AccountPage(View):
     def get(self, request):
-        if "id_user" in request.session:
-            link = "confirm_exit.html"
-            log = "Выйти"
-        else:
-            link = "login.html"
-            log = "Войти\Регистрация"
+        if "id_user" not in request.session:
             return HttpResponseRedirect('login.html')
         g_accounts = get_accounts()
         avatar = g_accounts.get(id=request.session["id_user"]).avatar
         form = UserForm(initial={'full_name': g_accounts.get(id=request.session["id_user"]).full_name,
-                                 'avatar': g_accounts.get(id=request.session["id_user"]).avatar
-                                })
+                                 'avatar': g_accounts.get(id=request.session["id_user"]).avatar})
         form.fields["login"].required = False
         context = {
             'form': form,
-            'avatar': avatar,
-            'link': link,
-            'log': log
+            'avatar': avatar
         }
         return render(request, 'account.html', context=context)
 
     def post(self, request):
-        if request.session["id_user"]:
-            link = "confirm_exit.html"
-            log = "Выйти"
-        else:
-            link = "login.html"
-            log = "Войти\Регистрация"
+        if "id_user" not in request.session:
             return HttpResponseRedirect('login.html')
         g_accounts = get_accounts()
         avatar = g_accounts.get(id=request.session["id_user"]).avatar
@@ -117,9 +136,7 @@ class AccountPage(View):
         form.fields["login"].required = False
         context = {
             'form': form,
-            'avatar': avatar,
-            'link': link,
-            'log': log
+            'avatar': avatar
         }
         if form.is_valid():
             user = Employee.objects.get(id=request.session["id_user"])
@@ -136,6 +153,10 @@ class AccountPage(View):
 
 class AllGamesPage(View):
     def get(self, request):
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('login.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
+            return HttpResponseRedirect('contracts.html')
         mod = "добавление"
         g_games = get_games()
         form = GamesForm()
@@ -157,6 +178,10 @@ class AllGamesPage(View):
         return render(request, 'allgames.html', context=context)
 
     def post(self, request):
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('login.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
+            return HttpResponseRedirect('contracts.html')
         mod = "добавление"
         g_games = get_games()
         form = GamesForm(request.POST)
@@ -185,6 +210,10 @@ class AllGamesPage(View):
 
 class GameListOnePage(View):
     def get(self, request, id):
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('/login.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
+            return HttpResponseRedirect('/contracts.html')
         mod = "редактирование"
         game_id = id
         g_games = get_games()
@@ -220,6 +249,10 @@ class GameListOnePage(View):
         return render(request, 'allgames.html', context=context)
 
     def post(self, request, id):
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('/login.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
+            return HttpResponseRedirect('/contracts.html')
         mod = "редактирование"
         game_id = id
         g_games = get_games()
@@ -264,15 +297,24 @@ class GameListOnePage(View):
 
 class AllTasksPage(View):
     def get(self, request):
-        mod = "добавление"
+        new = False
         g_tasks = get_tasks()
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('login.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
+            return HttpResponseRedirect('contracts.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'a':
+            new = True
+        else:
+            g_tasks = g_tasks.filter(employee_id=Employee.objects.get(id=request.session["id_user"]))
+        mod = "добавление"
         form = TasksForm()
         form.fields['employee_id'].queryset = (Employee.objects.filter(access_level='m'))
         filtred = TasksFilterForm(request.GET)
 
         if filtred.is_valid():
             if filtred.cleaned_data["search"]:
-                g_tasks = g_tasks.filter(employee_id__full_name__iregex=filtred.cleaned_data["search"])
+                g_tasks = g_tasks.filter(description__iregex=filtred.cleaned_data["search"])
 
             if filtred.cleaned_data["watching"]:
                 if filtred.cleaned_data["watching"] == "a":
@@ -284,20 +326,30 @@ class AllTasksPage(View):
             'g_tasks': g_tasks,
             'filtred': filtred,
             'form': form,
-            'mod': mod
+            'mod': mod,
+            'new': new
         }
         return render(request, 'alltasks.html', context=context)
 
     def post(self, request):
-        mod = "добавление"
+        new = False
         g_tasks = get_tasks()
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('login.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
+            return HttpResponseRedirect('contracts.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'a':
+            new = True
+        else:
+            g_tasks = g_tasks.filter(employee_id=Employee.objects.get(id=request.session["id_user"]))
+        mod = "добавление"
         form = TasksForm(request.POST)
         form.fields['employee_id'].queryset = (Employee.objects.filter(access_level='m'))
         filtred = TasksFilterForm(request.GET)
 
         if filtred.is_valid():
             if filtred.cleaned_data["search"]:
-                g_tasks = g_tasks.filter(employee_id__full_name__iregex=filtred.cleaned_data["search"])
+                g_tasks = g_tasks.filter(description__iregex=filtred.cleaned_data["search"])
 
             if filtred.cleaned_data["watching"]:
                 if filtred.cleaned_data["watching"] == "a":
@@ -309,7 +361,8 @@ class AllTasksPage(View):
             'g_tasks': g_tasks,
             'filtred': filtred,
             'form': form,
-            'mod': mod
+            'mod': mod,
+            'new': new
         }
         if form.is_valid():
             form.save()
@@ -321,18 +374,30 @@ class AllTasksPage(View):
 
 class TaskOnePage(View):
     def get(self, request, id):
-        mod = "редактирование"
-        task_id = id
         g_tasks = get_tasks()
+        new = True
         form = TasksForm(initial={'employee_id': g_tasks.get(id=id).employee_id,
                                   'description': g_tasks.get(id=id).description,
                                   'complete': g_tasks.get(id=id).complete})
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('/login.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
+            return HttpResponseRedirect('/contracts.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'm':
+            if TechnicalTask.objects.get(id=id).employee_id != Employee.objects.get(id=request.session["id_user"]):
+                return HttpResponseRedirect('/alltasks.html')
+            g_tasks = g_tasks.filter(employee_id=Employee.objects.get(id=request.session["id_user"]))
+            form.fields["employee_id"].required = False
+            form.fields["description"].required = False
+            new = False
+        mod = "редактирование"
+        task_id = id
         form.fields['employee_id'].queryset = (Employee.objects.filter(access_level='m'))
         filtred = TasksFilterForm(request.GET)
 
         if filtred.is_valid():
             if filtred.cleaned_data["search"]:
-                g_tasks = g_tasks.filter(employee_id__full_name__iregex=filtred.cleaned_data["search"])
+                g_tasks = g_tasks.filter(description__iregex=filtred.cleaned_data["search"])
 
             if filtred.cleaned_data["watching"]:
                 if filtred.cleaned_data["watching"] == "a":
@@ -345,21 +410,34 @@ class TaskOnePage(View):
             'filtred': filtred,
             'form': form,
             'mod': mod,
-            'task_id': task_id
+            'task_id': task_id,
+            'new': new
         }
         return render(request, 'alltasks.html', context=context)
 
     def post(self, request, id):
+        g_tasks = get_tasks()
+        new = True
+        form = TasksForm(request.POST)
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('/login.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
+            return HttpResponseRedirect('/contracts.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'm':
+            if TechnicalTask.objects.get(id=id).employee_id != Employee.objects.get(id=request.session["id_user"]):
+                return HttpResponseRedirect('/alltasks.html')
+            g_tasks = g_tasks.filter(employee_id=Employee.objects.get(id=request.session["id_user"]))
+            form.fields["employee_id"].required = False
+            form.fields["description"].required = False
+            new = False
         mod = "редактирование"
         task_id = id
-        g_tasks = get_tasks()
-        form = TasksForm(request.POST)
         form.fields['employee_id'].queryset = (Employee.objects.filter(access_level='m'))
         filtred = TasksFilterForm(request.GET)
 
         if filtred.is_valid():
             if filtred.cleaned_data["search"]:
-                g_tasks = g_tasks.filter(employee_id__full_name__iregex=filtred.cleaned_data["search"])
+                g_tasks = g_tasks.filter(description__iregex=filtred.cleaned_data["search"])
 
             if filtred.cleaned_data["watching"]:
                 if filtred.cleaned_data["watching"] == "a":
@@ -372,12 +450,14 @@ class TaskOnePage(View):
             'filtred': filtred,
             'form': form,
             'mod': mod,
-            'task_id': task_id
+            'task_id': task_id,
+            'new': new
         }
         if form.is_valid():
             task = TechnicalTask.objects.get(id=id)
-            task.employee_id = form.cleaned_data["employee_id"]
-            task.description = form.cleaned_data["description"]
+            if Employee.objects.get(id=request.session["id_user"]).access_level == 'a':
+                task.employee_id = form.cleaned_data["employee_id"]
+                task.description = form.cleaned_data["description"]
             task.complete = form.cleaned_data["complete"]
             task.save()
             return HttpResponseRedirect('/alltasks.html')
@@ -388,9 +468,24 @@ class TaskOnePage(View):
 
 class ContractsPage(View):
     def get(self, request):
-        mod = "добавление"
+        new = 2
+        message = ''
         g_contracts = get_contracts()
         form = ContractsInfoForm()
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('login.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level in ['m', 'c']:
+            new = 1
+            if Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
+                new = 0
+            g_contracts = g_contracts.filter(Q(client_id=Employee.objects.get(id=request.session["id_user"])) | Q(
+                employee_id=Employee.objects.get(id=request.session["id_user"])))
+            form.fields["employee_id"].required = False
+        if "message" in request.session:
+            if request.session["message"] == True:
+                message = 'Доступ запрещён'
+                request.session["message"] = False
+        mod = "добавление"
         form.fields['employee_id'].queryset = (Employee.objects.filter(access_level__in=['a', 'm']))
         filtred = ContractsFilterForm(request.GET)
 
@@ -414,14 +509,31 @@ class ContractsPage(View):
             'g_contracts': g_contracts,
             'filtred': filtred,
             'form': form,
-            'mod': mod
+            'mod': mod,
+            'new': new,
+            'message': message
         }
         return render(request, 'contracts.html', context=context)
 
     def post(self, request):
-        mod = "добавление"
+        new = 2
+        message = ''
         g_contracts = get_contracts()
         form = ContractsInfoForm(request.POST)
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('login.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level in ['m', 'c']:
+            new = 1
+            if Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
+                new = 0
+            g_contracts = g_contracts.filter(Q(client_id=Employee.objects.get(id=request.session["id_user"])) | Q(
+                employee_id=Employee.objects.get(id=request.session["id_user"])))
+            form.fields["employee_id"].required = False
+        if "message" in request.session:
+            if request.session["message"] == True:
+                message = 'Доступ запрещён'
+                request.session["message"] = False
+        mod = "добавление"
         form.fields['employee_id'].queryset = (Employee.objects.filter(access_level__in=['a', 'm']))
         filtred = ContractsFilterForm(request.GET)
 
@@ -445,10 +557,15 @@ class ContractsPage(View):
             'g_contracts': g_contracts,
             'filtred': filtred,
             'form': form,
-            'mod': mod
+            'mod': mod,
+            'new': new,
+            'message': message
         }
         if form.is_valid():
-            form.save()
+            contract = form.save(commit=False)
+            if Employee.objects.get(id=request.session["id_user"]).access_level == 'm':
+                contract.employee_id = Employee.objects.get(id=request.session["id_user"])
+            contract.save()
             return HttpResponseRedirect('contracts.html')
         else:
             context["error"] = "Неправильное заполнение"
@@ -457,8 +574,7 @@ class ContractsPage(View):
 
 class ContractOnePage(View):
     def get(self, request, id):
-        mod = "редактирование"
-        note_id = id
+        new = 2
         g_contracts = get_contracts()
         form = ContractsInfoForm(initial={'game_id': g_contracts.get(id=id).game_id,
                                           'conclusion_date': g_contracts.get(id=id).conclusion_date,
@@ -466,6 +582,20 @@ class ContractOnePage(View):
                                           'client_id': g_contracts.get(id=id).client_id,
                                           'employee_id': g_contracts.get(id=id).employee_id,
                                           'development_full_price': g_contracts.get(id=id).development_full_price})
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('/login.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level in ['m', 'c']:
+            new = 1
+            g_contracts = g_contracts.filter(Q(client_id=Employee.objects.get(id=request.session["id_user"])) | Q(
+                employee_id=Employee.objects.get(id=request.session["id_user"])))
+            if Employee.objects.get(
+                    id=request.session["id_user"]).access_level == 'c' or ContractOfDevelopment.objects.get(
+                    id=id) not in g_contracts.filter(employee_id=Employee.objects.get(id=request.session["id_user"])):
+                request.session["message"] = True
+                return HttpResponseRedirect('/contracts.html')
+            form.fields["employee_id"].required = False
+        mod = "редактирование"
+        note_id = id
         form.fields['employee_id'].queryset = (Employee.objects.filter(access_level__in=['a', 'm']))
         filtred = ContractsFilterForm(request.GET)
 
@@ -490,15 +620,29 @@ class ContractOnePage(View):
             'filtred': filtred,
             'form': form,
             'mod': mod,
-            'note_id': note_id
+            'note_id': note_id,
+            'new': new
         }
         return render(request, 'contracts.html', context=context)
 
     def post(self, request, id):
-        mod = "редактирование"
-        note_id = id
+        new = 2
         g_contracts = get_contracts()
         form = ContractsInfoForm(request.POST)
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('/login.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level in ['m', 'c']:
+            new = 1
+            g_contracts = g_contracts.filter(Q(client_id=Employee.objects.get(id=request.session["id_user"])) | Q(
+                employee_id=Employee.objects.get(id=request.session["id_user"])))
+            if Employee.objects.get(
+                    id=request.session["id_user"]).access_level == 'c' or ContractOfDevelopment.objects.get(
+                    id=id) not in g_contracts.filter(employee_id=Employee.objects.get(id=request.session["id_user"])):
+                request.session["message"] = True
+                return HttpResponseRedirect('/contracts.html')
+            form.fields["employee_id"].required = False
+        mod = "редактирование"
+        note_id = id
         form.fields['employee_id'].queryset = (Employee.objects.filter(access_level__in=['a', 'm']))
         filtred = ContractsFilterForm(request.GET)
 
@@ -523,7 +667,8 @@ class ContractOnePage(View):
             'filtred': filtred,
             'form': form,
             'mod': mod,
-            'note_id': note_id
+            'note_id': note_id,
+            'new': new
         }
         if form.is_valid():
             contract = ContractOfDevelopment.objects.get(id=id)
@@ -531,7 +676,10 @@ class ContractOnePage(View):
             contract.conclusion_date = form.cleaned_data["conclusion_date"]
             contract.contract_end_date = form.cleaned_data["contract_end_date"]
             contract.client_id = form.cleaned_data["client_id"]
-            contract.employee_id = form.cleaned_data["employee_id"]
+            if Employee.objects.get(id=request.session["id_user"]).access_level == 'm':
+                contract.employee_id = Employee.objects.get(id=request.session["id_user"])
+            else:
+                contract.employee_id = form.cleaned_data["employee_id"]
             contract.development_full_price = form.cleaned_data["development_full_price"]
             contract.save()
             return HttpResponseRedirect('/contracts.html')
@@ -542,9 +690,17 @@ class ContractOnePage(View):
 
 class ControlPage(View):
     def get(self, request):
+        new = False
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('login.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
+            return HttpResponseRedirect('contracts.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'a':
+            new = True
         mod = "добавление"
         g_accounts = get_accounts()
         form = AccountsForm()
+        form.fields['access_level'].choices = [('', '---------'), ('m', 'Мастер'), ('c', 'Клиент')]
         filtred = AccountsFilterForm(request.GET)
 
         if filtred.is_valid():
@@ -561,14 +717,23 @@ class ControlPage(View):
             'g_accounts': g_accounts,
             'filtred': filtred,
             'form': form,
-            'mod': mod
+            'mod': mod,
+            'new': new
         }
         return render(request, 'control.html', context=context)
 
     def post(self, request):
+        new = False
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('login.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
+            return HttpResponseRedirect('contracts.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'a':
+            new = True
         mod = "добавление"
         g_accounts = get_accounts()
         form = AccountsForm(request.POST)
+        form.fields['access_level'].choices = [('', '---------'), ('m', 'Мастер'), ('c', 'Клиент')]
         filtred = AccountsFilterForm(request.GET)
 
         if filtred.is_valid():
@@ -585,7 +750,8 @@ class ControlPage(View):
             'g_accounts': g_accounts,
             'filtred': filtred,
             'form': form,
-            'mod': mod
+            'mod': mod,
+            'new': new
         }
         if form.is_valid():
             account = form.save(commit=False)
@@ -599,9 +765,16 @@ class ControlPage(View):
 
 class ControlOnePage(View):
     def get(self, request, id):
+        g_accounts = get_accounts()
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('/login.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
+            return HttpResponseRedirect('/contracts.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'm' or g_accounts.get(
+                id=id).access_level == 'a':
+            return HttpResponseRedirect('/control.html')
         mod = "редактирование"
         user_id = id
-        g_accounts = get_accounts()
         avatar = g_accounts.get(id=id).avatar
         form = AccountsForm(initial={'full_name': g_accounts.get(id=id).full_name,
                                      'password': g_accounts.get(id=id).password,
@@ -609,6 +782,7 @@ class ControlOnePage(View):
                                      'email': g_accounts.get(id=id).email,
                                      'access_level': g_accounts.get(id=id).access_level,
                                      'avatar': g_accounts.get(id=id).avatar})
+        form.fields['access_level'].choices = [('', '---------'), ('m', 'Мастер'), ('c', 'Клиент')]
         form.fields["login"].required = False
         filtred = AccountsFilterForm(request.GET)
 
@@ -633,11 +807,19 @@ class ControlOnePage(View):
         return render(request, 'control.html', context=context)
 
     def post(self, request, id):
+        g_accounts = get_accounts()
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('/login.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
+            return HttpResponseRedirect('/contracts.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'm' or g_accounts.get(
+                id=id).access_level == 'a':
+            return HttpResponseRedirect('/control.html')
         mod = "редактирование"
         user_id = id
-        g_accounts = get_accounts()
         avatar = g_accounts.get(id=id).avatar
         form = AccountsForm(request.POST, request.FILES)
+        form.fields['access_level'].choices = [('', '---------'), ('m', 'Мастер'), ('c', 'Клиент')]
         form.fields["login"].required = False
         filtred = AccountsFilterForm(request.GET)
 
@@ -679,22 +861,55 @@ class ControlOnePage(View):
 
 class LoginPage(View):
     def get(self, request):
-        context = {}
+        success = ''
+        if "id_user" in request.session:
+            return HttpResponseRedirect('confirm_exit.html')
+        if "success" in request.session:
+            if request.session["success"]:
+                success = 'Регистрация прошла успешно'
+                request.session["success"] = False
+        context = {
+            'success': success
+        }
         return render(request, 'login.html', context=context)
 
     def post(self, request):
-        entered_login = request.POST.get("enter_login")
-        entered_pass = request.POST.get("enter_pass")
-        users = autoriz(entered_login, entered_pass)
-        if not users:
-            context = {
-                "error": "Введен неверный логин или пароль"
-            }
-            return render(request, 'login.html', context=context)
-        else:
-            request.session["id_user"] = users[0].id
-            request.session["access"] = users[0].access_level
-            return HttpResponseRedirect('account.html')
+        if "id_user" in request.session:
+            return HttpResponseRedirect('confirm_exit.html')
+        if "login_user" in request.POST:
+            entered_login = request.POST.get("enter_login")
+            entered_pass = request.POST.get("enter_pass")
+            users = autoriz(entered_login, entered_pass)
+            if not users:
+                context = {
+                    "error": "Введен неверный логин или пароль"
+                }
+                return render(request, 'login.html', context=context)
+            else:
+                request.session["id_user"] = users[0].id
+                request.session["access"] = users[0].access_level
+                return HttpResponseRedirect('account.html')
+        if "reg_user" in request.POST:
+            form = RegistrateForm(request.POST)
+            if form.is_valid():
+                entered_confirm = request.POST.get("confirm_pass")
+                if form.cleaned_data["password"] == entered_confirm:
+                    user = form.save(commit=False)
+                    user.access_level = 'c'
+                    user.reg_date = datetime.datetime.now()
+                    user.save()
+                    request.session["success"] = True
+                    return HttpResponseRedirect('control.html')
+                else:
+                    context = {
+                        "error": "Повторите пароль"
+                    }
+                    return render(request, 'login.html', context=context)
+            else:
+                context = {
+                    "error": "Неправильное заполнение"
+                }
+                return render(request, 'login.html', context=context)
 
 
 class MessagesPage(View):
@@ -705,6 +920,13 @@ class MessagesPage(View):
 
 class ReviewsPage(View):
     def get(self, request):
+        if "id_user" in request.session:
+            link = "confirm_exit.html"
+            log = "Выйти"
+        else:
+            link = "login.html"
+            log = "Войти\Регистрация"
+        enable = 0
         mod = "Оставить"
         g_reviews = get_reviews()
         form = ReviewsForm()
@@ -721,11 +943,21 @@ class ReviewsPage(View):
             'g_reviews': g_reviews,
             'filtred': filtred,
             'form': form,
-            'mod': mod
+            'mod': mod,
+            'link': link,
+            'log': log,
+            'enable': enable
         }
         return render(request, 'reviews.html', context=context)
 
     def post(self, request):
+        if "id_user" in request.session:
+            link = "confirm_exit.html"
+            log = "Выйти"
+        else:
+            link = "login.html"
+            log = "Войти\Регистрация"
+        enable = 0
         mod = "Оставить"
         g_reviews = get_reviews()
         form = ReviewsForm(request.POST)
@@ -742,10 +974,14 @@ class ReviewsPage(View):
             'g_reviews': g_reviews,
             'filtred': filtred,
             'form': form,
-            'mod': mod
+            'mod': mod,
+            'link': link,
+            'log': log,
+            'enable': enable
         }
         if form.is_valid():
             review = form.save(commit=False)
+            review.client_id = Employee.objects.get(id=request.session["id_user"])
             review.public_date = datetime.datetime.now()
             review.save()
             return HttpResponseRedirect('reviews.html')
@@ -756,7 +992,18 @@ class ReviewsPage(View):
 
 class ReviewOnePage(View):
     def get(self, request, id):
+        link = "confirm_exit.html"
+        log = "Выйти"
+        enable = 1
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('/login.html')
+        elif Review.objects.get(id=id).client_id != Employee.objects.get(id=request.session["id_user"]):
+            if Employee.objects.get(id=request.session["id_user"]).access_level in ['c', 'm']:
+                return HttpResponseRedirect('/reviews.html')
+            else:
+                enable = 2
         mod = "Редактировать"
+        review_id = id
         g_reviews = get_reviews()
         form = ReviewsForm(initial={'review_text': g_reviews.get(id=id).review_text})
         filtred = ReviewsFilterForm(request.GET)
@@ -772,12 +1019,27 @@ class ReviewOnePage(View):
             'g_reviews': g_reviews,
             'filtred': filtred,
             'form': form,
-            'mod': mod
+            'mod': mod,
+            'review_id': review_id,
+            'link': link,
+            'log': log,
+            'enable': enable
         }
         return render(request, 'reviews.html', context=context)
 
     def post(self, request, id):
+        link = "confirm_exit.html"
+        log = "Выйти"
+        enable = 1
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('/login.html')
+        elif Review.objects.get(id=id).client_id != Employee.objects.get(id=request.session["id_user"]):
+            if Employee.objects.get(id=request.session["id_user"]).access_level in ['c', 'm']:
+                return HttpResponseRedirect('/reviews.html')
+            else:
+                enable = 2
         mod = "Редактировать"
+        review_id = id
         g_reviews = get_reviews()
         form = ReviewsForm(request.POST)
         filtred = ReviewsFilterForm(request.GET)
@@ -793,7 +1055,11 @@ class ReviewOnePage(View):
             'g_reviews': g_reviews,
             'filtred': filtred,
             'form': form,
-            'mod': mod
+            'mod': mod,
+            'review_id': review_id,
+            'link': link,
+            'log': log,
+            'enable': enable
         }
         if form.is_valid():
             review = Review.objects.get(id=id)
@@ -807,8 +1073,16 @@ class ReviewOnePage(View):
 
 class StatesPage(View):
     def get(self, request):
-        mod = "добавление"
+        new = False
         g_states = get_states()
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('login.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level in ['a', 'm']:
+            new = True
+        else:
+            g_states = g_states.filter(game_id__in=ContractOfDevelopment.objects.filter(
+                client_id=request.session["id_user"]).values_list("game_id", flat=True))
+        mod = "добавление"
         form = StatesForm()
         filtred = StatesFilterForm(request.GET)
 
@@ -832,13 +1106,22 @@ class StatesPage(View):
             'g_states': g_states,
             'filtred': filtred,
             'form': form,
-            'mod': mod
+            'mod': mod,
+            'new': new
         }
         return render(request, 'game_states.html', context=context)
 
     def post(self, request):
-        mod = "добавление"
+        new = False
         g_states = get_states()
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('login.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level in ['a', 'm']:
+            new = True
+        else:
+            g_states = g_states.filter(game_id__in=ContractOfDevelopment.objects.filter(
+                client_id=request.session["id_user"]).values_list("game_id", flat=True))
+        mod = "добавление"
         form = StatesForm(request.POST)
         filtred = StatesFilterForm(request.GET)
 
@@ -862,7 +1145,8 @@ class StatesPage(View):
             'g_states': g_states,
             'filtred': filtred,
             'form': form,
-            'mod': mod
+            'mod': mod,
+            'new': new
         }
         if form.is_valid():
             form.save()
@@ -874,6 +1158,10 @@ class StatesPage(View):
 
 class StateOnePage(View):
     def get(self, request, id):
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('/login.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
+            return HttpResponseRedirect('/game_states.html')
         mod = "редактирование"
         state_id = id
         g_states = get_states()
@@ -909,6 +1197,10 @@ class StateOnePage(View):
         return render(request, 'game_states.html', context=context)
 
     def post(self, request, id):
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('/login.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
+            return HttpResponseRedirect('/game_states.html')
         mod = "редактирование"
         state_id = id
         g_states = get_states()
@@ -953,12 +1245,7 @@ class StateOnePage(View):
 
 class SequrityPage(View):
     def get(self, request):
-        if "id_user" in request.session:
-            link = "confirm_exit.html"
-            log = "Выйти"
-        else:
-            link = "login.html"
-            log = "Войти\Регистрация"
+        if "id_user" not in request.session:
             return HttpResponseRedirect('login.html')
         g_accounts = get_accounts()
         form = SequrityForm(initial={'phone': g_accounts.get(id=request.session["id_user"]).phone,
@@ -967,19 +1254,12 @@ class SequrityPage(View):
         conf = PasswordForm()
         context = {
             'form': form,
-            'conf': conf,
-            'link': link,
-            'log': log
+            'conf': conf
         }
         return render(request, 'sequrity.html', context=context)
 
     def post(self, request):
-        if "id_user" in request.session:
-            link = "confirm_exit.html"
-            log = "Выйти"
-        else:
-            link = "login.html"
-            log = "Войти\Регистрация"
+        if "id_user" not in request.session:
             return HttpResponseRedirect('login.html')
         g_accounts = get_accounts()
         form = SequrityForm(request.POST)
@@ -987,9 +1267,7 @@ class SequrityPage(View):
         conf = PasswordForm(request.POST)
         context = {
             'form': form,
-            'conf': conf,
-            'link': link,
-            'log': log
+            'conf': conf
         }
         if form.is_valid() & conf.is_valid():
             user = Employee.objects.get(id=request.session["id_user"])
@@ -1014,10 +1292,14 @@ class SequrityPage(View):
 
 class ExitPage(View):
     def get(self, request):
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('login.html')
         context = {}
         return render(request, 'confirm_exit.html', context=context)
 
     def post(self, request):
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('login.html')
         request.session.clear()
         context = {}
         return HttpResponseRedirect('/login.html')
@@ -1025,10 +1307,24 @@ class ExitPage(View):
 
 class AccountDeletePage(View):
     def get(self, request, id):
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('/login.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
+            return HttpResponseRedirect('/contracts.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'm' or Employee.objects.get(
+                id=id).access_level == 'a':
+            return HttpResponseRedirect('/control.html')
         context = {}
         return render(request, 'confirm_delete.html', context=context)
 
     def post(self, request, id):
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('/login.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
+            return HttpResponseRedirect('/contracts.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'm' or Employee.objects.get(
+                id=id).access_level == 'a':
+            return HttpResponseRedirect('/control.html')
         g_del_account = get_del_account(id)
         context = {}
         g_del_account.delete()
@@ -1037,10 +1333,24 @@ class AccountDeletePage(View):
 
 class ContractDeletePage(View):
     def get(self, request, id):
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('/login.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c' or Employee.objects.get(
+                id=request.session["id_user"]).access_level == 'm' and ContractOfDevelopment.objects.get(
+                id=id).employee_id != Employee.objects.get(id=request.session["id_user"]):
+            request.session["message"] = True
+            return HttpResponseRedirect('/contracts.html')
         context = {}
         return render(request, 'confirm_delete.html', context=context)
 
     def post(self, request, id):
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('/login.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c' or Employee.objects.get(
+                id=request.session["id_user"]).access_level == 'm' and ContractOfDevelopment.objects.get(
+                id=id).employee_id != Employee.objects.get(id=request.session["id_user"]):
+            request.session["message"] = True
+            return HttpResponseRedirect('/contracts.html')
         g_del_contract = get_del_contract(id)
         context = {}
         g_del_contract.delete()
@@ -1049,10 +1359,18 @@ class ContractDeletePage(View):
 
 class GameDeletePage(View):
     def get(self, request, id):
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('/login.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
+            return HttpResponseRedirect('/contracts.html')
         context = {}
         return render(request, 'confirm_delete.html', context=context)
 
     def post(self, request, id):
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('/login.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
+            return HttpResponseRedirect('/contracts.html')
         g_del_game = get_del_game(id)
         context = {}
         g_del_game.delete()
@@ -1061,10 +1379,22 @@ class GameDeletePage(View):
 
 class TaskDeletePage(View):
     def get(self, request, id):
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('/login.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
+            return HttpResponseRedirect('/contracts.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'm':
+            return HttpResponseRedirect('/alltasks.html')
         context = {}
         return render(request, 'confirm_delete.html', context=context)
 
     def post(self, request, id):
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('/login.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
+            return HttpResponseRedirect('/contracts.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'm':
+            return HttpResponseRedirect('/alltaks.html')
         g_del_task = get_del_task(id)
         context = {}
         g_del_task.delete()
@@ -1073,11 +1403,35 @@ class TaskDeletePage(View):
 
 class StateDeletePage(View):
     def get(self, request, id):
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('/login.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
+            return HttpResponseRedirect('/game_states.html')
         context = {}
         return render(request, 'confirm_delete.html', context=context)
 
     def post(self, request, id):
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('/login.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
+            return HttpResponseRedirect('/game_states.html')
         g_del_state = get_del_state(id)
         context = {}
         g_del_state.delete()
         return HttpResponseRedirect('/game_states.html')
+
+
+class ReviewDeletePage(View):
+    def get(self, request, id):
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('/login.html')
+        elif Review.objects.get(id=id).client_id != Employee.objects.get(id=request.session["id_user"]) and Employee.objects.get(id=request.session["id_user"]).access_level in ['c', 'm']:
+            return HttpResponseRedirect('/reviews.html')
+        context = {}
+        return render(request, 'confirm_delete.html', context=context)
+
+    def post(self, request, id):
+        g_del_review = get_del_review(id)
+        context = {}
+        g_del_review.delete()
+        return HttpResponseRedirect('/reviews.html')

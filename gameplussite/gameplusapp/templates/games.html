@@ -20,7 +20,7 @@
 					<li><a href="/account.html">Аккаунт</a></li>
 					<li><a href="/messages.html">Сообщения</a></li>
 					<li><a href="/control.html">Управление</a></li>
-					<li><a href="/login.html">Войти\Регистрация</a></li>
+					<li><a href="/{{ link }}">{{ log }}</a></li>
 				  </ul>
 				</li>
 			  </ul>
@@ -50,7 +50,8 @@
 					{% endfor %}
 
 				</div>
-				<div class="about">
+				{% if enable %}
+				<div style="" class="about">
 					<div class="name">
 						<h3>{{ game_info.name }}</h3>
 					</div>
@@ -62,10 +63,11 @@
 					</div>
 					<div class="buttonblock">
 						<form action="{{ game_info.id }}/contract">
-							<button type="buy">Заказать</button>
+							<button {{ push }} type="buy">Заказать</button>
 						</form>
 					</div>
 				</div>
+				{% endif %}
 			</div>
 		</section>
 	</body>

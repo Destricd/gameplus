@@ -10,6 +10,17 @@
         </div>
     </div>
     <div class="noteother">
+        <div class="notestart">
+            <p>Подписан: {{ contract.conclusion_date|date:"d.m.Y" }}</p>
+        </div>
+        <div class="noteend">
+            <p>Расторжение: {{ contract.contract_end_date|date:"d.m.Y" }}</p>
+        </div>
+        <div class="notemoney">
+            <p>Дополнительные средства: {{ contract.development_full_price }} руб.</p>
+        </div>
+    </div>
+    <div class="notechange">
         <div class="noterate">
             <p>Оформил(-а): {{ contract.client_id }}</p>
         </div>

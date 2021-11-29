@@ -96,17 +96,29 @@ section {
     resize: none;
     flex-grow: 3;
 }
-.inputrev > form > button {
+.inputrev > form > button, .inputrev > form > a {
     padding: 12px 9px;
     border: none;
-    background: #7BA7AB;
     cursor: pointer;
 }
-.inputrev > form > button:before {
-    content: "Отправить";
+.inputrev > form > button[type="submit"] {
+    background: #7BA7AB;
+}
+.inputrev > form > a[type="button"] {
+    background: red;
+    text-align: center;
+    text-decoration: none;
+}
+.inputrev > form > button:before, .inputrev > form > a:before {
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     font-size: 17px;
     color: #F9F0DA;
+}
+.inputrev > form > button[type="submit"]:before {
+    content: "Отправить";
+}
+.inputrev > form > a[type="button"]:before {
+    content: "Удалить";
 }
 .revone {
     margin: 10px 0;

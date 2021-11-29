@@ -21,7 +21,7 @@
 					<li><a href="/account.html">Аккаунт</a></li>
 					<li><a href="/messages.html">Сообщения</a></li>
 					<li><a href="/control.html">Управление</a></li>
-					<li><a href="/login.html">Войти\Регистрация</a></li>
+					<li><a href="/confirm_exit.html">Выйти</a></li>
 				  </ul>
 				</li>
 			  </ul>
@@ -52,13 +52,20 @@
 					<div class="widget">
 						<h3>Управление</h3>
 						<ul>
-						    <li><a href="/control.html">Аккаунты</a></li>
+						    {% if new >= 1 %}
+							<li><a href="/control.html">Аккаунты</a></li>
+							{% endif %}
 						    <li><a href="/contracts.html">Договора</a></li>
+							{% if new >= 1 %}
 						    <li><a href="/allgames.html">Игры</a></li>
+							{% endif %}
 							<li><a href="/game_states.html">Стадии разработки игр</a></li>
+							{% if new >= 1 %}
 						    <li><a href="/alltasks.html">Технические задачи</a></li>
+							{% endif %}
 						</ul>
 					</div>
+					<p><span style="color: red">{{ message }}</span></p>
 				</div>
                 <div class="games">
 
@@ -67,6 +74,7 @@
 					{% endfor %}
 
 				</div>
+				{% if new >= 1 and mod == "добавление" or mod == "редактирование" %}
 				<div class="info">
 					<div class="name">
 						<h3>Договора - {{ mod }}</h3>
@@ -82,20 +90,25 @@
 								    <p>{{ form.conclusion_date }}</p>
 									<p><strong>Дата окончания:</strong></p>
 								    <p>{{ form.contract_end_date }}</p>
-									<p><strong>Оформитель:</strong></p>
+									{% if new == 2 %}
+									<p><strong>Работник:</strong></p>
 								    <p>{{ form.employee_id }}</p>
-									<p><strong>Клиент:</strong></p>
+									{% endif %}
+									<p><strong>Клиент-оформитель:</strong></p>
 								    <p>{{ form.client_id  }}</p>
 									<p><strong>Дополнительные средства разработки:</strong></p>
 								    <p>{{ form.development_full_price }}</p>
 									<p><span style="color: red">{{ error }}</span></p>
 								    <p><button type="submit">Отправить</button></p>
 								</form>
+								{% if mod == "редактирование" %}
 								<a href="{{ note_id }}/delete">Удалить контракт</a>
+								{% endif %}
 							</div>
 						</p>
 					</div>
 				</div>
+				{% endif %}
 			</div>
 		</section>
 	</body>

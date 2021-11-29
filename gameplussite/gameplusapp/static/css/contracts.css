@@ -3,10 +3,10 @@
     border: 1px solid black;
     border-radius: 20px;
 }
-.notetag {
+.notetag, .noteother {
     border-bottom: 1px solid black;
 }
-.notetag, .noteother {
+.notetag, .noteother, .notechange {
     display: table;
     width: 100%;
     margin-left: 0;
@@ -15,7 +15,9 @@
 .notetag > div,
 .notetag > noindex > div,
 .noteother > div,
-.noteother > noindex > div {
+.noteother > noindex > div,
+.notechange > div,
+.notechange > noindex > div {
     display: table-cell;
     vertical-align: middle;
 }
@@ -29,13 +31,19 @@
     float: right;
     padding: 10px 40px 10px 10px;
 }
-.notename > p, .noteemp > p, .noterate > p, .more > p {
+.notename > p, .noteemp > p, .notestart > p, .noteend > p, .notemoney > p, .noterate > p, .more > a {
     margin: 0;
+}
+.notestart, .noteend, .notemoney, .noterate {
+    padding: 8px 10px;
+}
+.notestart, .noteend {
+    width: 30%;
+    border-right: 1px solid black;
 }
 .noterate {
     width: 49%;
     border-right: 1px solid black;
-    padding: 8px 10px;
 }
 .more {
     float: right;

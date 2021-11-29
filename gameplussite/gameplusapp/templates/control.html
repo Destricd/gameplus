@@ -21,7 +21,7 @@
 					<li><a href="/account.html">Аккаунт</a></li>
 					<li><a href="/messages.html">Сообщения</a></li>
 					<li><a href="/control.html">Управление</a></li>
-					<li><a href="/login.html">Войти\Регистрация</a></li>
+					<li><a href="/confirm_exit.html">Выйти</a></li>
 				  </ul>
 				</li>
 			  </ul>
@@ -67,6 +67,7 @@
 					{% endfor %}
 
 				</div>
+				{% if new or mod == "редактирование" %}
 				<div class="info">
 					<div class="name">
 						<h3>Аккаунты - {{ mod }}</h3>
@@ -98,6 +99,7 @@
 						</p>
 					</div>
 				</div>
+				{% endif %}
 			</div>
 		</section>
 	</body>

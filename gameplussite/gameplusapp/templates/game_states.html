@@ -21,7 +21,7 @@
 					<li><a href="/account.html">Аккаунт</a></li>
 					<li><a href="/messages.html">Сообщения</a></li>
 					<li><a href="/control.html">Управление</a></li>
-					<li><a href="/login.html">Войти\Регистрация</a></li>
+					<li><a href="/confirm_exit.html.html">Выйти</a></li>
 				  </ul>
 				</li>
 			  </ul>
@@ -52,11 +52,17 @@
 					<div class="widget">
 						<h3>Управление</h3>
 						<ul>
+							{% if new or mod == "редактирование" %}
 						    <li><a href="/control.html">Аккаунты</a></li>
+							{% endif %}
 						    <li><a href="/contracts.html">Договора</a></li>
+							{% if new or mod == "редактирование" %}
 						    <li><a href="/allgames.html">Игры</a></li>
+							{% endif %}
 							<li><a href="/game_states.html">Стадии разработки игр</a></li>
+							{% if new or mod == "редактирование" %}
 						    <li><a href="/alltasks.html">Технические задачи</a></li>
+							{% endif %}
 						</ul>
 					</div>
 				</div>
@@ -67,6 +73,7 @@
 					{% endfor %}
 
 				</div>
+				{% if new or mod == "редактирование" %}
 				<div class="info">
 					<div class="name">
 						<h3>Стадии разработки - {{ mod }}</h3>
@@ -92,6 +99,7 @@
 						</p>
 					</div>
 				</div>
+				{% endif %}
 			</div>
 		</section>
 	</body>

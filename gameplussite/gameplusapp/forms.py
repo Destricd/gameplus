@@ -7,6 +7,12 @@ from .models import TechnicalTask
 from .models import GameDevelopmentStage
 
 
+class RegistrateForm(forms.ModelForm):
+    class Meta:
+        model = Employee
+        fields = ['full_name', 'phone', 'email', 'login', 'password']
+
+
 class GamesFilterForm(forms.Form):
     ordering = forms.ChoiceField(required=False, widget=forms.Select(attrs={
         'class': 'sortsel'
@@ -54,7 +60,7 @@ class GamesForm(forms.ModelForm):
 class ContractsForm(forms.ModelForm):
     class Meta:
         model = ContractOfDevelopment
-        fields = ['conclusion_date', 'contract_end_date', 'employee_id', 'client_id', 'development_full_price']
+        fields = ['conclusion_date', 'contract_end_date', 'employee_id', 'development_full_price']
 
         widgets = {
             "development_full_price": forms.NumberInput(attrs={
@@ -78,7 +84,7 @@ class ReviewsFilterForm(forms.Form):
 class ReviewsForm(forms.ModelForm):
     class Meta:
         model = Review
-        fields = ['client_id', 'review_text']
+        fields = ['review_text']
 
         widgets = {
             "review_text": forms.Textarea(attrs={

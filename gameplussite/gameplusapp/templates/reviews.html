@@ -20,7 +20,7 @@
 					<li><a href="/account.html">Аккаунт</a></li>
 					<li><a href="/messages.html">Сообщения</a></li>
 					<li><a href="/control.html">Управление</a></li>
-					<li><a href="/login.html">Войти\Регистрация</a></li>
+					<li><a href="/{{ link }}">{{ log }}</a></li>
 				  </ul>
 				</li>
 			  </ul>
@@ -50,20 +50,25 @@
 					{% endfor %}
 
 				</div>
+				{% if "id_user" in request.session %}
 				<div class="feedback">
 					<div class="inputrev">
 						<form method="post">
 							{% csrf_token %}
 							<h3 class="writetitle">{{ mod }} отзыв</h3>
-							<label for="id_client_id">Ваше ФИО</label>
-							{{ form.client_id }}
+							{% if enable == 0 or enable == 1 %}
 							<label for="id_review_text">Сообщение</label>
 							{{ form.review_text }}
 							<span style="color: red">{{ error }}</span>
 							<button type="submit"></button>
+							{% endif %}
+							{% if enable == 1 or enable == 2 %}
+							<a href="{{ review_id }}/delete" type="button"></a>
+							{% endif %}
 						</form>
 					</div>
 				</div>
+				{% endif %}
 			</div>
 		</section>
 	</body>

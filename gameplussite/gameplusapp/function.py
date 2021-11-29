@@ -59,3 +59,8 @@ def get_del_task(pk):
 def get_del_state(pk):
     state = GameDevelopmentStage.objects.get(id=pk)
     return state
+
+
+def get_del_review(pk):
+    review = Review.objects.get(id=pk)
+    return review
