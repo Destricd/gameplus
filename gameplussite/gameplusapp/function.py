@@ -26,6 +26,11 @@ def get_tasks():
     return tasks
 
 
+def get_states():
+    states = GameDevelopmentStage.objects.all()
+    return states
+
+
 def get_del_account(pk):
     account = Employee.objects.get(id=pk)
     return account
@@ -44,3 +49,8 @@ def get_del_game(pk):
 def get_del_task(pk):
     task = TechnicalTask.objects.get(id=pk)
     return task
+
+
+def get_del_state(pk):
+    state = GameDevelopmentStage.objects.get(id=pk)
+    return state

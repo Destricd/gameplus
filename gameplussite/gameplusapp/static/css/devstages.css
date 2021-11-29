@@ -1,40 +1,45 @@
-.taskone {
+.stateone {
     margin: 10px 0;
     border: 1px solid black;
     border-radius: 20px;
 }
-.tasktag, .taskother {
+.statetag, .stateother {
     border-bottom: 1px solid black;
 }
-.tasktag, .taskother, .taskchange {
+.statetag, .stateother, .statechange {
     display: table;
     width: 100%;
     margin-left: 0;
     margin-right: 0;
 }
-.tasktag > div,
-.tasktag > noindex > div,
-.taskother > div,
-.taskother > noindex > div,
-.taskchange > div,
-.taskchange > noindex > div {
+.statetag > div,
+.statetag > noindex > div,
+.stateother > div,
+.stateother > noindex > div,
+.statechange > div,
+.statechange > noindex > div {
     display: table-cell;
     vertical-align: middle;
 }
-.taskname {
-    width: 49%;
+.statename {
+    width: 40%;
     border-right: 1px solid black;
     padding: 10px 10px 10px 20px;
     font-weight: bold;
 }
-.taskdate {
+.statestartdate {
+    width: 25%;
+    border-right: 1px solid black;
+    padding: 10px;
+}
+.stateenddate {
     float: right;
     padding: 10px 40px 10px 10px;
 }
-.taskname > p, .taskdate > p, .taskrate > p {
+.statename > p, .statestartdate > p, .stateenddate > p, .staterate > p {
     margin: 0;
 }
-.taskrate {
+.staterate {
     padding: 8px 10px;
 }
 .more {

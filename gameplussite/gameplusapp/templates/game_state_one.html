@@ -1,0 +1,27 @@
+{% block content %}
+
+<div class="stateone">
+    <div class="statetag">
+        <div class="statename">
+            <p>{{ state.game_id }}</p>
+        </div>
+        <div class="statestartdate">
+            <p>Дата начала: {{ state.start_date|date:"d.m.Y" }}</p>
+        </div>
+        <div class="stateenddate">
+            <p>Дата завершения: {{ state.end_date|date:"d.m.Y" }}</p>
+        </div>
+    </div>
+    <div class="stateother">
+        <div class="staterate">
+            <p>{{ state.stage_description }}</p>
+        </div>
+    </div>
+    <div class="statechange">
+        <div class="more">
+            <a href="/game_states.html/{{ state.id }}">Редактировать>></a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

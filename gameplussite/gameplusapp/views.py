@@ -15,6 +15,8 @@ from .forms import ContractsInfoForm
 from .forms import ContractsFilterForm
 from .forms import TasksForm
 from .forms import TasksFilterForm
+from .forms import StatesForm
+from .forms import StatesFilterForm
 
 
 class MainPage(View):
@@ -753,6 +755,152 @@ class ReviewOnePage(View):
             return render(request, 'reviews.html', context=context)
 
 
+class StatesPage(View):
+    def get(self, request):
+        mod = "добавление"
+        g_states = get_states()
+        form = StatesForm()
+        filtred = StatesFilterForm(request.GET)
+
+        if filtred.is_valid():
+            if filtred.cleaned_data["search"]:
+                g_states = g_states.filter(game_id__name__iregex=filtred.cleaned_data["search"])
+
+            if filtred.cleaned_data["ordering"]:
+                g_states = g_states.order_by(filtred.cleaned_data["ordering"])
+
+            if filtred.cleaned_data["watching"]:
+                if filtred.cleaned_data["watching"] == "a":
+                    g_states = g_states.filter(start_date__gt=datetime.datetime.now())
+                elif filtred.cleaned_data["watching"] == "b":
+                    g_states = g_states.filter(start_date__lt=datetime.datetime.now(),
+                                               end_date__gt=datetime.datetime.now())
+                elif filtred.cleaned_data["watching"] == "c":
+                    g_states = g_states.filter(end_date__lt=datetime.datetime.now())
+
+        context = {
+            'g_states': g_states,
+            'filtred': filtred,
+            'form': form,
+            'mod': mod
+        }
+        return render(request, 'game_states.html', context=context)
+
+    def post(self, request):
+        mod = "добавление"
+        g_states = get_states()
+        form = StatesForm(request.POST)
+        filtred = StatesFilterForm(request.GET)
+
+        if filtred.is_valid():
+            if filtred.cleaned_data["search"]:
+                g_states = g_states.filter(game_id__name__iregex=filtred.cleaned_data["search"])
+
+            if filtred.cleaned_data["ordering"]:
+                g_states = g_states.order_by(filtred.cleaned_data["ordering"])
+
+            if filtred.cleaned_data["watching"]:
+                if filtred.cleaned_data["watching"] == "a":
+                    g_states = g_states.filter(start_date__gt=datetime.datetime.now())
+                elif filtred.cleaned_data["watching"] == "b":
+                    g_states = g_states.filter(start_date__lt=datetime.datetime.now(),
+                                               end_date__gt=datetime.datetime.now())
+                elif filtred.cleaned_data["watching"] == "c":
+                    g_states = g_states.filter(end_date__lt=datetime.datetime.now())
+
+        context = {
+            'g_states': g_states,
+            'filtred': filtred,
+            'form': form,
+            'mod': mod
+        }
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('game_states.html')
+        else:
+            context["error"] = "Неправильное заполнение"
+            return render(request, 'game_states.html', context=context)
+
+
+class StateOnePage(View):
+    def get(self, request, id):
+        mod = "редактирование"
+        state_id = id
+        g_states = get_states()
+        form = StatesForm(initial={'game_id': g_states.get(id=id).game_id,
+                                   'start_date': g_states.get(id=id).start_date,
+                                   'end_date': g_states.get(id=id).end_date,
+                                   'stage_description': g_states.get(id=id).stage_description})
+        filtred = StatesFilterForm(request.GET)
+
+        if filtred.is_valid():
+            if filtred.cleaned_data["search"]:
+                g_states = g_states.filter(game_id__name__iregex=filtred.cleaned_data["search"])
+
+            if filtred.cleaned_data["ordering"]:
+                g_states = g_states.order_by(filtred.cleaned_data["ordering"])
+
+            if filtred.cleaned_data["watching"]:
+                if filtred.cleaned_data["watching"] == "a":
+                    g_states = g_states.filter(start_date__gt=datetime.datetime.now())
+                elif filtred.cleaned_data["watching"] == "b":
+                    g_states = g_states.filter(start_date__lt=datetime.datetime.now(),
+                                               end_date__gt=datetime.datetime.now())
+                elif filtred.cleaned_data["watching"] == "c":
+                    g_states = g_states.filter(end_date__lt=datetime.datetime.now())
+
+        context = {
+            'g_states': g_states,
+            'filtred': filtred,
+            'form': form,
+            'mod': mod,
+            'state_id': state_id
+        }
+        return render(request, 'game_states.html', context=context)
+
+    def post(self, request, id):
+        mod = "редактирование"
+        state_id = id
+        g_states = get_states()
+        form = StatesForm(request.POST)
+        filtred = StatesFilterForm(request.GET)
+
+        if filtred.is_valid():
+            if filtred.cleaned_data["search"]:
+                g_states = g_states.filter(game_id__name__iregex=filtred.cleaned_data["search"])
+
+            if filtred.cleaned_data["ordering"]:
+                g_states = g_states.order_by(filtred.cleaned_data["ordering"])
+
+            if filtred.cleaned_data["watching"]:
+                if filtred.cleaned_data["watching"] == "a":
+                    g_states = g_states.filter(start_date__gt=datetime.datetime.now())
+                elif filtred.cleaned_data["watching"] == "b":
+                    g_states = g_states.filter(start_date__lt=datetime.datetime.now(),
+                                               end_date__gt=datetime.datetime.now())
+                elif filtred.cleaned_data["watching"] == "c":
+                    g_states = g_states.filter(end_date__lt=datetime.datetime.now())
+
+        context = {
+            'g_states': g_states,
+            'filtred': filtred,
+            'form': form,
+            'mod': mod,
+            'state_id': state_id
+        }
+        if form.is_valid():
+            state = GameDevelopmentStage.objects.get(id=id)
+            state.game_id = form.cleaned_data["game_id"]
+            state.start_date = form.cleaned_data["start_date"]
+            state.end_date = form.cleaned_data["end_date"]
+            state.stage_description = form.cleaned_data["stage_description"]
+            state.save()
+            return HttpResponseRedirect('/game_states.html')
+        else:
+            context["error"] = "Неправильное заполнение"
+            return render(request, 'game_states.html', context=context)
+
+
 class SequrityPage(View):
     def get(self, request):
         context = {}
@@ -805,3 +953,15 @@ class TaskDeletePage(View):
         context = {}
         g_del_task.delete()
         return HttpResponseRedirect('/alltasks.html')
+
+
+class StateDeletePage(View):
+    def get(self, request, id):
+        context = {}
+        return render(request, 'confirm_delete.html', context=context)
+
+    def post(self, request, id):
+        g_del_state = get_del_state(id)
+        context = {}
+        g_del_state.delete()
+        return HttpResponseRedirect('/game_states.html')

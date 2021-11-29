@@ -1,14 +1,14 @@
 <!DOCTYPE HTML>
 <html>
-	
+
 	<head>
 		<meta charset="utf-8" />
-		<title>Студия Гейм-Плюс | Управление | Игры</title>
+		<title>Студия Гейм-Плюс | Управление | Стадии разработки игр</title>
 		<link rel="stylesheet" href="../static/css/pattern.css" />
 		<link rel="stylesheet" href="../static/css/control.css" />
-		<link rel="stylesheet" href="../static/css/allgames.css" />
+		<link rel="stylesheet" href="../static/css/devstages.css" />
 	</head>
-	
+
 	<body>
 		<header>
 		  <nav>
@@ -30,6 +30,10 @@
         <section class="selections">
 			<div class="functions">
 				<form class="searchform" method="get">
+					<div class="viewblock">
+						<p><strong>Показать:</strong></p>
+						<p>{{ filtred.watching }}</p>
+					</div>
 					<div class="sortblock">
 						<p><strong>Сортировать по:</strong></p>
 						<p>{{ filtred.ordering }}</p>
@@ -58,44 +62,32 @@
 				</div>
                 <div class="games">
 
-					{% for game in g_games %}
-					{% include 'game_list_one.html' %}
+					{% for state in g_states %}
+					{% include 'game_state_one.html' %}
 					{% endfor %}
 
 				</div>
 				<div class="info">
 					<div class="name">
-						<h3>Игры - {{ mod }}</h3>
+						<h3>Стадии разработки - {{ mod }}</h3>
 					</div>
 					<div class="description">
-						<p><img src="../{{ picture }}" alt="Отсутствует фото" class="rightimg">
-							<div class="noteblock">
-								<form class="noteform" method="post" enctype="multipart/form-data">
+						<p>
+							<div class="stateblock">
+								<form class="stateform" method="post" enctype="multipart/form-data">
 									{% csrf_token %}
-								    <p><strong>Название:</strong></p>
-								    <p>{{ form.name }}</p>
-									<p><strong>Жанр:</strong></p>
-								    <p>{{ form.type }}</p>
-									<p><strong>Рейтинг:</strong></p>
-								    <p>{{ form.rate }}</p>
-									<p><strong>Правила:</strong></p>
-								    <p>{{ form.rules }}</p>
-									<p><strong>Дата выхода:</strong></p>
-								    <p>{{ form.release_date  }}</p>
-									<p><strong>Сайт:</strong></p>
-								    <p>{{ form.site }}</p>
-									<p><strong>Многопользовательская:</strong></p>
-								    <p>{{ form.number_of_rules }}</p>
-									<p><strong>Цена для продажи:</strong></p>
-								    <p>{{ form.price }}</p>
-									<p><strong>Первоначальный бюджет разработки:</strong></p>
-								    <p>{{ form.development_budget  }}</p>
-									<p><strong>Изображение:</strong></p>
-								    <p>{{ form.picture }}</p>
+								    <p><strong>Игра:</strong></p>
+								    <p>{{ form.game_id }}</p>
+									<p><strong>Дата подписания:</strong></p>
+								    <p>{{ form.start_date }}</p>
+									<p><strong>Дата окончания:</strong></p>
+								    <p>{{ form.end_date }}</p>
+									<p><strong>Описание стадии:</strong></p>
+								    <p>{{ form.stage_description }}</p>
 									<p><span style="color: red">{{ error }}</span></p>
 								    <p><button type="submit">Отправить</button></p>
 								</form>
-								<a href="{{ game_id }}/delete">Удалить игру</a>
+								<a href="{{ state_id }}/delete">Удалить стадию</a>
 							</div>
 						</p>
 					</div>
@@ -103,11 +95,11 @@
 			</div>
 		</section>
 	</body>
-	
+
 	<footer>
 		<div class="copyright">
 			<span>&copy; The Game + LLC 2019-2020</span>
 		</div>
 	</footer>
-	
+
 </html>

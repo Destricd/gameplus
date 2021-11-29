@@ -27,6 +27,9 @@ class GameDevelopmentStage(models.Model):
     end_date = models.DateField(default=timezone.now())
     stage_description = models.TextField(default=' ')
 
+    class Meta:
+        ordering = ["game_id"]
+
 
 class Employee(models.Model):
     MY_CHOICES = (

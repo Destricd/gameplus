@@ -4,6 +4,7 @@ from .models import ContractOfDevelopment
 from .models import Employee
 from .models import Review
 from .models import TechnicalTask
+from .models import GameDevelopmentStage
 
 
 class GamesFilterForm(forms.Form):
@@ -188,6 +189,40 @@ class TasksForm(forms.ModelForm):
 
         widgets = {
             "description": forms.Textarea(attrs={
+                'placeholder': 'Описание'
+            })
+
+        }
+
+
+class StatesFilterForm(forms.Form):
+    watching = forms.ChoiceField(required=False, widget=forms.Select(attrs={
+        'class': 'sortsel'
+    }), choices=[
+        ["", "Все"],
+        ["a", "Неначатые"],
+        ["b", "Разрабатываемые"],
+        ["c", "Завершённые"]
+    ])
+    ordering = forms.ChoiceField(required=False, widget=forms.Select(attrs={
+        'class': 'sortsel'
+    }), choices=[
+        ["game_id", "Играм"],
+        ["start_date", "Дате начала"],
+        ["end_date", "Дате завершения"]
+    ])
+    search = forms.CharField(label="Найти:", required=False, widget=forms.TextInput(attrs={
+        'placeholder': 'Искать здесь...'
+    }))
+
+
+class StatesForm(forms.ModelForm):
+    class Meta:
+        model = GameDevelopmentStage
+        fields = ['game_id', 'start_date', 'end_date', 'stage_description']
+
+        widgets = {
+            "stage_description": forms.Textarea(attrs={
                 'placeholder': 'Описание'
             })
 
