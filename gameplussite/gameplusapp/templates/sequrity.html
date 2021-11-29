@@ -20,7 +20,7 @@
 					<li><a href="account.html">Аккаунт</a></li>
 					<li><a href="messages.html">Сообщения</a></li>
 					<li><a href="control.html">Управление</a></li>
-					<li><a href="login.html">Войти\Регистрация</a></li>
+					<li><a href="{{ link }}">{{ log }}</a></li>
 				  </ul>
 				</li>
 			  </ul>
@@ -42,26 +42,19 @@
 						<h3>Безопасность</h3>
 					</div>
 					<div class="description">
-						<p><div class="password">
-								<form class="paswform">
-								   <p><strong>Пароль:</strong></p>
-								   <p><input type="text" placeholder="Пароль"></p>
-								   <p><input type="text" placeholder="Повторите пароль"></p>
-								   <p><button type="submit">Изменить</button></p>
-								</form>
-							</div>
-							<div class="phone">
-								<form class="phoneform">
-								   <p><strong>Телефон:</strong></p>
-								   <p><input type="text" placeholder="Телефон"></p>
-								   <p><button type="submit">Изменить</button></p>
-								</form>
-							</div>
-							<div class="email">
-								<form class="emailform">
-								   <p><strong>Почта:</strong></p>
-								   <p><input type="text" placeholder="E-mail"></p>
-								   <p><button type="submit">Изменить</button></p>
+						<p><div class="sequrity">
+								<form method="post" class="seqform">
+									{% csrf_token %}
+								    <p><strong>Пароль:</strong></p>
+								    <p>{{ conf.old_pass }}</p>
+									<p>{{ form.password }}</p>
+								    <p>{{ conf.confirm }}</p>
+								    <p><strong>Телефон:</strong></p>
+								    <p>{{ form.phone }}</p>
+								    <p><strong>Почта:</strong></p>
+								    <p>{{ form.email }}</p>
+									<p><span style="color: red">{{ error }}</span></p>
+								    <p><button type="submit">Изменить</button></p>
 								</form>
 							</div>
 						</p>

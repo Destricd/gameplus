@@ -227,3 +227,46 @@ class StatesForm(forms.ModelForm):
             })
 
         }
+
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = Employee
+        fields = ['full_name', 'login', 'avatar']
+
+        widgets = {
+            "full_name": forms.TextInput(attrs={
+                'placeholder': 'Фамилия Имя Отчество'
+            }),
+            "login": forms.TextInput(attrs={
+                'placeholder': 'Логин'
+            })
+        }
+
+
+class SequrityForm(forms.ModelForm):
+    class Meta:
+        model = Employee
+        fields = ['password', 'phone', 'email']
+
+        widgets = {
+            "phone": forms.NumberInput(attrs={
+                'placeholder': '***********'
+            }),
+            "email": forms.EmailInput(attrs={
+                'placeholder': 'box@example.com'
+            }),
+            "password": forms.PasswordInput(attrs={
+                'placeholder': 'Новый пароль'
+            })
+
+        }
+
+
+class PasswordForm(forms.Form):
+    old_pass = forms.CharField(required=False, widget=forms.PasswordInput(attrs={
+        'placeholder': 'Текущий пароль'
+    }))
+    confirm = forms.CharField(required=False, widget=forms.PasswordInput(attrs={
+        'placeholder': 'Повторите пароль'
+    }))

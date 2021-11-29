@@ -4,19 +4,7 @@ from django.shortcuts import render
 from django.views import View
 from django.http import HttpResponseRedirect
 from .function import *
-from .forms import GamesForm
-from .forms import GamesFilterForm
-from .forms import ContractsForm
-from .forms import ReviewsForm
-from .forms import ReviewsFilterForm
-from .forms import AccountsForm
-from .forms import AccountsFilterForm
-from .forms import ContractsInfoForm
-from .forms import ContractsFilterForm
-from .forms import TasksForm
-from .forms import TasksFilterForm
-from .forms import StatesForm
-from .forms import StatesFilterForm
+from .forms import *
 
 
 class MainPage(View):
@@ -94,8 +82,56 @@ class CreateContract(View):
 
 class AccountPage(View):
     def get(self, request):
-        context = {}
+        if "id_user" in request.session:
+            link = "confirm_exit.html"
+            log = "Выйти"
+        else:
+            link = "login.html"
+            log = "Войти\Регистрация"
+            return HttpResponseRedirect('login.html')
+        g_accounts = get_accounts()
+        avatar = g_accounts.get(id=request.session["id_user"]).avatar
+        form = UserForm(initial={'full_name': g_accounts.get(id=request.session["id_user"]).full_name,
+                                 'avatar': g_accounts.get(id=request.session["id_user"]).avatar
+                                })
+        form.fields["login"].required = False
+        context = {
+            'form': form,
+            'avatar': avatar,
+            'link': link,
+            'log': log
+        }
         return render(request, 'account.html', context=context)
+
+    def post(self, request):
+        if request.session["id_user"]:
+            link = "confirm_exit.html"
+            log = "Выйти"
+        else:
+            link = "login.html"
+            log = "Войти\Регистрация"
+            return HttpResponseRedirect('login.html')
+        g_accounts = get_accounts()
+        avatar = g_accounts.get(id=request.session["id_user"]).avatar
+        form = UserForm(request.POST)
+        form.fields["login"].required = False
+        context = {
+            'form': form,
+            'avatar': avatar,
+            'link': link,
+            'log': log
+        }
+        if form.is_valid():
+            user = Employee.objects.get(id=request.session["id_user"])
+            user.full_name = form.cleaned_data["full_name"]
+            if form.cleaned_data["login"] != '':
+                user.login = form.cleaned_data["login"]
+            user.avatar = form.cleaned_data["avatar"]
+            user.save()
+            return HttpResponseRedirect('account.html')
+        else:
+            context["error"] = "Неправильное заполнение"
+            return render(request, 'account.html', context=context)
 
 
 class AllGamesPage(View):
@@ -646,6 +682,20 @@ class LoginPage(View):
         context = {}
         return render(request, 'login.html', context=context)
 
+    def post(self, request):
+        entered_login = request.POST.get("enter_login")
+        entered_pass = request.POST.get("enter_pass")
+        users = autoriz(entered_login, entered_pass)
+        if not users:
+            context = {
+                "error": "Введен неверный логин или пароль"
+            }
+            return render(request, 'login.html', context=context)
+        else:
+            request.session["id_user"] = users[0].id
+            request.session["access"] = users[0].access_level
+            return HttpResponseRedirect('account.html')
+
 
 class MessagesPage(View):
     def get(self, request):
@@ -903,8 +953,74 @@ class StateOnePage(View):
 
 class SequrityPage(View):
     def get(self, request):
-        context = {}
+        if "id_user" in request.session:
+            link = "confirm_exit.html"
+            log = "Выйти"
+        else:
+            link = "login.html"
+            log = "Войти\Регистрация"
+            return HttpResponseRedirect('login.html')
+        g_accounts = get_accounts()
+        form = SequrityForm(initial={'phone': g_accounts.get(id=request.session["id_user"]).phone,
+                                     'email': g_accounts.get(id=request.session["id_user"]).email})
+        form.fields["password"].required = False
+        conf = PasswordForm()
+        context = {
+            'form': form,
+            'conf': conf,
+            'link': link,
+            'log': log
+        }
         return render(request, 'sequrity.html', context=context)
+
+    def post(self, request):
+        if "id_user" in request.session:
+            link = "confirm_exit.html"
+            log = "Выйти"
+        else:
+            link = "login.html"
+            log = "Войти\Регистрация"
+            return HttpResponseRedirect('login.html')
+        g_accounts = get_accounts()
+        form = SequrityForm(request.POST)
+        form.fields["password"].required = False
+        conf = PasswordForm(request.POST)
+        context = {
+            'form': form,
+            'conf': conf,
+            'link': link,
+            'log': log
+        }
+        if form.is_valid() & conf.is_valid():
+            user = Employee.objects.get(id=request.session["id_user"])
+            user.phone = form.cleaned_data["phone"]
+            user.email = form.cleaned_data["email"]
+            if form.cleaned_data["password"] != '':
+                if conf.cleaned_data["old_pass"] == user.password:
+                    if conf.cleaned_data["confirm"] == form.cleaned_data["password"]:
+                        user.password = form.cleaned_data["password"]
+                    else:
+                        context["error"] = "Повторите пароль"
+                        return render(request, 'sequrity.html', context=context)
+                else:
+                    context["error"] = "Текущий пароль введён неверно"
+                    return render(request, 'sequrity.html', context=context)
+            user.save()
+            return HttpResponseRedirect('sequrity.html')
+        else:
+            context["error"] = "Неправильное заполнение"
+            return render(request, 'sequrity.html', context=context)
+
+
+class ExitPage(View):
+    def get(self, request):
+        context = {}
+        return render(request, 'confirm_exit.html', context=context)
+
+    def post(self, request):
+        request.session.clear()
+        context = {}
+        return HttpResponseRedirect('/login.html')
 
 
 class AccountDeletePage(View):

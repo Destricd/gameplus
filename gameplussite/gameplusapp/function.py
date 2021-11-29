@@ -1,6 +1,11 @@
 from .models import *
 
 
+def autoriz(login, password):
+    users = Employee.objects.filter(login=login, password=password)
+    return users
+
+
 def get_games():
     games = Game.objects.all()
     return games

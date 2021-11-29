@@ -29,19 +29,22 @@
 		<section class="allgames">
 			<div class="login-page">
                 <div class="form">
-                  <form class="register-form">
-                    <input type="text" placeholder="Логин"/>
-                    <input type="password" placeholder="Пароль"/>
-                    <input type="password" placeholder="Повторите пароль"/>
-                    <input type="text" placeholder="Почта"/>
-                    <button>Создать</button>
-                    <p class="message">Уже зарегестрированы? <a href="#">Войти</a></p>
+                  <form method="post" class="register-form" name="reg_user">
+					  {% csrf_token %}
+                      <input type="text" placeholder="Логин"/>
+                      <input type="password" placeholder="Пароль"/>
+                      <input type="password" placeholder="Повторите пароль"/>
+                      <input type="text" placeholder="Почта"/>
+                      <button type="submit">Создать</button>
+                      <p class="message">Уже зарегестрированы? <a href="#">Войти</a></p>
                   </form>
-                  <form class="login-form">
-                    <input type="text" placeholder="Ваш логин или E-mail"/>
-                    <input type="password" placeholder="Пароль"/>
-                    <button>Войти</button>
-                    <p class="message">Нет учётной записи? <a href="#">Зарегестрироваться</a></p>
+                  <form method="post" class="login-form" name="login_user">
+					  {% csrf_token %}
+                      <input type="text" name="enter_login" placeholder="Ваш логин"/>
+                      <input type="password" name="enter_pass" placeholder="Пароль"/>
+					  <span style="color: red">{{ error }}</span>
+                      <button type="submit">Войти</button>
+                      <p class="message">Нет учётной записи? <a href="#">Зарегестрироваться</a></p>
                   </form>
                 </div>
             </div>

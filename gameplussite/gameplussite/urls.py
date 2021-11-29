@@ -40,6 +40,7 @@ urlpatterns = [
     path('game_states.html/<int:id>', StateOnePage.as_view()),
     path('game_states.html/<int:id>/delete', StateDeletePage.as_view()),
     path('login.html', LoginPage.as_view()),
+    path('confirm_exit.html', ExitPage.as_view()),
     path('messages.html', MessagesPage.as_view()),
     path('reviews.html', ReviewsPage.as_view()),
     path('reviews.html/<int:id>', ReviewOnePage.as_view()),
