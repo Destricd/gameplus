@@ -44,8 +44,10 @@ section {
     color: #F9F0DA;
 }
 .sublinks, .games, .info {
-    background-color: #A6CAF0; /* Цвет фона */
 	height: 720px; /* Высота блока */
+}
+.games, .info {
+    background-color: #A6CAF0; /* Цвет фона */
 }
 .lists {
 	padding: 5px 20px 40px 20px;

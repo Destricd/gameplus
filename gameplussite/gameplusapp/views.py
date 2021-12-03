@@ -697,6 +697,11 @@ class ControlPage(View):
             return HttpResponseRedirect('contracts.html')
         elif Employee.objects.get(id=request.session["id_user"]).access_level == 'a':
             new = True
+        message = ''
+        if "message" in request.session:
+            if request.session["message"] == True:
+                message = 'Доступ запрещён'
+                request.session["message"] = False
         mod = "добавление"
         g_accounts = get_accounts()
         form = AccountsForm()
@@ -718,7 +723,8 @@ class ControlPage(View):
             'filtred': filtred,
             'form': form,
             'mod': mod,
-            'new': new
+            'new': new,
+            'message': message
         }
         return render(request, 'control.html', context=context)
 
@@ -730,6 +736,11 @@ class ControlPage(View):
             return HttpResponseRedirect('contracts.html')
         elif Employee.objects.get(id=request.session["id_user"]).access_level == 'a':
             new = True
+        message = ''
+        if "message" in request.session:
+            if request.session["message"] == True:
+                message = 'Доступ запрещён'
+                request.session["message"] = False
         mod = "добавление"
         g_accounts = get_accounts()
         form = AccountsForm(request.POST)
@@ -751,7 +762,8 @@ class ControlPage(View):
             'filtred': filtred,
             'form': form,
             'mod': mod,
-            'new': new
+            'new': new,
+            'message': message
         }
         if form.is_valid():
             account = form.save(commit=False)
@@ -772,6 +784,7 @@ class ControlOnePage(View):
             return HttpResponseRedirect('/contracts.html')
         elif Employee.objects.get(id=request.session["id_user"]).access_level == 'm' or g_accounts.get(
                 id=id).access_level == 'a':
+            request.session["message"] = True
             return HttpResponseRedirect('/control.html')
         mod = "редактирование"
         user_id = id
@@ -814,6 +827,7 @@ class ControlOnePage(View):
             return HttpResponseRedirect('/contracts.html')
         elif Employee.objects.get(id=request.session["id_user"]).access_level == 'm' or g_accounts.get(
                 id=id).access_level == 'a':
+            request.session["message"] = True
             return HttpResponseRedirect('/control.html')
         mod = "редактирование"
         user_id = id
@@ -926,6 +940,11 @@ class ReviewsPage(View):
         else:
             link = "login.html"
             log = "Войти\Регистрация"
+        message = ''
+        if "message" in request.session:
+            if request.session["message"] == True:
+                message = 'Доступ запрещён'
+                request.session["message"] = False
         enable = 0
         mod = "Оставить"
         g_reviews = get_reviews()
@@ -946,7 +965,8 @@ class ReviewsPage(View):
             'mod': mod,
             'link': link,
             'log': log,
-            'enable': enable
+            'enable': enable,
+            'message': message
         }
         return render(request, 'reviews.html', context=context)
 
@@ -957,6 +977,11 @@ class ReviewsPage(View):
         else:
             link = "login.html"
             log = "Войти\Регистрация"
+        message = ''
+        if "message" in request.session:
+            if request.session["message"] == True:
+                message = 'Доступ запрещён'
+                request.session["message"] = False
         enable = 0
         mod = "Оставить"
         g_reviews = get_reviews()
@@ -977,7 +1002,8 @@ class ReviewsPage(View):
             'mod': mod,
             'link': link,
             'log': log,
-            'enable': enable
+            'enable': enable,
+            'message': message
         }
         if form.is_valid():
             review = form.save(commit=False)
@@ -999,6 +1025,7 @@ class ReviewOnePage(View):
             return HttpResponseRedirect('/login.html')
         elif Review.objects.get(id=id).client_id != Employee.objects.get(id=request.session["id_user"]):
             if Employee.objects.get(id=request.session["id_user"]).access_level in ['c', 'm']:
+                request.session["message"] = True
                 return HttpResponseRedirect('/reviews.html')
             else:
                 enable = 2
@@ -1035,6 +1062,7 @@ class ReviewOnePage(View):
             return HttpResponseRedirect('/login.html')
         elif Review.objects.get(id=id).client_id != Employee.objects.get(id=request.session["id_user"]):
             if Employee.objects.get(id=request.session["id_user"]).access_level in ['c', 'm']:
+                request.session["message"] = True
                 return HttpResponseRedirect('/reviews.html')
             else:
                 enable = 2
@@ -1082,6 +1110,11 @@ class StatesPage(View):
         else:
             g_states = g_states.filter(game_id__in=ContractOfDevelopment.objects.filter(
                 client_id=request.session["id_user"]).values_list("game_id", flat=True))
+        message = ''
+        if "message" in request.session:
+            if request.session["message"] == True:
+                message = 'Доступ запрещён'
+                request.session["message"] = False
         mod = "добавление"
         form = StatesForm()
         filtred = StatesFilterForm(request.GET)
@@ -1107,7 +1140,8 @@ class StatesPage(View):
             'filtred': filtred,
             'form': form,
             'mod': mod,
-            'new': new
+            'new': new,
+            'message': message
         }
         return render(request, 'game_states.html', context=context)
 
@@ -1121,6 +1155,11 @@ class StatesPage(View):
         else:
             g_states = g_states.filter(game_id__in=ContractOfDevelopment.objects.filter(
                 client_id=request.session["id_user"]).values_list("game_id", flat=True))
+        message = ''
+        if "message" in request.session:
+            if request.session["message"] == True:
+                message = 'Доступ запрещён'
+                request.session["message"] = False
         mod = "добавление"
         form = StatesForm(request.POST)
         filtred = StatesFilterForm(request.GET)
@@ -1146,7 +1185,8 @@ class StatesPage(View):
             'filtred': filtred,
             'form': form,
             'mod': mod,
-            'new': new
+            'new': new,
+            'message': message
         }
         if form.is_valid():
             form.save()
@@ -1161,6 +1201,7 @@ class StateOnePage(View):
         if "id_user" not in request.session:
             return HttpResponseRedirect('/login.html')
         elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
+            request.session["message"] = True
             return HttpResponseRedirect('/game_states.html')
         mod = "редактирование"
         state_id = id
@@ -1200,6 +1241,7 @@ class StateOnePage(View):
         if "id_user" not in request.session:
             return HttpResponseRedirect('/login.html')
         elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
+            request.session["message"] = True
             return HttpResponseRedirect('/game_states.html')
         mod = "редактирование"
         state_id = id
@@ -1338,7 +1380,6 @@ class ContractDeletePage(View):
         elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c' or Employee.objects.get(
                 id=request.session["id_user"]).access_level == 'm' and ContractOfDevelopment.objects.get(
                 id=id).employee_id != Employee.objects.get(id=request.session["id_user"]):
-            request.session["message"] = True
             return HttpResponseRedirect('/contracts.html')
         context = {}
         return render(request, 'confirm_delete.html', context=context)
@@ -1349,7 +1390,6 @@ class ContractDeletePage(View):
         elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c' or Employee.objects.get(
                 id=request.session["id_user"]).access_level == 'm' and ContractOfDevelopment.objects.get(
                 id=id).employee_id != Employee.objects.get(id=request.session["id_user"]):
-            request.session["message"] = True
             return HttpResponseRedirect('/contracts.html')
         g_del_contract = get_del_contract(id)
         context = {}

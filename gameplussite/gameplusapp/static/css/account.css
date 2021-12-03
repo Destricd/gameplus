@@ -3,23 +3,21 @@ section {
 }
 .games, .info {
 	display: inline-block;
+	height: 720px; /* Высота блока */
 }
 .lists {
 	padding: 5px 120px 40px 120px;
-}
-.games, .info {
-	background-color: #A6CAF0; /* Цвет фона */
-	height: 720px; /* Высота блока */
 }
 .games {
   width: 20%;
 }
 .info {
   width: 60%; /* Ширина блока */
-	padding: 10px 20px;
-	float: right;
+  background-color: #A6CAF0; /* Цвет фона */
+  padding: 10px 20px;
+  float: right;
   background-attachment: local;
-	overflow: auto; /* Добавляем полосы прокрутки */
+  overflow: auto; /* Добавляем полосы прокрутки */
 }
 .widget {
   padding: 20px;
