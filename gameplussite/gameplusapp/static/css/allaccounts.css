@@ -29,7 +29,7 @@
     float: right;
     padding: 10px 40px 10px 10px;
 }
-.username > p, .userlogin > p, .userrate > p, .userdate > p, .useremail > p, .more > p {
+.username > p, .userlogin > p, .userrate > p, .userdate > p, .userid > a, .more > a {
     margin: 0;
 }
 .userrate {
@@ -45,7 +45,7 @@
 .userrate > p, .userdate > p {
     text-align: center;
 }
-.useremail {
+.userid {
     width: 15%;
     border-right: 1px solid black;
     padding: 8px 20px 8px 10px;
@@ -54,7 +54,7 @@
     float: right;
     padding: 8px 8px 8px 4px;
 }
-.useremail > p {
+.userid > a {
     text-align: right;
 }
 .rightimg  {

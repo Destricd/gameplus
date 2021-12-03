@@ -3,7 +3,8 @@ import datetime
 from django.shortcuts import render
 from django.views import View
 from django.http import HttpResponseRedirect
-from django.db.models import Q
+from django.urls import reverse
+from django.db.models import Q, Count
 from .function import *
 from .forms import *
 
@@ -702,6 +703,9 @@ class ControlPage(View):
             if request.session["message"] == True:
                 message = 'Доступ запрещён'
                 request.session["message"] = False
+            elif request.session["message"] == 2:
+                message = 'Нельзя писать сообщения себе'
+                request.session["message"] = False
         mod = "добавление"
         g_accounts = get_accounts()
         form = AccountsForm()
@@ -740,6 +744,9 @@ class ControlPage(View):
         if "message" in request.session:
             if request.session["message"] == True:
                 message = 'Доступ запрещён'
+                request.session["message"] = False
+            elif request.session["message"] == 2:
+                message = 'Нельзя писать сообщения себе'
                 request.session["message"] = False
         mod = "добавление"
         g_accounts = get_accounts()
@@ -926,10 +933,62 @@ class LoginPage(View):
                 return render(request, 'login.html', context=context)
 
 
-class MessagesPage(View):
+class CreateChat(View):
+    def get(self, request, id):
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('/login.html')
+        elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
+            return HttpResponseRedirect('/contracts.html')
+        elif id == request.session["id_user"]:
+            request.session["message"] = 2
+            return HttpResponseRedirect('/control.html')
+        chats = Chat.objects.filter(members__in=[request.session["id_user"], id]).annotate(c=Count('members')).filter(c=2)
+        if chats.count() == 0:
+            chat = Chat.objects.create()
+            chat.members.add(request.session["id_user"])
+            chat.members.add(id)
+        else:
+            chat = chats.first()
+        return HttpResponseRedirect(reverse('messages', kwargs={'id': chat.id}))
+
+
+class ChatsPage(View):
     def get(self, request):
-        context = {}
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('/login.html')
+        chats = Chat.objects.filter(members__in=[request.session["id_user"]])
+        context = {
+            'user_profile': Employee.objects.get(id=request.session["id_user"]),
+            'chats': chats
+        }
         return render(request, 'messages.html', context=context)
+
+
+class MessagesPage(View):
+    def get(self, request, id):
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('/login.html')
+        chats = Chat.objects.filter(members__in=[request.session["id_user"]])
+        chat = Chat.objects.get(id=id)
+        context = {
+            'user_profile': Employee.objects.get(id=request.session["id_user"]),
+            'chats': chats,
+            'chat': chat,
+            'form': MessageForm()
+        }
+        return render(request, 'messages.html', context=context)
+
+    def post(self, request, id):
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('/login.html')
+        form = MessageForm(data=request.POST)
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.chat_id = id
+            message.sender_id = Employee.objects.get(id=request.session["id_user"])
+            message.pub_date = datetime.datetime.now()
+            message.save()
+        return HttpResponseRedirect(reverse('messages', kwargs={'id': id}))
 
 
 class ReviewsPage(View):
@@ -1471,7 +1530,31 @@ class ReviewDeletePage(View):
         return render(request, 'confirm_delete.html', context=context)
 
     def post(self, request, id):
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('/login.html')
+        elif Review.objects.get(id=id).client_id != Employee.objects.get(id=request.session["id_user"]) and Employee.objects.get(id=request.session["id_user"]).access_level in ['c', 'm']:
+            return HttpResponseRedirect('/reviews.html')
         g_del_review = get_del_review(id)
         context = {}
         g_del_review.delete()
         return HttpResponseRedirect('/reviews.html')
+
+
+class MessageDeletePage(View):
+    def get(self, request, id):
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('/login.html')
+        elif Message.objects.get(id=id).sender_id != Employee.objects.get(id=request.session["id_user"]):
+            return HttpResponseRedirect('/messages.html')
+        context = {}
+        return render(request, 'confirm_delete.html', context=context)
+
+    def post(self, request, id):
+        if "id_user" not in request.session:
+            return HttpResponseRedirect('/login.html')
+        elif Message.objects.get(id=id).sender_id != Employee.objects.get(id=request.session["id_user"]):
+            return HttpResponseRedirect('/messages.html')
+        g_del_message = get_del_message(id)
+        context = {}
+        g_del_message.delete()
+        return HttpResponseRedirect('/messages.html')

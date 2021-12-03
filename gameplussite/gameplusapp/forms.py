@@ -5,6 +5,7 @@ from .models import Employee
 from .models import Review
 from .models import TechnicalTask
 from .models import GameDevelopmentStage
+from .models import Message
 
 
 class RegistrateForm(forms.ModelForm):
@@ -276,3 +277,10 @@ class PasswordForm(forms.Form):
     confirm = forms.CharField(required=False, widget=forms.PasswordInput(attrs={
         'placeholder': 'Повторите пароль'
     }))
+
+
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ['letter']
+        labels = {'letter': ""}

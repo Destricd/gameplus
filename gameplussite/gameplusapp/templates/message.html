@@ -1,0 +1,19 @@
+{% block content %}
+
+<div class="list-group-item">
+    <img class="avatar-comment" src="/{{ message_item.sender_id.avatar }}">
+    <div class="reply-body">
+        <ul class="list-inline">
+            <li class="drop-left-padding">
+                <strong class="list-group-item-heading">{{ message_item.sender_id.full_name }}</strong>
+            </li>
+            <li class="pull-right text-muted"><small>{{ message_item.pub_date }}</small></li>
+        </ul>
+        <div>{{ message_item.letter|safe }}</div>
+        {% if message_item.sender_id.id == request.session.id_user %}
+        <div><a href="{{ message_item.id }}/delete">Удалить</a></div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

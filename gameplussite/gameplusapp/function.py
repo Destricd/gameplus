@@ -64,3 +64,8 @@ def get_del_state(pk):
 def get_del_review(pk):
     review = Review.objects.get(id=pk)
     return review
+
+
+def get_del_message(pk):
+    message = Message.objects.get(id=pk)
+    return message

@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 
 
@@ -86,14 +87,19 @@ class ContractOfDevelopment(models.Model):
 class Chat(models.Model):
     members = models.ManyToManyField(Employee)
 
+    def get_absolute_url(self):
+        return reverse('messages', kwargs={'id': self.pk})
+
 
 class Message(models.Model):
     chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
     sender_id = models.ForeignKey(Employee, on_delete=models.CASCADE)
     letter = models.TextField(default=' ')
     pub_date = models.DateTimeField(default=timezone.now())
-    is_readed = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['pub_date']
+
+    def __str__(self):
+        return self.letter
 

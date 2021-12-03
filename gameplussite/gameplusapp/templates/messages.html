@@ -1,3 +1,4 @@
+{% load poll_extras %}
 <!DOCTYPE HTML>
 <html>
 	
@@ -13,14 +14,14 @@
 		  <nav>
 		      <a href="/" class="logo"><img src="../static/images/logo.png" alt="логотип"></a>
 			  <ul class="topmenu">
-				<li><a href="games.html">Игры</a></li>
-				<li><a href="reviews.html">Отзывы</a></li>
+				<li><a href="/games.html">Игры</a></li>
+				<li><a href="/reviews.html">Отзывы</a></li>
 				<li><a class="submenu-link"><img src="../static/images/avatar.png" alt="аватарка"></a>
 				  <ul class="submenu">
-					<li><a href="account.html">Аккаунт</a></li>
-					<li><a href="messages.html">Сообщения</a></li>
-					<li><a href="control.html">Управление</a></li>
-					<li><a href="login.html">Войти\Регистрация</a></li>
+					<li><a href="/account.html">Аккаунт</a></li>
+					<li><a href="/messages.html">Сообщения</a></li>
+					<li><a href="/control.html">Управление</a></li>
+					<li><a href="/confirm_exit.html">Выйти</a></li>
 				  </ul>
 				</li>
 			  </ul>
@@ -44,32 +45,57 @@
 		<section class="allmessages">
 			<div class="lists">
 				<div class="messages">
-					<p class="example"></p>
+					{% if chats.count == 0 %}
+						<div class="panel panel-body">Нет ни одного начатого диалога</div>
+					{% endif %}
+					{% for chat in chats %}
+						{% if chat.message_set.count != 0 %}
+							{% with last_message=chat.message_set.last %}
+								{% get_companion request chat as companion %}
+								<a class="list-group-item" href="{{ chat.get_absolute_url }}">
+									<img class="avatar-messages" src="/{{ companion.avatar }}">
+									<div class="reply-body">
+										<ul class="list-inline">
+											<li class="drop-left-padding">
+												<strong class="list-group-item-heading">{{ companion.full_name }}</strong>
+											</li>
+											<li class="pull-right text-muted"><small>{{ last_message.pub_date }}</small></li>
+										</ul>
+										{% if companion != last_message.sender_id %}
+											<div>
+												<div class="attached-reply-body">{{ last_message.letter|truncatechars_html:"200"|safe|striptags }}</div>
+											</div>
+										{% else %}
+											<div>{{ last_message.letter|truncatechars_html:"200"|safe|striptags }}</div>
+										{% endif %}
+									</div>
+								</a>
+							{% endwith %}
+						{% endif %}
+					{% endfor %}
 				</div>
+				{% if chat %}
 				<div class="about">
                     <div class="msglist">
-                        <div class="description">
-                            <p>Как принято считать, предприниматели в сети интернет освещают чрезвычайно интересные особенности картины в целом, однако конкретные выводы,
-                            разумеется, объективно рассмотрены соответствующими инстанциями. В частности, консультация с широким активом прекрасно подходит для реализации
-                            дальнейших направлений развития. Социально-экономическое развитие напрямую зависит от существующих финансовых и административных условий. Равным образом,
-                            убеждённость некоторых оппонентов играет важную роль в формировании существующих финансовых и административных условий. Имеется спорная точка зрения, гласящая примерно следующее: сделанные на базе интернет-аналитики выводы могут быть указаны как претенденты на роль
-                            ключевых факторов. Идейные соображения высшего порядка, а также сплочённость команды профессионалов требует анализа прогресса профессионального сообщества.
-                            Значимость этих проблем настолько очевидна, что укрепление и развитие внутренней структуры не оставляет шанса для системы массового участия. Каждый из нас понимает
-                            очевидную вещь: внедрение современных методик позволяет оценить значение экономической целесообразности принимаемых решений. Как принято считать, многие известные
-                            личности, вне зависимости от их уровня, должны быть рассмотрены исключительно в разрезе маркетинговых и финансовых предпосылок. Вот вам яркий пример современных
-                            тенденций - высокотехнологичная концепция общественного уклада играет важную роль в формировании кластеризации усилий. Внезапно, ключевые особенности структуры
-                            проекта, инициированные исключительно синтетически, разоблачены. Сложно сказать, почему предприниматели в сети интернет неоднозначны и будут превращены в посмешище,
-                            хотя само их существование приносит несомненную пользу обществу.Как принято считать, предприниматели в сети интернет освещают чрезвычайно интересные особенности картины в целом, однако конкретные выводы,
-                            разумеется, объективно рассмотрены соответствующими инстанциями.</p>
-                        </div>
+							{% if chat %}
+								<div id="messages" class="panel">
+									<div id="innerMessages">
+										{% for message in chat.message_set.all %}
+												{% include 'message.html' with message_item=message %}
+										{% endfor %}
+									</div>
+								</div>
+							{% endif %}
                     </div>
-                    <div class="send">
-                        <form class="sendform">
-                            <p><textarea name="text" placeholder="Введите сообщение"></textarea>
-                           <button type="submit"></button></p>
+                    <div id="message_form" class="send">
+                        <form id="message-form" class="sendform" method="post">
+							{% csrf_token %}
+                            <p>{{ form.letter }}
+                           <button type="submit" onclick="return ETextEditor.validateForm('message-form')"></button></p>
                         </form>
                     </div>
 				</div>
+				{% endif %}
 			</div>
 		</section>
 	</body>

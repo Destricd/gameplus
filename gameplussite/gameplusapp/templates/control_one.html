@@ -16,8 +16,8 @@
         <div class="userdate">
             <p>{{ account.reg_date|date:"d.m.Y H:i" }}</p>
         </div>
-        <div class="useremail">
-            <p>{{ account.email|truncatechars:4 }}</p>
+        <div class="userid">
+            <a href="/messages.html/create/{{ account.id }}">Создать диалог</a>
         </div>
         <div class="more">
             <a href="/control.html/{{ account.id }}">Редактировать>></a>
