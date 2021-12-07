@@ -15,7 +15,13 @@
 			  <ul class="topmenu">
 				<li><a href="/games.html">Игры</a></li>
 				<li><a href="/reviews.html">Отзывы</a></li>
-				<li><a class="submenu-link"><img src="../static/images/avatar.png" alt="аватарка"></a>
+				<li><a class="submenu-link">
+					{% if g_avatar == '' %}
+					<img src="../static/images/avatar.png" alt="отсутствует аватарка">
+					{% else %}
+					<img src="../{{ g_avatar }}" alt="аватарка">
+					{% endif %}
+				</a>
 				  <ul class="submenu">
 					<li><a href="/account.html">Аккаунт</a></li>
 					<li><a href="/messages.html">Сообщения</a></li>

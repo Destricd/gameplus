@@ -4,10 +4,10 @@ section {
 .functions {
 	padding: 10px 20px 5px 20px;
 }
-.sortblock, .searchblock, .messages, .about {
+.searchblock, .messages, .about {
 	display: inline-block;
 }
-.sortblock {
+.searchblock {
 	margin-right: 10px;
 }
 .send > .sendform {
@@ -16,12 +16,6 @@ section {
 .sortblock  > form, .searchblock > form, .searchblock > p {
     position: relative;
     margin: 10px 0;
-}
-.sortsel {
-	padding: 8px;
-	border: 2px solid #7BA7AB;
-	border-radius: 5px;
-	width: 150px;
 }
 .searchblock > p > input {
 	width: 100%;

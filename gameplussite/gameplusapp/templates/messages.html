@@ -30,10 +30,6 @@
 		<section class="selections">
 			<div class="functions">
 				<form class="searchform" method="get">
-					<div class="sortblock">
-						<p><strong>Сортировать по:</strong></p>
-						<p>{{ filtred.ordering }}</p>
-					</div>
 					<div class="searchblock">
 						<p><strong>Найти:</strong></p>
 						<p>{{ filtred.search }}
@@ -59,7 +55,7 @@
 											<li class="drop-left-padding">
 												<strong class="list-group-item-heading">{{ companion.full_name }}</strong>
 											</li>
-											<li class="pull-right text-muted"><small>{{ last_message.pub_date }}</small></li>
+											<li class="pull-right text-muted"><small>{{ last_message.pub_date|date:"d.m.Y H:i" }}</small></li>
 										</ul>
 										{% if companion != last_message.sender_id %}
 											<div>

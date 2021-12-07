@@ -6,6 +6,7 @@ from .models import Review
 from .models import TechnicalTask
 from .models import GameDevelopmentStage
 from .models import Message
+from .templatetags import poll_extras
 
 
 class RegistrateForm(forms.ModelForm):
@@ -276,6 +277,12 @@ class PasswordForm(forms.Form):
     }))
     confirm = forms.CharField(required=False, widget=forms.PasswordInput(attrs={
         'placeholder': 'Повторите пароль'
+    }))
+
+
+class ChatsFilterForm(forms.Form):
+    search = forms.CharField(label="Найти:", required=False, widget=forms.TextInput(attrs={
+        'placeholder': 'Искать здесь...'
     }))
 
 

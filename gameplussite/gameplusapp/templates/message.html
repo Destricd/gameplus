@@ -7,7 +7,7 @@
             <li class="drop-left-padding">
                 <strong class="list-group-item-heading">{{ message_item.sender_id.full_name }}</strong>
             </li>
-            <li class="pull-right text-muted"><small>{{ message_item.pub_date }}</small></li>
+            <li class="pull-right text-muted"><small>{{ message_item.pub_date|date:"d.m.Y H:i" }}</small></li>
         </ul>
         <div>{{ message_item.letter|safe }}</div>
         {% if message_item.sender_id.id == request.session.id_user %}

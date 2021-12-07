@@ -61,7 +61,10 @@ nav ul {
   margin-left: 10px;
 }
 .submenu-link > img {
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
+  object-fit:cover;
 }
 .submenu {
   background: rgba(255,255,255, .4);

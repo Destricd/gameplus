@@ -11,24 +11,29 @@ from .forms import *
 
 class MainPage(View):
     def get(self, request):
+        g_avatar = None
         if "id_user" in request.session:
             link = "confirm_exit.html"
             log = "Выйти"
+            g_avatar = get_del_account(request.session["id_user"]).avatar
         else:
             link = "login.html"
             log = "Войти\Регистрация"
         context = {
             'link': link,
-            'log': log
+            'log': log,
+            'g_avatar': g_avatar
         }
         return render(request, 'main.html', context=context)
 
 
 class GamesPage(View):
     def get(self, request):
+        g_avatar = None
         if "id_user" in request.session:
             link = "confirm_exit.html"
             log = "Выйти"
+            g_avatar = get_del_account(request.session["id_user"]).avatar
         else:
             link = "login.html"
             log = "Войти\Регистрация"
@@ -46,16 +51,19 @@ class GamesPage(View):
             'g_games': g_games,
             'form': form,
             'link': link,
-            'log': log
+            'log': log,
+            'g_avatar': g_avatar
         }
         return render(request, 'games.html', context=context)
 
 
 class GameOnePage(View):
     def get(self, request, id):
+        g_avatar = None
         if "id_user" in request.session:
             link = "confirm_exit.html"
             log = "Выйти"
+            g_avatar = get_del_account(request.session["id_user"]).avatar
         else:
             link = "login.html"
             log = "Войти\Регистрация"
@@ -76,6 +84,7 @@ class GameOnePage(View):
             'form': form,
             'link': link,
             'log': log,
+            'g_avatar': g_avatar,
             'enable': 'enable'
         }
         return render(request, 'games.html', context=context)
@@ -957,9 +966,16 @@ class ChatsPage(View):
         if "id_user" not in request.session:
             return HttpResponseRedirect('/login.html')
         chats = Chat.objects.filter(members__in=[request.session["id_user"]])
+        filtred = ChatsFilterForm(request.GET)
+
+        if filtred.is_valid():
+            if filtred.cleaned_data["search"]:
+                chats = chats.filter(members__full_name__iregex=filtred.cleaned_data["search"])
+
         context = {
             'user_profile': Employee.objects.get(id=request.session["id_user"]),
-            'chats': chats
+            'chats': chats,
+            'filtred': filtred
         }
         return render(request, 'messages.html', context=context)
 
@@ -968,8 +984,10 @@ class MessagesPage(View):
     def get(self, request, id):
         if "id_user" not in request.session:
             return HttpResponseRedirect('/login.html')
-        chats = Chat.objects.filter(members__in=[request.session["id_user"]])
         chat = Chat.objects.get(id=id)
+        if Employee.objects.get(id=request.session["id_user"]) not in chat.members.all():
+            return HttpResponseRedirect('/messages.html')
+        chats = Chat.objects.filter(members__in=[request.session["id_user"]])
         context = {
             'user_profile': Employee.objects.get(id=request.session["id_user"]),
             'chats': chats,
@@ -1403,7 +1421,7 @@ class ExitPage(View):
             return HttpResponseRedirect('login.html')
         request.session.clear()
         context = {}
-        return HttpResponseRedirect('/login.html')
+        return HttpResponseRedirect('login.html')
 
 
 class AccountDeletePage(View):
