@@ -95,7 +95,9 @@
 									<p><span style="color: red">{{ error }}</span></p>
 								    <p><button type="submit">Отправить</button></p>
 								</form>
+								{% if mod == "редактирование" %}
 								<a href="{{ user_id }}/delete">Удалить аккаунт</a>
+								{% endif %}
 							</div>
 						</p>
 					</div>

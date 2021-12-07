@@ -16,7 +16,7 @@
 				<li><a href="games.html">Игры</a></li>
 				<li><a href="reviews.html">Отзывы</a></li>
 				<li><a class="submenu-link">
-					{% if g_avatar == '' %}
+					{% if g_avatar == '' or g_avatar == None %}
 					<img src="../static/images/avatar.png" alt="отсутствует аватарка">
 					{% else %}
 					<img src="../{{ g_avatar }}" alt="аватарка">
