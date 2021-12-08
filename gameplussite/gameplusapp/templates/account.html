@@ -51,7 +51,7 @@
 					<div class="description">
 						<p><img src="../{{ avatar }}" alt="Отстутствует фотография" class="rightimg">
 							<div class="userblock">
-								<form method="post" class="userform">
+								<form method="post" class="userform" enctype="multipart/form-data">
 								    {% csrf_token %}
 									<p><strong>ФИО:</strong></p>
 								    <p>{{ form.full_name }}</p>

@@ -158,7 +158,8 @@ class AccountPage(View):
             user.full_name = form.cleaned_data["full_name"]
             if form.cleaned_data["login"] != '':
                 user.login = form.cleaned_data["login"]
-            user.avatar = form.cleaned_data["avatar"]
+            if form.cleaned_data["avatar"] != None:
+                user.avatar = form.cleaned_data["avatar"]
             user.save()
             return HttpResponseRedirect('account.html')
         else:
