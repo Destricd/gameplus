@@ -59,6 +59,10 @@ body {
 .form-inner {
    padding: 50px;
 }
+.form-inner input[type="button"], .form-inner input[type="submit"] {
+    display: inline-block;
+    width: 49%;
+}
 .form-inner input, .form-inner textarea, .form-inner select {
    display: block;
    width: 100%;
@@ -73,8 +77,15 @@ body {
 .form-inner select {
     height: 40px;
 }
+.form-inner input[type="button"] {
+   margin-top: 20px;
+   background: #75D3EA;
+   border-bottom: 4px solid #6FCFE8;
+   color: white;
+   font-size: 14px;
+}
 .form-inner input[type="submit"] {
-   margin-top: 30px;
+   margin-top: 20px;
    background: #A6CAF0;
    border-bottom: 4px solid #99C4EF;
    color: white;

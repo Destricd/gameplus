@@ -95,26 +95,30 @@ class CreateContract(View):
     def get(self, request, id):
         if "id_user" not in request.session:
             return HttpResponseRedirect('/login.html')
-        g_avatar = get_del_account(request.session["id_user"]).avatar
         form = ContractsForm()
+        g_avatar = get_del_account(request.session["id_user"]).avatar
+        back = "/games.html/" + str(id)
         form.fields['employee_id'].queryset = (Employee.objects.filter(access_level__in=['a', 'm']))
 
         context = {
             'form': form,
-            'g_avatar': g_avatar
+            'g_avatar': g_avatar,
+            'back': back
         }
         return render(request, 'newcontract.html', context=context)
 
     def post(self, request, id):
         if "id_user" not in request.session:
             return HttpResponseRedirect('/login.html')
-        g_avatar = get_del_account(request.session["id_user"]).avatar
         form = ContractsForm(request.POST)
+        g_avatar = get_del_account(request.session["id_user"]).avatar
+        back = "/games.html/" + str(id)
         form.fields['employee_id'].queryset = (Employee.objects.filter(access_level__in=['a', 'm']))
 
         context = {
             'form': form,
-            'g_avatar': g_avatar
+            'g_avatar': g_avatar,
+            'back': back
         }
         if form.is_valid():
             contract = form.save(commit=False)
@@ -1520,8 +1524,10 @@ class AccountDeletePage(View):
                 id=id).access_level == 'a':
             return HttpResponseRedirect('/control.html')
         g_avatar = get_del_account(request.session["id_user"]).avatar
+        back = "/control.html/" + str(id)
         context = {
-            'g_avatar': g_avatar
+            'g_avatar': g_avatar,
+            'back': back
         }
         return render(request, 'confirm_delete.html', context=context)
 
@@ -1547,8 +1553,10 @@ class ContractDeletePage(View):
                 id=id).employee_id != Employee.objects.get(id=request.session["id_user"]):
             return HttpResponseRedirect('/contracts.html')
         g_avatar = get_del_account(request.session["id_user"]).avatar
+        back = "/contracts.html/" + str(id)
         context = {
-            'g_avatar': g_avatar
+            'g_avatar': g_avatar,
+            'back': back
         }
         return render(request, 'confirm_delete.html', context=context)
 
@@ -1571,8 +1579,10 @@ class GameDeletePage(View):
         elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
             return HttpResponseRedirect('/contracts.html')
         g_avatar = get_del_account(request.session["id_user"]).avatar
+        back = "/allgames.html/" + str(id)
         context = {
-            'g_avatar': g_avatar
+            'g_avatar': g_avatar,
+            'back': back
         }
         return render(request, 'confirm_delete.html', context=context)
 
@@ -1595,8 +1605,10 @@ class TaskDeletePage(View):
         elif Employee.objects.get(id=request.session["id_user"]).access_level == 'm':
             return HttpResponseRedirect('/alltasks.html')
         g_avatar = get_del_account(request.session["id_user"]).avatar
+        back = "/alltasks.html/" + str(id)
         context = {
-            'g_avatar': g_avatar
+            'g_avatar': g_avatar,
+            'back': back
         }
         return render(request, 'confirm_delete.html', context=context)
 
@@ -1619,8 +1631,10 @@ class StateDeletePage(View):
         elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
             return HttpResponseRedirect('/game_states.html')
         g_avatar = get_del_account(request.session["id_user"]).avatar
+        back = "/game_states.html/" + str(id)
         context = {
-            'g_avatar': g_avatar
+            'g_avatar': g_avatar,
+            'back': back
         }
         return render(request, 'confirm_delete.html', context=context)
 
@@ -1641,8 +1655,10 @@ class ReviewDeletePage(View):
         elif Review.objects.get(id=id).client_id != Employee.objects.get(id=request.session["id_user"]) and Employee.objects.get(id=request.session["id_user"]).access_level in ['c', 'm']:
             return HttpResponseRedirect('/reviews.html')
         g_avatar = get_del_account(request.session["id_user"]).avatar
+        back = "/reviews.html/" + str(id)
         context = {
-            'g_avatar': g_avatar
+            'g_avatar': g_avatar,
+            'back': back
         }
         return render(request, 'confirm_delete.html', context=context)
 
@@ -1663,8 +1679,10 @@ class MessageDeletePage(View):
         elif Message.objects.get(id=id).sender_id != Employee.objects.get(id=request.session["id_user"]):
             return HttpResponseRedirect('/messages.html')
         g_avatar = get_del_account(request.session["id_user"]).avatar
+        back = "/messages.html/" + str(Message.objects.get(id=id).chat.id)
         context = {
-            'g_avatar': g_avatar
+            'g_avatar': g_avatar,
+            'back': back
         }
         return render(request, 'confirm_delete.html', context=context)
 
