@@ -147,7 +147,7 @@ class AccountPage(View):
             return HttpResponseRedirect('login.html')
         g_accounts = get_accounts()
         avatar = g_accounts.get(id=request.session["id_user"]).avatar
-        form = UserForm(request.POST)
+        form = UserForm(request.POST, request.FILES)
         form.fields["login"].required = False
         context = {
             'form': form,
