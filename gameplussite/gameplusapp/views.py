@@ -315,7 +315,7 @@ class GameListOnePage(View):
             if form.cleaned_data["picture"] != None:
                 game.picture = form.cleaned_data["picture"]
             game.save()
-            return HttpResponseRedirect('/allgames.html')
+            return HttpResponseRedirect(reverse('allgames', kwargs={'id': id}))
         else:
             context["error"] = "Неправильное заполнение"
             return render(request, 'allgames.html', context=context)
@@ -494,7 +494,7 @@ class TaskOnePage(View):
                 task.description = form.cleaned_data["description"]
             task.complete = form.cleaned_data["complete"]
             task.save()
-            return HttpResponseRedirect('/alltasks.html')
+            return HttpResponseRedirect(reverse('alltasks', kwargs={'id': id}))
         else:
             context["error"] = "Неправильное заполнение"
             return render(request, 'alltasks.html', context=context)
@@ -724,7 +724,7 @@ class ContractOnePage(View):
                 contract.employee_id = form.cleaned_data["employee_id"]
             contract.development_full_price = form.cleaned_data["development_full_price"]
             contract.save()
-            return HttpResponseRedirect('/contracts.html')
+            return HttpResponseRedirect(reverse('contracts', kwargs={'id': id}))
         else:
             context["error"] = "Неправильное заполнение"
             return render(request, 'contracts.html', context=context)
@@ -925,7 +925,7 @@ class ControlOnePage(View):
             if account.avatar == False:
                 account.avatar = None
             account.save()
-            return HttpResponseRedirect('/control.html')
+            return HttpResponseRedirect(reverse('control', kwargs={'id': id}))
         else:
             context["error"] = "Неправильное заполнение"
             return render(request, 'control.html', context=context)
@@ -1437,7 +1437,7 @@ class StateOnePage(View):
             state.end_date = form.cleaned_data["end_date"]
             state.stage_description = form.cleaned_data["stage_description"]
             state.save()
-            return HttpResponseRedirect('/game_states.html')
+            return HttpResponseRedirect(reverse('game_states', kwargs={'id': id}))
         else:
             context["error"] = "Неправильное заполнение"
             return render(request, 'game_states.html', context=context)
