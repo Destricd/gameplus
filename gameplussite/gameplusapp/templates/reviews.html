@@ -44,6 +44,11 @@
 						<p>{{ filtred.search }}
 						<button type="submit"></button></p>
 					</div>
+					{% if mod == "Редактировать" %}
+					<div class="back">
+						<p><a href="/reviews.html">Назад<<</a></p>
+					</div>
+					{% endif %}
 				</form>
 			</div>
 		</section>

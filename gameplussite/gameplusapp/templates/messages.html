@@ -53,7 +53,7 @@
 					{% endif %}
 					{% for chat in chats %}
 						{% if chat.message_set.count != 0 %}
-							{% with last_message=chat.message_set.last %}
+							{% with first_message=chat.message_set.first %}
 								{% get_companion request chat as companion %}
 								<a class="list-group-item" href="{{ chat.get_absolute_url }}">
 									<img class="avatar-messages" src="/{{ companion.avatar }}">
@@ -62,14 +62,14 @@
 											<li class="drop-left-padding">
 												<strong class="list-group-item-heading">{{ companion.full_name }}</strong>
 											</li>
-											<li class="pull-right text-muted"><small>{{ last_message.pub_date|date:"d.m.Y H:i" }}</small></li>
+											<li class="pull-right text-muted"><small>{{ first_message.pub_date|date:"d.m.Y H:i" }}</small></li>
 										</ul>
-										{% if companion != last_message.sender_id %}
+										{% if companion != first_message.sender_id %}
 											<div>
-												<div class="attached-reply-body">{{ last_message.letter|truncatechars_html:"200"|safe|striptags }}</div>
+												<div class="attached-reply-body">{{ first_message.letter|truncatechars_html:"200"|safe|striptags }}</div>
 											</div>
 										{% else %}
-											<div>{{ last_message.letter|truncatechars_html:"200"|safe|striptags }}</div>
+											<div>{{ first_message.letter|truncatechars_html:"200"|safe|striptags }}</div>
 										{% endif %}
 									</div>
 								</a>

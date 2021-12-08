@@ -4,13 +4,16 @@ section {
 .functions {
 	padding: 10px 20px 5px 20px;
 }
-.sortblock, .searchblock, .reviews, .feedback {
+.sortblock, .searchblock, .back, .reviews, .feedback {
 	display: inline-block;
 }
 .sortblock {
 	margin-right: 10px;
 }
-.sortblock  > p, .searchblock > p {
+.back {
+    margin-left: 10px;
+}
+.sortblock  > p, .searchblock > p, .back > p {
     position: relative;
     margin: 10px 0;
 }

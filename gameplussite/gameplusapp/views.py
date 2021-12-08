@@ -1243,7 +1243,7 @@ class ReviewOnePage(View):
             review = Review.objects.get(id=id)
             review.review_text = form.cleaned_data["review_text"]
             review.save()
-            return HttpResponseRedirect('/reviews.html')
+            return HttpResponseRedirect(reverse('reviews', kwargs={'id': id}))
         else:
             context["error"] = "Неправильное заполнение"
             return render(request, 'reviews.html', context=context)
@@ -1675,4 +1675,4 @@ class MessageDeletePage(View):
             return HttpResponseRedirect('/messages.html')
         g_del_message = get_del_message(id)
         g_del_message.delete()
-        return HttpResponseRedirect('/messages.html')
+        return HttpResponseRedirect(reverse('messages', kwargs={'id': g_del_message.chat.id}))

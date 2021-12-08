@@ -46,7 +46,7 @@ urlpatterns = [
     path('messages.html/create/<int:id>', CreateChat.as_view()),
     path('messages.html/<int:id>/delete', MessageDeletePage.as_view()),
     path('reviews.html', ReviewsPage.as_view()),
-    path('reviews.html/<int:id>', ReviewOnePage.as_view()),
+    path('reviews.html/<int:id>', ReviewOnePage.as_view(), name='reviews'),
     path('reviews.html/<int:id>/delete', ReviewDeletePage.as_view()),
     path('sequrity.html', SequrityPage.as_view())
 ]
