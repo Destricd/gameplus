@@ -160,6 +160,8 @@ class AccountPage(View):
                 user.login = form.cleaned_data["login"]
             if form.cleaned_data["avatar"] != None:
                 user.avatar = form.cleaned_data["avatar"]
+            if user.avatar == False:
+                user.avatar = None
             user.save()
             return HttpResponseRedirect('account.html')
         else:
@@ -920,6 +922,8 @@ class ControlOnePage(View):
             account.access_level = form.cleaned_data["access_level"]
             if form.cleaned_data["avatar"] != None:
                 account.avatar = form.cleaned_data["avatar"]
+            if account.avatar == False:
+                account.avatar = None
             account.save()
             return HttpResponseRedirect('/control.html')
         else:
