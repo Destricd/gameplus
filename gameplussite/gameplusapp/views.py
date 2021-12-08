@@ -1519,7 +1519,10 @@ class AccountDeletePage(View):
         elif Employee.objects.get(id=request.session["id_user"]).access_level == 'm' or Employee.objects.get(
                 id=id).access_level == 'a':
             return HttpResponseRedirect('/control.html')
-        context = {}
+        g_avatar = get_del_account(request.session["id_user"]).avatar
+        context = {
+            'g_avatar': g_avatar
+        }
         return render(request, 'confirm_delete.html', context=context)
 
     def post(self, request, id):
@@ -1531,7 +1534,6 @@ class AccountDeletePage(View):
                 id=id).access_level == 'a':
             return HttpResponseRedirect('/control.html')
         g_del_account = get_del_account(id)
-        context = {}
         g_del_account.delete()
         return HttpResponseRedirect('/control.html')
 
@@ -1544,7 +1546,10 @@ class ContractDeletePage(View):
                 id=request.session["id_user"]).access_level == 'm' and ContractOfDevelopment.objects.get(
                 id=id).employee_id != Employee.objects.get(id=request.session["id_user"]):
             return HttpResponseRedirect('/contracts.html')
-        context = {}
+        g_avatar = get_del_account(request.session["id_user"]).avatar
+        context = {
+            'g_avatar': g_avatar
+        }
         return render(request, 'confirm_delete.html', context=context)
 
     def post(self, request, id):
@@ -1555,7 +1560,6 @@ class ContractDeletePage(View):
                 id=id).employee_id != Employee.objects.get(id=request.session["id_user"]):
             return HttpResponseRedirect('/contracts.html')
         g_del_contract = get_del_contract(id)
-        context = {}
         g_del_contract.delete()
         return HttpResponseRedirect('/contracts.html')
 
@@ -1566,7 +1570,10 @@ class GameDeletePage(View):
             return HttpResponseRedirect('/login.html')
         elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
             return HttpResponseRedirect('/contracts.html')
-        context = {}
+        g_avatar = get_del_account(request.session["id_user"]).avatar
+        context = {
+            'g_avatar': g_avatar
+        }
         return render(request, 'confirm_delete.html', context=context)
 
     def post(self, request, id):
@@ -1575,7 +1582,6 @@ class GameDeletePage(View):
         elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
             return HttpResponseRedirect('/contracts.html')
         g_del_game = get_del_game(id)
-        context = {}
         g_del_game.delete()
         return HttpResponseRedirect('/allgames.html')
 
@@ -1588,7 +1594,10 @@ class TaskDeletePage(View):
             return HttpResponseRedirect('/contracts.html')
         elif Employee.objects.get(id=request.session["id_user"]).access_level == 'm':
             return HttpResponseRedirect('/alltasks.html')
-        context = {}
+        g_avatar = get_del_account(request.session["id_user"]).avatar
+        context = {
+            'g_avatar': g_avatar
+        }
         return render(request, 'confirm_delete.html', context=context)
 
     def post(self, request, id):
@@ -1599,7 +1608,6 @@ class TaskDeletePage(View):
         elif Employee.objects.get(id=request.session["id_user"]).access_level == 'm':
             return HttpResponseRedirect('/alltaks.html')
         g_del_task = get_del_task(id)
-        context = {}
         g_del_task.delete()
         return HttpResponseRedirect('/alltasks.html')
 
@@ -1610,7 +1618,10 @@ class StateDeletePage(View):
             return HttpResponseRedirect('/login.html')
         elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
             return HttpResponseRedirect('/game_states.html')
-        context = {}
+        g_avatar = get_del_account(request.session["id_user"]).avatar
+        context = {
+            'g_avatar': g_avatar
+        }
         return render(request, 'confirm_delete.html', context=context)
 
     def post(self, request, id):
@@ -1619,7 +1630,6 @@ class StateDeletePage(View):
         elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
             return HttpResponseRedirect('/game_states.html')
         g_del_state = get_del_state(id)
-        context = {}
         g_del_state.delete()
         return HttpResponseRedirect('/game_states.html')
 
@@ -1630,7 +1640,10 @@ class ReviewDeletePage(View):
             return HttpResponseRedirect('/login.html')
         elif Review.objects.get(id=id).client_id != Employee.objects.get(id=request.session["id_user"]) and Employee.objects.get(id=request.session["id_user"]).access_level in ['c', 'm']:
             return HttpResponseRedirect('/reviews.html')
-        context = {}
+        g_avatar = get_del_account(request.session["id_user"]).avatar
+        context = {
+            'g_avatar': g_avatar
+        }
         return render(request, 'confirm_delete.html', context=context)
 
     def post(self, request, id):
@@ -1639,7 +1652,6 @@ class ReviewDeletePage(View):
         elif Review.objects.get(id=id).client_id != Employee.objects.get(id=request.session["id_user"]) and Employee.objects.get(id=request.session["id_user"]).access_level in ['c', 'm']:
             return HttpResponseRedirect('/reviews.html')
         g_del_review = get_del_review(id)
-        context = {}
         g_del_review.delete()
         return HttpResponseRedirect('/reviews.html')
 
@@ -1650,7 +1662,10 @@ class MessageDeletePage(View):
             return HttpResponseRedirect('/login.html')
         elif Message.objects.get(id=id).sender_id != Employee.objects.get(id=request.session["id_user"]):
             return HttpResponseRedirect('/messages.html')
-        context = {}
+        g_avatar = get_del_account(request.session["id_user"]).avatar
+        context = {
+            'g_avatar': g_avatar
+        }
         return render(request, 'confirm_delete.html', context=context)
 
     def post(self, request, id):
@@ -1659,6 +1674,5 @@ class MessageDeletePage(View):
         elif Message.objects.get(id=id).sender_id != Employee.objects.get(id=request.session["id_user"]):
             return HttpResponseRedirect('/messages.html')
         g_del_message = get_del_message(id)
-        context = {}
         g_del_message.delete()
         return HttpResponseRedirect('/messages.html')
