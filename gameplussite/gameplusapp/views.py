@@ -95,22 +95,26 @@ class CreateContract(View):
     def get(self, request, id):
         if "id_user" not in request.session:
             return HttpResponseRedirect('/login.html')
+        g_avatar = get_del_account(request.session["id_user"]).avatar
         form = ContractsForm()
         form.fields['employee_id'].queryset = (Employee.objects.filter(access_level__in=['a', 'm']))
 
         context = {
-            'form': form
+            'form': form,
+            'g_avatar': g_avatar
         }
         return render(request, 'newcontract.html', context=context)
 
     def post(self, request, id):
         if "id_user" not in request.session:
             return HttpResponseRedirect('/login.html')
+        g_avatar = get_del_account(request.session["id_user"]).avatar
         form = ContractsForm(request.POST)
         form.fields['employee_id'].queryset = (Employee.objects.filter(access_level__in=['a', 'm']))
 
         context = {
-            'form': form
+            'form': form,
+            'g_avatar': g_avatar
         }
         if form.is_valid():
             contract = form.save(commit=False)
@@ -168,6 +172,7 @@ class AllGamesPage(View):
             return HttpResponseRedirect('login.html')
         elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
             return HttpResponseRedirect('contracts.html')
+        g_avatar = get_del_account(request.session["id_user"]).avatar
         mod = "добавление"
         g_games = get_games()
         form = GamesForm()
@@ -184,7 +189,8 @@ class AllGamesPage(View):
             'g_games': g_games,
             'filtred': filtred,
             'form': form,
-            'mod': mod
+            'mod': mod,
+            'g_avatar': g_avatar
         }
         return render(request, 'allgames.html', context=context)
 
@@ -193,6 +199,7 @@ class AllGamesPage(View):
             return HttpResponseRedirect('login.html')
         elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
             return HttpResponseRedirect('contracts.html')
+        g_avatar = get_del_account(request.session["id_user"]).avatar
         mod = "добавление"
         g_games = get_games()
         form = GamesForm(request.POST)
@@ -209,7 +216,8 @@ class AllGamesPage(View):
             'g_games': g_games,
             'filtred': filtred,
             'form': form,
-            'mod': mod
+            'mod': mod,
+            'g_avatar': g_avatar
         }
         if form.is_valid():
             form.save()
@@ -225,6 +233,7 @@ class GameListOnePage(View):
             return HttpResponseRedirect('/login.html')
         elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
             return HttpResponseRedirect('/contracts.html')
+        g_avatar = get_del_account(request.session["id_user"]).avatar
         mod = "редактирование"
         game_id = id
         g_games = get_games()
@@ -255,7 +264,8 @@ class GameListOnePage(View):
             'form': form,
             'mod': mod,
             'picture': picture,
-            'game_id': game_id
+            'game_id': game_id,
+            'g_avatar': g_avatar
         }
         return render(request, 'allgames.html', context=context)
 
@@ -264,6 +274,7 @@ class GameListOnePage(View):
             return HttpResponseRedirect('/login.html')
         elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
             return HttpResponseRedirect('/contracts.html')
+        g_avatar = get_del_account(request.session["id_user"]).avatar
         mod = "редактирование"
         game_id = id
         g_games = get_games()
@@ -284,7 +295,8 @@ class GameListOnePage(View):
             'form': form,
             'mod': mod,
             'picture': picture,
-            'game_id': game_id
+            'game_id': game_id,
+            'g_avatar': g_avatar
         }
         if form.is_valid():
             game = Game.objects.get(id=id)
@@ -318,6 +330,7 @@ class AllTasksPage(View):
             new = True
         else:
             g_tasks = g_tasks.filter(employee_id=Employee.objects.get(id=request.session["id_user"]))
+        g_avatar = get_del_account(request.session["id_user"]).avatar
         mod = "добавление"
         form = TasksForm()
         form.fields['employee_id'].queryset = (Employee.objects.filter(access_level='m'))
@@ -338,7 +351,8 @@ class AllTasksPage(View):
             'filtred': filtred,
             'form': form,
             'mod': mod,
-            'new': new
+            'new': new,
+            'g_avatar': g_avatar
         }
         return render(request, 'alltasks.html', context=context)
 
@@ -353,6 +367,7 @@ class AllTasksPage(View):
             new = True
         else:
             g_tasks = g_tasks.filter(employee_id=Employee.objects.get(id=request.session["id_user"]))
+        g_avatar = get_del_account(request.session["id_user"]).avatar
         mod = "добавление"
         form = TasksForm(request.POST)
         form.fields['employee_id'].queryset = (Employee.objects.filter(access_level='m'))
@@ -373,7 +388,8 @@ class AllTasksPage(View):
             'filtred': filtred,
             'form': form,
             'mod': mod,
-            'new': new
+            'new': new,
+            'g_avatar': g_avatar
         }
         if form.is_valid():
             form.save()
@@ -401,6 +417,7 @@ class TaskOnePage(View):
             form.fields["employee_id"].required = False
             form.fields["description"].required = False
             new = False
+        g_avatar = get_del_account(request.session["id_user"]).avatar
         mod = "редактирование"
         task_id = id
         form.fields['employee_id'].queryset = (Employee.objects.filter(access_level='m'))
@@ -422,7 +439,8 @@ class TaskOnePage(View):
             'form': form,
             'mod': mod,
             'task_id': task_id,
-            'new': new
+            'new': new,
+            'g_avatar': g_avatar
         }
         return render(request, 'alltasks.html', context=context)
 
@@ -441,6 +459,7 @@ class TaskOnePage(View):
             form.fields["employee_id"].required = False
             form.fields["description"].required = False
             new = False
+        g_avatar = get_del_account(request.session["id_user"]).avatar
         mod = "редактирование"
         task_id = id
         form.fields['employee_id'].queryset = (Employee.objects.filter(access_level='m'))
@@ -462,7 +481,8 @@ class TaskOnePage(View):
             'form': form,
             'mod': mod,
             'task_id': task_id,
-            'new': new
+            'new': new,
+            'g_avatar': g_avatar
         }
         if form.is_valid():
             task = TechnicalTask.objects.get(id=id)
@@ -492,6 +512,7 @@ class ContractsPage(View):
             g_contracts = g_contracts.filter(Q(client_id=Employee.objects.get(id=request.session["id_user"])) | Q(
                 employee_id=Employee.objects.get(id=request.session["id_user"])))
             form.fields["employee_id"].required = False
+        g_avatar = get_del_account(request.session["id_user"]).avatar
         if "message" in request.session:
             if request.session["message"] == True:
                 message = 'Доступ запрещён'
@@ -522,7 +543,8 @@ class ContractsPage(View):
             'form': form,
             'mod': mod,
             'new': new,
-            'message': message
+            'message': message,
+            'g_avatar': g_avatar
         }
         return render(request, 'contracts.html', context=context)
 
@@ -540,6 +562,7 @@ class ContractsPage(View):
             g_contracts = g_contracts.filter(Q(client_id=Employee.objects.get(id=request.session["id_user"])) | Q(
                 employee_id=Employee.objects.get(id=request.session["id_user"])))
             form.fields["employee_id"].required = False
+        g_avatar = get_del_account(request.session["id_user"]).avatar
         if "message" in request.session:
             if request.session["message"] == True:
                 message = 'Доступ запрещён'
@@ -570,7 +593,8 @@ class ContractsPage(View):
             'form': form,
             'mod': mod,
             'new': new,
-            'message': message
+            'message': message,
+            'g_avatar': g_avatar
         }
         if form.is_valid():
             contract = form.save(commit=False)
@@ -605,6 +629,7 @@ class ContractOnePage(View):
                 request.session["message"] = True
                 return HttpResponseRedirect('/contracts.html')
             form.fields["employee_id"].required = False
+        g_avatar = get_del_account(request.session["id_user"]).avatar
         mod = "редактирование"
         note_id = id
         form.fields['employee_id'].queryset = (Employee.objects.filter(access_level__in=['a', 'm']))
@@ -632,7 +657,8 @@ class ContractOnePage(View):
             'form': form,
             'mod': mod,
             'note_id': note_id,
-            'new': new
+            'new': new,
+            'g_avatar': g_avatar
         }
         return render(request, 'contracts.html', context=context)
 
@@ -652,6 +678,7 @@ class ContractOnePage(View):
                 request.session["message"] = True
                 return HttpResponseRedirect('/contracts.html')
             form.fields["employee_id"].required = False
+        g_avatar = get_del_account(request.session["id_user"]).avatar
         mod = "редактирование"
         note_id = id
         form.fields['employee_id'].queryset = (Employee.objects.filter(access_level__in=['a', 'm']))
@@ -679,7 +706,8 @@ class ContractOnePage(View):
             'form': form,
             'mod': mod,
             'note_id': note_id,
-            'new': new
+            'new': new,
+            'g_avatar': g_avatar
         }
         if form.is_valid():
             contract = ContractOfDevelopment.objects.get(id=id)
@@ -708,6 +736,7 @@ class ControlPage(View):
             return HttpResponseRedirect('contracts.html')
         elif Employee.objects.get(id=request.session["id_user"]).access_level == 'a':
             new = True
+        g_avatar = get_del_account(request.session["id_user"]).avatar
         message = ''
         if "message" in request.session:
             if request.session["message"] == True:
@@ -738,7 +767,8 @@ class ControlPage(View):
             'form': form,
             'mod': mod,
             'new': new,
-            'message': message
+            'message': message,
+            'g_avatar': g_avatar
         }
         return render(request, 'control.html', context=context)
 
@@ -750,6 +780,7 @@ class ControlPage(View):
             return HttpResponseRedirect('contracts.html')
         elif Employee.objects.get(id=request.session["id_user"]).access_level == 'a':
             new = True
+        g_avatar = get_del_account(request.session["id_user"]).avatar
         message = ''
         if "message" in request.session:
             if request.session["message"] == True:
@@ -780,7 +811,8 @@ class ControlPage(View):
             'form': form,
             'mod': mod,
             'new': new,
-            'message': message
+            'message': message,
+            'g_avatar': g_avatar
         }
         if form.is_valid():
             account = form.save(commit=False)
@@ -803,6 +835,7 @@ class ControlOnePage(View):
                 id=id).access_level == 'a':
             request.session["message"] = True
             return HttpResponseRedirect('/control.html')
+        g_avatar = get_del_account(request.session["id_user"]).avatar
         mod = "редактирование"
         user_id = id
         avatar = g_accounts.get(id=id).avatar
@@ -832,7 +865,8 @@ class ControlOnePage(View):
             'form': form,
             'mod': mod,
             'avatar': avatar,
-            'user_id': user_id
+            'user_id': user_id,
+            'g_avatar': g_avatar
         }
         return render(request, 'control.html', context=context)
 
@@ -846,6 +880,7 @@ class ControlOnePage(View):
                 id=id).access_level == 'a':
             request.session["message"] = True
             return HttpResponseRedirect('/control.html')
+        g_avatar = get_del_account(request.session["id_user"]).avatar
         mod = "редактирование"
         user_id = id
         avatar = g_accounts.get(id=id).avatar
@@ -870,7 +905,8 @@ class ControlOnePage(View):
             'form': form,
             'mod': mod,
             'avatar': avatar,
-            'user_id': user_id
+            'user_id': user_id,
+            'g_avatar': g_avatar
         }
         if form.is_valid():
             account = Employee.objects.get(id=id)
@@ -966,6 +1002,7 @@ class ChatsPage(View):
     def get(self, request):
         if "id_user" not in request.session:
             return HttpResponseRedirect('/login.html')
+        g_avatar = get_del_account(request.session["id_user"]).avatar
         chats = Chat.objects.filter(members__in=[request.session["id_user"]])
         filtred = ChatsFilterForm(request.GET)
 
@@ -981,7 +1018,8 @@ class ChatsPage(View):
         context = {
             'user_profile': Employee.objects.get(id=request.session["id_user"]),
             'chats': chats,
-            'filtred': filtred
+            'filtred': filtred,
+            'g_avatar': g_avatar
         }
         return render(request, 'messages.html', context=context)
 
@@ -993,6 +1031,7 @@ class MessagesPage(View):
         chat = Chat.objects.get(id=id)
         if Employee.objects.get(id=request.session["id_user"]) not in chat.members.all():
             return HttpResponseRedirect('/messages.html')
+        g_avatar = get_del_account(request.session["id_user"]).avatar
         chats = Chat.objects.filter(members__in=[request.session["id_user"]])
         filtred = ChatsFilterForm(request.GET)
 
@@ -1010,6 +1049,7 @@ class MessagesPage(View):
             'chats': chats,
             'chat': chat,
             'filtred': filtred,
+            'g_avatar': g_avatar,
             'form': MessageForm()
         }
         return render(request, 'messages.html', context=context)
@@ -1029,9 +1069,11 @@ class MessagesPage(View):
 
 class ReviewsPage(View):
     def get(self, request):
+        g_avatar = None
         if "id_user" in request.session:
             link = "confirm_exit.html"
             log = "Выйти"
+            g_avatar = get_del_account(request.session["id_user"]).avatar
         else:
             link = "login.html"
             log = "Войти\Регистрация"
@@ -1061,14 +1103,17 @@ class ReviewsPage(View):
             'link': link,
             'log': log,
             'enable': enable,
-            'message': message
+            'message': message,
+            'g_avatar': g_avatar
         }
         return render(request, 'reviews.html', context=context)
 
     def post(self, request):
+        g_avatar = None
         if "id_user" in request.session:
             link = "confirm_exit.html"
             log = "Выйти"
+            g_avatar = get_del_account(request.session["id_user"]).avatar
         else:
             link = "login.html"
             log = "Войти\Регистрация"
@@ -1098,7 +1143,8 @@ class ReviewsPage(View):
             'link': link,
             'log': log,
             'enable': enable,
-            'message': message
+            'message': message,
+            'g_avatar': g_avatar
         }
         if form.is_valid():
             review = form.save(commit=False)
@@ -1124,6 +1170,7 @@ class ReviewOnePage(View):
                 return HttpResponseRedirect('/reviews.html')
             else:
                 enable = 2
+        g_avatar = get_del_account(request.session["id_user"]).avatar
         mod = "Редактировать"
         review_id = id
         g_reviews = get_reviews()
@@ -1145,7 +1192,8 @@ class ReviewOnePage(View):
             'review_id': review_id,
             'link': link,
             'log': log,
-            'enable': enable
+            'enable': enable,
+            'g_avatar': g_avatar
         }
         return render(request, 'reviews.html', context=context)
 
@@ -1161,6 +1209,7 @@ class ReviewOnePage(View):
                 return HttpResponseRedirect('/reviews.html')
             else:
                 enable = 2
+        g_avatar = get_del_account(request.session["id_user"]).avatar
         mod = "Редактировать"
         review_id = id
         g_reviews = get_reviews()
@@ -1182,7 +1231,8 @@ class ReviewOnePage(View):
             'review_id': review_id,
             'link': link,
             'log': log,
-            'enable': enable
+            'enable': enable,
+            'g_avatar': g_avatar
         }
         if form.is_valid():
             review = Review.objects.get(id=id)
@@ -1205,6 +1255,7 @@ class StatesPage(View):
         else:
             g_states = g_states.filter(game_id__in=ContractOfDevelopment.objects.filter(
                 client_id=request.session["id_user"]).values_list("game_id", flat=True))
+        g_avatar = get_del_account(request.session["id_user"]).avatar
         message = ''
         if "message" in request.session:
             if request.session["message"] == True:
@@ -1236,7 +1287,8 @@ class StatesPage(View):
             'form': form,
             'mod': mod,
             'new': new,
-            'message': message
+            'message': message,
+            'g_avatar': g_avatar
         }
         return render(request, 'game_states.html', context=context)
 
@@ -1250,6 +1302,7 @@ class StatesPage(View):
         else:
             g_states = g_states.filter(game_id__in=ContractOfDevelopment.objects.filter(
                 client_id=request.session["id_user"]).values_list("game_id", flat=True))
+        g_avatar = get_del_account(request.session["id_user"]).avatar
         message = ''
         if "message" in request.session:
             if request.session["message"] == True:
@@ -1281,7 +1334,8 @@ class StatesPage(View):
             'form': form,
             'mod': mod,
             'new': new,
-            'message': message
+            'message': message,
+            'g_avatar': g_avatar
         }
         if form.is_valid():
             form.save()
@@ -1298,6 +1352,7 @@ class StateOnePage(View):
         elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
             request.session["message"] = True
             return HttpResponseRedirect('/game_states.html')
+        g_avatar = get_del_account(request.session["id_user"]).avatar
         mod = "редактирование"
         state_id = id
         g_states = get_states()
@@ -1328,7 +1383,8 @@ class StateOnePage(View):
             'filtred': filtred,
             'form': form,
             'mod': mod,
-            'state_id': state_id
+            'state_id': state_id,
+            'g_avatar': g_avatar
         }
         return render(request, 'game_states.html', context=context)
 
@@ -1338,6 +1394,7 @@ class StateOnePage(View):
         elif Employee.objects.get(id=request.session["id_user"]).access_level == 'c':
             request.session["message"] = True
             return HttpResponseRedirect('/game_states.html')
+        g_avatar = get_del_account(request.session["id_user"]).avatar
         mod = "редактирование"
         state_id = id
         g_states = get_states()
@@ -1365,7 +1422,8 @@ class StateOnePage(View):
             'filtred': filtred,
             'form': form,
             'mod': mod,
-            'state_id': state_id
+            'state_id': state_id,
+            'g_avatar': g_avatar
         }
         if form.is_valid():
             state = GameDevelopmentStage.objects.get(id=id)
@@ -1384,6 +1442,7 @@ class SequrityPage(View):
     def get(self, request):
         if "id_user" not in request.session:
             return HttpResponseRedirect('login.html')
+        g_avatar = get_del_account(request.session["id_user"]).avatar
         g_accounts = get_accounts()
         form = SequrityForm(initial={'phone': g_accounts.get(id=request.session["id_user"]).phone,
                                      'email': g_accounts.get(id=request.session["id_user"]).email})
@@ -1391,20 +1450,22 @@ class SequrityPage(View):
         conf = PasswordForm()
         context = {
             'form': form,
-            'conf': conf
+            'conf': conf,
+            'g_avatar': g_avatar
         }
         return render(request, 'sequrity.html', context=context)
 
     def post(self, request):
         if "id_user" not in request.session:
             return HttpResponseRedirect('login.html')
-        g_accounts = get_accounts()
+        g_avatar = get_del_account(request.session["id_user"]).avatar
         form = SequrityForm(request.POST)
         form.fields["password"].required = False
         conf = PasswordForm(request.POST)
         context = {
             'form': form,
-            'conf': conf
+            'conf': conf,
+            'g_avatar': g_avatar
         }
         if form.is_valid() & conf.is_valid():
             user = Employee.objects.get(id=request.session["id_user"])
@@ -1431,14 +1492,16 @@ class ExitPage(View):
     def get(self, request):
         if "id_user" not in request.session:
             return HttpResponseRedirect('login.html')
-        context = {}
+        g_avatar = get_del_account(request.session["id_user"]).avatar
+        context = {
+            'g_avatar': g_avatar
+        }
         return render(request, 'confirm_exit.html', context=context)
 
     def post(self, request):
         if "id_user" not in request.session:
             return HttpResponseRedirect('login.html')
         request.session.clear()
-        context = {}
         return HttpResponseRedirect('login.html')
 
 

@@ -4,18 +4,24 @@
     <head>
         <meta charset="UTF-8">
         <title>Студия Гейм-Плюс | Подтверждение выхода из аккаунта</title>
-        <link rel="stylesheet" href="/static/css/pattern.css" />
-        <link rel="stylesheet" href="/static/css/delete.css" />
+        <link rel="stylesheet" href="../static/css/pattern.css" />
+        <link rel="stylesheet" href="../static/css/delete.css" />
     </head>
 
     <body>
         <header>
 		  <nav>
-		      <a href="/" class="logo"><img src="/static/images/logo.png" alt="логотип"></a>
+		      <a href="/" class="logo"><img src="../static/images/logo.png" alt="логотип"></a>
 			  <ul class="topmenu">
 				<li><a href="/games.html">Игры</a></li>
 				<li><a href="/reviews.html">Отзывы</a></li>
-				<li><a class="submenu-link"><img src="/static/images/avatar.png" alt="аватарка"></a>
+				<li><a class="submenu-link">
+					{% if g_avatar == '' or g_avatar == None %}
+					<img src="../static/images/avatar.png" alt="отсутствует аватарка">
+					{% else %}
+					<img src="../{{ g_avatar }}" alt="аватарка">
+					{% endif %}
+				</a>
 				  <ul class="submenu">
 					<li><a href="/account.html">Аккаунт</a></li>
 					<li><a href="/messages.html">Сообщения</a></li>
