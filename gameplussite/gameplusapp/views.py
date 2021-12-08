@@ -1,4 +1,5 @@
 import datetime
+import re
 
 from django.shortcuts import render
 from django.views import View
@@ -970,7 +971,12 @@ class ChatsPage(View):
 
         if filtred.is_valid():
             if filtred.cleaned_data["search"]:
-                chats = chats.filter(members__full_name__iregex=filtred.cleaned_data["search"])
+                members = []
+                for c in chats:
+                    members.append(poll_extras.get_companion(request, c).full_name)
+                r = re.compile(filtred.cleaned_data["search"], re.I)
+                members = list(filter(r.search, members))
+                chats = chats.filter(members__full_name__in=members)
 
         context = {
             'user_profile': Employee.objects.get(id=request.session["id_user"]),
@@ -988,10 +994,22 @@ class MessagesPage(View):
         if Employee.objects.get(id=request.session["id_user"]) not in chat.members.all():
             return HttpResponseRedirect('/messages.html')
         chats = Chat.objects.filter(members__in=[request.session["id_user"]])
+        filtred = ChatsFilterForm(request.GET)
+
+        if filtred.is_valid():
+            if filtred.cleaned_data["search"]:
+                members = []
+                for c in chats:
+                    members.append(poll_extras.get_companion(request, c).full_name)
+                r = re.compile(filtred.cleaned_data["search"], re.I)
+                members = list(filter(r.search, members))
+                chats = chats.filter(members__full_name__in=members)
+
         context = {
             'user_profile': Employee.objects.get(id=request.session["id_user"]),
             'chats': chats,
             'chat': chat,
+            'filtred': filtred,
             'form': MessageForm()
         }
         return render(request, 'messages.html', context=context)

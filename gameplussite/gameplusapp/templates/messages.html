@@ -35,6 +35,7 @@
 						<p>{{ filtred.search }}
 						<button type="submit"></button></p>
 					</div>
+					{{ read }}
 				</form>
 			</div>
 		</section>
@@ -42,7 +43,7 @@
 			<div class="lists">
 				<div class="messages">
 					{% if chats.count == 0 %}
-						<div class="panel panel-body">Нет ни одного начатого диалога</div>
+						<div class="panel panel-body">Диалоги не найдены или отсутствуют</div>
 					{% endif %}
 					{% for chat in chats %}
 						{% if chat.message_set.count != 0 %}
