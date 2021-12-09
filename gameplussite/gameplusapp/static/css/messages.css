@@ -13,9 +13,15 @@ section {
 .send > .sendform {
 	display: block;
 }
-.sortblock  > form, .searchblock > form, .searchblock > p {
+.sortblock  > form, .searchblock > form, .searchblock > p, .sendform > p {
     position: relative;
+}
+.sortblock  > form, .searchblock > form, .searchblock > p {
     margin: 10px 0;
+}
+.sendform > p {
+    height: 100%;
+    margin: 0;
 }
 .searchblock > p > input {
 	width: 100%;

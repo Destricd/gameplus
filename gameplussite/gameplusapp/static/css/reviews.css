@@ -159,6 +159,9 @@ section {
 .revname > p, .revdate > p, .revrate > p {
     margin: 0;
 }
+.revrate > p {
+    word-break: break-all;
+}
 .revrate {
     padding: 8px 10px;
 }
