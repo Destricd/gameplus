@@ -55,22 +55,24 @@
 						{% if chat.message_set.count != 0 %}
 							{% with first_message=chat.message_set.first %}
 								{% get_companion request chat as companion %}
-								<a class="list-group-item" href="{{ chat.get_absolute_url }}">
-									<img class="avatar-messages" src="/{{ companion.avatar }}">
+								<a class="dialog" href="{{ chat.get_absolute_url }}">
+									<div class="avatar-dialog">
+										<img src="/{{ companion.avatar }}">
+									</div>
 									<div class="reply-body">
-										<ul class="list-inline">
-											<li class="drop-left-padding">
-												<strong class="list-group-item-heading">{{ companion.full_name }}</strong>
-											</li>
-											<li class="pull-right text-muted"><small>{{ first_message.pub_date|date:"d.m.Y H:i" }}</small></li>
-										</ul>
-										{% if companion != first_message.sender_id %}
-											<div>
-												<div class="attached-reply-body">{{ first_message.letter|truncatechars_html:"200"|safe|striptags }}</div>
-											</div>
-										{% else %}
-											<div>{{ first_message.letter|truncatechars_html:"200"|safe|striptags }}</div>
-										{% endif %}
+										<div class="reply-dialog">
+											<ul class="list-inline">
+												<li class="dialog-name">
+													<strong class="list-group-item-heading">{{ companion.full_name }}</strong>
+												</li>
+												<li class="dialog-date"><small>{{ first_message.pub_date|date:"d.m.Y H:i" }}</small></li>
+											</ul>
+											{% if companion != first_message.sender_id %}
+												<div class="dialog-text">Вы: {{ first_message.letter|truncatechars_html:"200"|safe|striptags }}</div>
+											{% else %}
+												<div class="dialog-text">{{ first_message.letter|truncatechars_html:"200"|safe|striptags }}</div>
+											{% endif %}
+										</div>
 									</div>
 								</a>
 							{% endwith %}
