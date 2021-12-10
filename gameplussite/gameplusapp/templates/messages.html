@@ -57,7 +57,11 @@
 								{% get_companion request chat as companion %}
 								<a class="dialog" href="{{ chat.get_absolute_url }}">
 									<div class="avatar-dialog">
-										<img src="/{{ companion.avatar }}">
+										{% if companion.avatar == '' or companion.avatar == None %}
+										<img src="../static/images/avatar.png" alt="отсутствует аватарка">
+										{% else %}
+										<img src="../{{ companion.avatar }}" alt="аватарка">
+										{% endif %}
 									</div>
 									<div class="reply-body">
 										<div class="reply-dialog">

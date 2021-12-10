@@ -159,3 +159,56 @@ p.example {
     overflow: hidden;
     color: #626d7a;
 }
+.message-list {
+    position: relative;
+    padding: 6px 30px 7px 0;
+    margin: 0 7px 4px 7px;
+}
+.avatar-message {
+    position: absolute;
+    top: 8px;
+    left: 43px;
+    z-index: 2;
+}
+.avatar-message > img {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    margin-left: 2px;
+    margin-bottom: 1px;
+    object-fit:cover;
+}
+.message-body {
+    font-size: 13px;
+    text-align: left;
+}
+.list-user {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.list-user > li {
+    position: relative;
+    left: 92px;
+    display: inline-block;
+}
+.user-name {
+    z-index: 2;
+}
+.user-date {
+    margin-left: 4px;
+}
+.text-user, .delete {
+    margin: 0 49px 0 93px;
+}
+.text-user {
+    padding-top: 5px;
+    outline: 0;
+    line-height: 18px;
+    word-wrap: break-word;
+}
+.delete > a {
+    color: #c6262f;
+    text-decoration: none;
+}

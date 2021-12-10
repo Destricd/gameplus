@@ -1,17 +1,23 @@
 {% block content %}
 
-<div class="list-group-item">
-    <img class="avatar-comment" src="/{{ message_item.sender_id.avatar }}">
-    <div class="reply-body">
-        <ul class="list-inline">
-            <li class="drop-left-padding">
+<div class="message-list">
+    <div class="avatar-message">
+        {% if message_item.sender_id.avatar == '' or message_item.sender_id.avatar == None %}
+        <img src="../static/images/avatar.png" alt="отсутствует аватарка">
+        {% else %}
+        <img src="../{{ message_item.sender_id.avatar }}" alt="аватарка">
+        {% endif %}
+    </div>
+    <div class="message-body">
+        <ul class="list-user">
+            <li class="user-name">
                 <strong class="list-group-item-heading">{{ message_item.sender_id.full_name }}</strong>
             </li>
-            <li class="pull-right text-muted"><small>{{ message_item.pub_date|date:"d.m.Y H:i" }}</small></li>
+            <li class="user-date"><small>{{ message_item.pub_date|date:"d.m.Y H:i" }}</small></li>
         </ul>
-        <div>{{ message_item.letter|safe }}</div>
+        <div class="text-user">{{ message_item.letter|safe }}</div>
         {% if message_item.sender_id.id == request.session.id_user %}
-        <div><a href="{{ message_item.id }}/delete">Удалить</a></div>
+        <div class="delete"><a href="{{ message_item.id }}/delete">Удалить</a></div>
         {% endif %}
     </div>
 </div>
