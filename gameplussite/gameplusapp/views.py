@@ -1059,6 +1059,7 @@ class MessagesPage(View):
             'chat': chat,
             'filtred': filtred,
             'g_avatar': g_avatar,
+            'chat_id': id,
             'form': MessageForm()
         }
         return render(request, 'messages.html', context=context)

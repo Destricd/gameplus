@@ -50,7 +50,9 @@ section {
 	height: 720px; /* Высота блока */
 }
 .games, .info {
-    background-color: #A6CAF0; /* Цвет фона */
+    background-color: #FFFFFF; /* Цвет фона */
+    background-attachment: local;
+	overflow: auto; /* Добавляем полосы прокрутки */
 }
 .lists {
 	padding: 5px 20px 40px 20px;
@@ -59,18 +61,41 @@ section {
     width: 20%;
     float: left;
 }
-.games, .info {
-    background-attachment: local;
-	overflow: auto; /* Добавляем полосы прокрутки */
-}
 .games {
     width: 30%;
     margin-left: 4%;
+    border-right: 1px solid #eaeaea;
 }
 .info {
     width: 46%; /* Ширина блока */
 	padding: 10px 20px;
     float: right;
+}
+.form > input, .form > select, .form > textarea {
+  outline: 0;
+  background: #f2f2f2;
+  width: 60%;
+  border: 0;
+  margin: 0;
+  padding: 15px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+.form > button {
+  text-transform: uppercase;
+  outline: 0;
+  background: #7BA7AB;
+  width: 60%;
+  border: 0;
+  padding: 15px;
+  color: #FFFFFF;
+  font-size: 14px;
+  -webkit-transition: all 0.3 ease;
+  transition: all 0.3 ease;
+  cursor: pointer;
+}
+button:hover, button:active, button:focus {
+  background: #6D92AA;
 }
 .widget {
   padding: 20px;

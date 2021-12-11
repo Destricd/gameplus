@@ -3,7 +3,7 @@
 	
 	<head>
 		<meta charset="utf-8" />
-		<title>Студия Гейм-Плюс | Управление | Аккаунты</title>
+		<title>Студия Game-Plus | Управление | Аккаунты</title>
 		<link rel="stylesheet" href="../static/css/pattern.css" />
 		<link rel="stylesheet" href="../static/css/control.css" />
 		<link rel="stylesheet" href="../static/css/allaccounts.css" />
@@ -90,21 +90,21 @@
 								<form class="userform" method="post" enctype="multipart/form-data">
 									{% csrf_token %}
 								    <p><strong>ФИО:</strong></p>
-								    <p>{{ form.full_name }}</p>
+								    <p class="form">{{ form.full_name }}</p>
 									<p><strong>Логин:</strong></p>
-								    <p>{{ form.login }}</p>
+								    <p class="form">{{ form.login }}</p>
 									<p><strong>Пароль:</strong></p>
-								    <p>{{ form.password }}</p>
+								    <p class="form">{{ form.password }}</p>
 									<p><strong>Телефон:</strong></p>
-								    <p>{{ form.phone }}</p>
+								    <p class="form">{{ form.phone }}</p>
 									<p><strong>Почта:</strong></p>
-								    <p>{{ form.email }}</p>
+								    <p class="form">{{ form.email }}</p>
 									<p><strong>Уровень доступа:</strong></p>
-								    <p>{{ form.access_level }}</p>
+								    <p class="form">{{ form.access_level }}</p>
 									<p><strong>Фотография профиля:</strong></p>
 								    <p>{{ form.avatar }}</p>
 									<p><span style="color: red">{{ error }}</span></p>
-								    <p><button type="submit">Отправить</button></p>
+								    <p class="form"><button type="submit">Отправить</button></p>
 								</form>
 								{% if mod == "редактирование" %}
 								<a href="{{ user_id }}/delete">Удалить аккаунт</a>

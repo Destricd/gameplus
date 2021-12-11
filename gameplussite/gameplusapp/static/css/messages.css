@@ -75,9 +75,10 @@ section {
 }
 .messages, .about {
 	width: 48%; /* Ширина блока */
+	box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
 .messages, .msglist {
-    background-color: #A6CAF0; /* Цвет фона */
+    background-color: #FFFFFF; /* Цвет фона */
     background-attachment: local;
 	overflow: auto; /* Добавляем полосы прокрутки */
 }
@@ -113,7 +114,19 @@ p.example {
     height: 63px;
     padding: 0 0 0 15px;
     text-decoration: none;
-    color: black;
+    color: #000000;
+}
+.dialog:hover {
+    background: rgba(174, 183, 194, 0.12);
+    border-bottom: solid 1px #dce1e6;
+}
+.selected {
+    background: #7BA7AB;
+    color: #FFFFFF;
+}
+.selected:hover {
+    background: #7BA7AB;
+    border-bottom: solid 1px #668C8E;
 }
 .avatar-dialog {
     width: 46px;
@@ -132,6 +145,9 @@ p.example {
     margin-left: 57px;
     text-decoration: none;
     border-bottom: solid 1px #dce1e6;
+}
+.selected > .reply-body {
+    border-bottom: solid 1px #668C8E;
 }
 .reply-dialog {
     padding: 8px 0;
@@ -153,11 +169,17 @@ p.example {
     float: right;
     color: #818c99;
 }
+.selected .dialog-date {
+    color: #FFFFFF;
+}
 .dialog-text {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
     color: #626d7a;
+}
+.selected .dialog-text {
+    color: #FFFFFF;
 }
 .message-list {
     position: relative;

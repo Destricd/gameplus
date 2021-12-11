@@ -3,7 +3,7 @@
 	
 	<head>
 		<meta charset="utf-8" />
-		<title>Студия Гейм-Плюс | Управление | Игры</title>
+		<title>Студия Game-Plus | Управление | Игры</title>
 		<link rel="stylesheet" href="../static/css/pattern.css" />
 		<link rel="stylesheet" href="../static/css/control.css" />
 		<link rel="stylesheet" href="../static/css/allgames.css" />
@@ -84,27 +84,26 @@
 								<form class="noteform" method="post" enctype="multipart/form-data">
 									{% csrf_token %}
 								    <p><strong>Название:</strong></p>
-								    <p>{{ form.name }}</p>
+								    <p class="form">{{ form.name }}</p>
 									<p><strong>Жанр:</strong></p>
-								    <p>{{ form.type }}</p>
+								    <p class="form">{{ form.type }}</p>
 									<p><strong>Рейтинг:</strong></p>
-								    <p>{{ form.rate }}</p>
+								    <p class="form">{{ form.rate }}</p>
 									<p><strong>Правила:</strong></p>
-								    <p>{{ form.rules }}</p>
+								    <p class="form">{{ form.rules }}</p>
 									<p><strong>Дата выхода:</strong></p>
-								    <p>{{ form.release_date  }}</p>
+								    <p class="form">{{ form.release_date  }}</p>
 									<p><strong>Сайт:</strong></p>
-								    <p>{{ form.site }}</p>
-									<p><strong>Многопользовательская:</strong></p>
-								    <p>{{ form.number_of_rules }}</p>
+								    <p class="form">{{ form.site }}</p>
+									<p><strong>Многопользовательская: {{ form.number_of_rules }}</strong></p>
 									<p><strong>Цена для продажи:</strong></p>
-								    <p>{{ form.price }}</p>
+								    <p class="form">{{ form.price }}</p>
 									<p><strong>Первоначальный бюджет разработки:</strong></p>
-								    <p>{{ form.development_budget  }}</p>
+								    <p class="form">{{ form.development_budget  }}</p>
 									<p><strong>Изображение:</strong></p>
 								    <p>{{ form.picture }}</p>
 									<p><span style="color: red">{{ error }}</span></p>
-								    <p><button type="submit">Отправить</button></p>
+								    <p class="form"><button type="submit">Отправить</button></p>
 								</form>
 								{% if mod == "редактирование" %}
 								<a href="{{ game_id }}/delete">Удалить игру</a>

@@ -3,7 +3,7 @@
 	
 	<head>
 		<meta charset="utf-8" />
-		<title>Студия Гейм-Плюс | Управление | Договора</title>
+		<title>Студия Game-Plus | Управление | Договора</title>
 		<link rel="stylesheet" href="../static/css/pattern.css" />
 		<link rel="stylesheet" href="../static/css/control.css" />
 		<link rel="stylesheet" href="../static/css/contracts.css" />
@@ -96,21 +96,21 @@
 								<form class="noteform" method="post" enctype="multipart/form-data">
 									{% csrf_token %}
 								    <p><strong>Игра:</strong></p>
-								    <p>{{ form.game_id }}</p>
+								    <p class="form">{{ form.game_id }}</p>
 									<p><strong>Дата подписания:</strong></p>
-								    <p>{{ form.conclusion_date }}</p>
+								    <p class="form">{{ form.conclusion_date }}</p>
 									<p><strong>Дата окончания:</strong></p>
-								    <p>{{ form.contract_end_date }}</p>
+								    <p class="form">{{ form.contract_end_date }}</p>
 									{% if new == 2 %}
 									<p><strong>Работник:</strong></p>
-								    <p>{{ form.employee_id }}</p>
+								    <p class="form">{{ form.employee_id }}</p>
 									{% endif %}
 									<p><strong>Клиент-оформитель:</strong></p>
-								    <p>{{ form.client_id  }}</p>
+								    <p class="form">{{ form.client_id  }}</p>
 									<p><strong>Дополнительные средства разработки:</strong></p>
-								    <p>{{ form.development_full_price }}</p>
+								    <p class="form">{{ form.development_full_price }}</p>
 									<p><span style="color: red">{{ error }}</span></p>
-								    <p><button type="submit">Отправить</button></p>
+								    <p class="form"><button type="submit">Отправить</button></p>
 								</form>
 								{% if mod == "редактирование" %}
 								<a href="{{ note_id }}/delete">Удалить контракт</a>

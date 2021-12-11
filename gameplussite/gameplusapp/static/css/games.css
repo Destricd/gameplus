@@ -47,11 +47,12 @@ section {
 	padding: 5px 20px 40px 20px;
 }
 .games, .about {
-	background-color: #A6CAF0; /* Цвет фона */
+	background-color: #FFFFFF; /* Цвет фона */
 	width: 48%; /* Ширина блока */
 	height: 720px; /* Высота блока */
 	background-attachment: local;
 	overflow: auto; /* Добавляем полосы прокрутки */
+	box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
 .about {
 	padding: 10px 20px;
@@ -94,7 +95,7 @@ section {
     float: right;
     padding: 10px 40px 10px 10px;
 }
-.gamename > p, .gametype > p, .gamerate > p, .gamedate > p, .gameprice > p, .more > p {
+.gamename > p, .gametype > p, .gamerate > p, .gamedate > p, .gameprice > p, .more > a {
     margin: 0;
 }
 .gamerate {
@@ -118,6 +119,11 @@ section {
 .more {
     float: right;
     padding: 8px 8px 8px 4px;
+    width: 100%;
+    text-align: center;
+}
+.more > a {
+    text-decoration: none;
 }
 .gameprice > p {
     text-align: right;

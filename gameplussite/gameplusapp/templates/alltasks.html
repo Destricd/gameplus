@@ -3,7 +3,7 @@
 	
 	<head>
 		<meta charset="utf-8" />
-		<title>Студия Гейм-Плюс | Управление | Технические задачи</title>
+		<title>Студия Game-Plus | Управление | Технические задачи</title>
 		<link rel="stylesheet" href="../static/css/pattern.css" />
 		<link rel="stylesheet" href="../static/css/control.css" />
 		<link rel="stylesheet" href="../static/css/alltasks.css" />
@@ -86,14 +86,13 @@
 									{% csrf_token %}
 									{% if new %}
 								    <p><strong>Работник:</strong></p>
-								    <p>{{ form.employee_id }}</p>
+								    <p class="form">{{ form.employee_id }}</p>
 									<p><strong>Описание задачи:</strong></p>
-								    <p>{{ form.description }}</p>
+								    <p class="form">{{ form.description }}</p>
 									{% endif %}
-									<p><strong>Выполнена:</strong></p>
-								    <p>{{ form.complete }}</p>
+									<p><strong>Выполнена: {{ form.complete }}</strong></p>
 									<p><span style="color: red">{{ error }}</span></p>
-								    <p><button type="submit">Отправить</button></p>
+								    <p class="form"><button type="submit">Отправить</button></p>
 								</form>
 								{% if mod == "редактирование" and new %}
 								<a href="{{ task_id }}/delete">Удалить задачу</a>

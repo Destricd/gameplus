@@ -4,9 +4,9 @@
 	
 	<head>
 		<meta charset="utf-8" />
-		<title>Студия Гейм-Плюс | Сообщения</title>
+		<title>Студия Game-Plus | Сообщения</title>
 		<link rel="stylesheet" href="../static/css/pattern.css" />
-		<link rel="stylesheet" href="/static/css/messages.css" />
+		<link rel="stylesheet" href="../static/css/messages.css" />
 	</head>
 	
 	<body>
@@ -55,7 +55,8 @@
 						{% if chat.message_set.count != 0 %}
 							{% with first_message=chat.message_set.first %}
 								{% get_companion request chat as companion %}
-								<a class="dialog" href="{{ chat.get_absolute_url }}">
+								<a class="dialog {% if chat.id == chat_id %}selected{% endif %}"
+								   href="{{ chat.get_absolute_url }}">
 									<div class="avatar-dialog">
 										{% if companion.avatar == '' or companion.avatar == None %}
 										<img src="../static/images/avatar.png" alt="отсутствует аватарка">

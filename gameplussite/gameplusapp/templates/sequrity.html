@@ -3,7 +3,7 @@
 	
 	<head>
 		<meta charset="utf-8" />
-		<title>Студия Гейм-Плюс | Настройки аккаунта | Безопасность</title>
+		<title>Студия Game-Plus | Настройки аккаунта | Безопасность</title>
 		<link rel="stylesheet" href="../static/css/pattern.css" />
 		<link rel="stylesheet" href="../static/css/account.css" />
 	</head>
@@ -52,15 +52,15 @@
 								<form method="post" class="seqform">
 									{% csrf_token %}
 								    <p><strong>Пароль:</strong></p>
-								    <p>{{ conf.old_pass }}</p>
-									<p>{{ form.password }}</p>
-								    <p>{{ conf.confirm }}</p>
+								    <p class="form">{{ conf.old_pass }}</p>
+									<p class="form">{{ form.password }}</p>
+								    <p class="form">{{ conf.confirm }}</p>
 								    <p><strong>Телефон:</strong></p>
-								    <p>{{ form.phone }}</p>
+								    <p class="form">{{ form.phone }}</p>
 								    <p><strong>Почта:</strong></p>
-								    <p>{{ form.email }}</p>
+								    <p class="form">{{ form.email }}</p>
 									<p><span style="color: red">{{ error }}</span></p>
-								    <p><button type="submit">Изменить</button></p>
+								    <p class="form"><button type="submit">Изменить</button></p>
 								</form>
 							</div>
 						</p>

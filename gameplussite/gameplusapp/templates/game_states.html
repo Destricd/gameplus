@@ -3,7 +3,7 @@
 
 	<head>
 		<meta charset="utf-8" />
-		<title>Студия Гейм-Плюс | Управление | Стадии разработки игр</title>
+		<title>Студия Game-Plus | Управление | Стадии разработки игр</title>
 		<link rel="stylesheet" href="../static/css/pattern.css" />
 		<link rel="stylesheet" href="../static/css/control.css" />
 		<link rel="stylesheet" href="../static/css/devstages.css" />
@@ -96,15 +96,15 @@
 								<form class="stateform" method="post" enctype="multipart/form-data">
 									{% csrf_token %}
 								    <p><strong>Игра:</strong></p>
-								    <p>{{ form.game_id }}</p>
+								    <p class="form">{{ form.game_id }}</p>
 									<p><strong>Дата подписания:</strong></p>
-								    <p>{{ form.start_date }}</p>
+								    <p class="form">{{ form.start_date }}</p>
 									<p><strong>Дата окончания:</strong></p>
-								    <p>{{ form.end_date }}</p>
+								    <p class="form">{{ form.end_date }}</p>
 									<p><strong>Описание стадии:</strong></p>
-								    <p>{{ form.stage_description }}</p>
+								    <p class="form">{{ form.stage_description }}</p>
 									<p><span style="color: red">{{ error }}</span></p>
-								    <p><button type="submit">Отправить</button></p>
+								    <p class="form"><button type="submit">Отправить</button></p>
 								</form>
 								{% if mod == "редактирование" %}
 								<a href="{{ state_id }}/delete">Удалить стадию</a>

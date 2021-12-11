@@ -46,6 +46,9 @@ section {
     font-size: 17px;
     color: #F9F0DA;
 }
+.back > p > a {
+    text-decoration: none;
+}
 .lists {
 	padding: 5px 20px 40px 20px;
 }
@@ -54,9 +57,10 @@ section {
 	height: 720px; /* Высота блока */
 }
 .reviews {
-    background-color: #A6CAF0; /* Цвет фона */
+    background-color: #FFFFFF; /* Цвет фона */
 	background-attachment: local;
 	overflow: auto; /* Добавляем полосы прокрутки */
+	box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
 .feedback {
 	float: right;
@@ -167,8 +171,9 @@ section {
 }
 .more {
     width: 100%;
-    padding: 8px 8px 8px 4px;
+    padding: 8px 24px 8px 4px;
 }
 .more > a {
     float: right;
+    text-decoration: none;
 }

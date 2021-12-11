@@ -13,11 +13,12 @@ section {
 }
 .info {
   width: 60%; /* Ширина блока */
-  background-color: #A6CAF0; /* Цвет фона */
+  background-color: #FFFFFF; /* Цвет фона */
   padding: 10px 20px;
   float: right;
   background-attachment: local;
   overflow: auto; /* Добавляем полосы прокрутки */
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
 .widget {
   padding: 20px;
@@ -60,4 +61,32 @@ section {
   vertical-align:bottom;
   color: #dd3333; 
   margin-right: 14px;
+}
+.form > input {
+  font-family: "Roboto", sans-serif;
+  outline: 0;
+  background: #f2f2f2;
+  width: 60%;
+  border: 0;
+  margin: 0;
+  padding: 15px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+.form > button {
+  font-family: "Roboto", sans-serif;
+  text-transform: uppercase;
+  outline: 0;
+  background: #4c7faf;
+  width: 60%;
+  border: 0;
+  padding: 15px;
+  color: #FFFFFF;
+  font-size: 14px;
+  -webkit-transition: all 0.3 ease;
+  transition: all 0.3 ease;
+  cursor: pointer;
+}
+button:hover, button:active, button:focus {
+  background: #4364a0;
 }

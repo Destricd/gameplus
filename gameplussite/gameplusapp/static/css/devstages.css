@@ -44,10 +44,13 @@
 }
 .more {
     width: 100%;
-    padding: 8px 8px 8px 4px;
+    padding: 8px 24px 8px 4px;
 }
 .more > a {
     float: right;
+}
+a {
+    text-decoration: none;
 }
 textarea {
     resize: none;

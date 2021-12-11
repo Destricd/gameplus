@@ -3,7 +3,7 @@
 	
 	<head>
 		<meta charset="utf-8" />
-		<title>Студия Гейм-Плюс | Настройки аккаунта | Общее</title>
+		<title>Студия Game-Plus | Настройки аккаунта | Общее</title>
 		<link rel="stylesheet" href="../static/css/pattern.css" />
 		<link rel="stylesheet" href="../static/css/account.css" />
 		<link rel="stylesheet" href="../static/css/general.css" />
@@ -54,13 +54,13 @@
 								<form method="post" class="userform" enctype="multipart/form-data">
 								    {% csrf_token %}
 									<p><strong>ФИО:</strong></p>
-								    <p>{{ form.full_name }}</p>
+								    <p class="form">{{ form.full_name }}</p>
 								    <p><strong>Логин:</strong></p>
-								    <p>{{ form.login }}</p>
+								    <p class="form">{{ form.login }}</p>
 								    <p><strong>Фотография профиля:</strong></p>
 								    <p>{{ form.avatar }}</p>
 									<p><span style="color: red">{{ error }}</span></p>
-								    <p><button type="submit">Изменить</button></p>
+								    <p class="form"><button type="submit">Изменить</button></p>
 								</form>
 							</div>
 						</p>
