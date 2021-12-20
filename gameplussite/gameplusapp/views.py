@@ -124,8 +124,12 @@ class CreateContract(View):
             contract = form.save(commit=False)
             contract.game_id = Game.objects.get(id=id)
             contract.client_id = Employee.objects.get(id=request.session["id_user"])
-            contract.save()
-            return HttpResponseRedirect('/games.html')
+            if contract.development_full_price < 0:
+                context["error"] = "Введено отрицательное число"
+                return render(request, 'newcontract.html', context=context)
+            else:
+                contract.save()
+                return HttpResponseRedirect('/games.html')
         else:
             context["error"] = "Неправильное заполнение"
             return render(request, 'newcontract.html', context=context)
@@ -227,8 +231,12 @@ class AllGamesPage(View):
             'g_avatar': g_avatar
         }
         if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('allgames.html')
+            if form.cleaned_data["price"] < 0 or form.cleaned_data["development_budget"] < 0:
+                context["error"] = "Введено отрицательное число"
+                return render(request, 'allgames.html', context=context)
+            else:
+                form.save()
+                return HttpResponseRedirect('allgames.html')
         else:
             context["error"] = "Неправильное заполнение"
             return render(request, 'allgames.html', context=context)
@@ -306,20 +314,24 @@ class GameListOnePage(View):
             'g_avatar': g_avatar
         }
         if form.is_valid():
-            game = Game.objects.get(id=id)
-            game.name = form.cleaned_data["name"]
-            game.type = form.cleaned_data["type"]
-            game.rate = form.cleaned_data["rate"]
-            game.rules = form.cleaned_data["rules"]
-            game.release_date = form.cleaned_data["release_date"]
-            game.site = form.cleaned_data["site"]
-            game.number_of_rules = form.cleaned_data["number_of_rules"]
-            game.price = form.cleaned_data["price"]
-            game.development_budget = form.cleaned_data["development_budget"]
-            if form.cleaned_data["picture"] != None:
-                game.picture = form.cleaned_data["picture"]
-            game.save()
-            return HttpResponseRedirect(reverse('allgames', kwargs={'id': id}))
+            if form.cleaned_data["price"] < 0 or form.cleaned_data["development_budget"] < 0:
+                context["error"] = "Введено отрицательное число"
+                return render(request, 'allgames.html', context=context)
+            else:
+                game = Game.objects.get(id=id)
+                game.name = form.cleaned_data["name"]
+                game.type = form.cleaned_data["type"]
+                game.rate = form.cleaned_data["rate"]
+                game.rules = form.cleaned_data["rules"]
+                game.release_date = form.cleaned_data["release_date"]
+                game.site = form.cleaned_data["site"]
+                game.number_of_rules = form.cleaned_data["number_of_rules"]
+                game.price = form.cleaned_data["price"]
+                game.development_budget = form.cleaned_data["development_budget"]
+                if form.cleaned_data["picture"] != None:
+                    game.picture = form.cleaned_data["picture"]
+                game.save()
+                return HttpResponseRedirect(reverse('allgames', kwargs={'id': id}))
         else:
             context["error"] = "Неправильное заполнение"
             return render(request, 'allgames.html', context=context)
@@ -605,10 +617,14 @@ class ContractsPage(View):
         }
         if form.is_valid():
             contract = form.save(commit=False)
-            if Employee.objects.get(id=request.session["id_user"]).access_level == 'm':
-                contract.employee_id = Employee.objects.get(id=request.session["id_user"])
-            contract.save()
-            return HttpResponseRedirect('contracts.html')
+            if contract.development_full_price < 0:
+                context["error"] = "Введено отрицательное число"
+                return render(request, 'contracts.html', context=context)
+            else:
+                if Employee.objects.get(id=request.session["id_user"]).access_level == 'm':
+                    contract.employee_id = Employee.objects.get(id=request.session["id_user"])
+                contract.save()
+                return HttpResponseRedirect('contracts.html')
         else:
             context["error"] = "Неправильное заполнение"
             return render(request, 'contracts.html', context=context)
@@ -717,18 +733,22 @@ class ContractOnePage(View):
             'g_avatar': g_avatar
         }
         if form.is_valid():
-            contract = ContractOfDevelopment.objects.get(id=id)
-            contract.game_id = form.cleaned_data["game_id"]
-            contract.conclusion_date = form.cleaned_data["conclusion_date"]
-            contract.contract_end_date = form.cleaned_data["contract_end_date"]
-            contract.client_id = form.cleaned_data["client_id"]
-            if Employee.objects.get(id=request.session["id_user"]).access_level == 'm':
-                contract.employee_id = Employee.objects.get(id=request.session["id_user"])
+            if form.cleaned_data["development_full_price"] < 0:
+                context["error"] = "Введено отрицатлеьное число"
+                return render(request, 'contracts.html', context=context)
             else:
-                contract.employee_id = form.cleaned_data["employee_id"]
-            contract.development_full_price = form.cleaned_data["development_full_price"]
-            contract.save()
-            return HttpResponseRedirect(reverse('contracts', kwargs={'id': id}))
+                contract = ContractOfDevelopment.objects.get(id=id)
+                contract.game_id = form.cleaned_data["game_id"]
+                contract.conclusion_date = form.cleaned_data["conclusion_date"]
+                contract.contract_end_date = form.cleaned_data["contract_end_date"]
+                contract.client_id = form.cleaned_data["client_id"]
+                if Employee.objects.get(id=request.session["id_user"]).access_level == 'm':
+                    contract.employee_id = Employee.objects.get(id=request.session["id_user"])
+                else:
+                    contract.employee_id = form.cleaned_data["employee_id"]
+                contract.development_full_price = form.cleaned_data["development_full_price"]
+                contract.save()
+                return HttpResponseRedirect(reverse('contracts', kwargs={'id': id}))
         else:
             context["error"] = "Неправильное заполнение"
             return render(request, 'contracts.html', context=context)
